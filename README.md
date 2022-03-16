@@ -1,4 +1,4 @@
-# MyMonero for Mobile
+# MyMonero for Mobile (iOS beta)
 
 <p align="center">
   <img alt="MyMonero" src="https://user-images.githubusercontent.com/1645428/146000939-b06f8fd3-9ed2-4a5e-bdd6-3981281dde9c.png">
@@ -13,7 +13,20 @@
   <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg"></a>
 </p>
 
+Beta Testers Needed
+
+We're currently looking for tech-savvy MyMonero users willing to take part in our beta test.
+
+While we've taken every precaution to make migration of data from the old iOS app as simple as possible, please ensure you back your mnemonic seeds up before installing the beta version.
+
+Once you move across to the beta version of the iOS app, there is no way to return to the old version.
+
+To join the beta, DM @tekkzbadger on Reddit to be added.
 ## Summary
+
+
+If you pick up any issues, please report all bugs on Github:
+https://github.com/mymonero/mymonero-android-js/issues
 
 This repository contains the source code for the MyMonero mobile applications. The packages on the Apple Store and on Google Play are built from this repository.
 
@@ -42,7 +55,7 @@ The plugin MyMonero uses for storage can be found [here](https://www.npmjs.com/p
 
 ## Reporting Bugs & Making Feature Requests
 
-If you would like to report an issue or share a feature request, please create a Github [Issue](https://github.com/mymonero/monero-android-js/issues) on this project.
+If you would like to report an issue or share a feature request, please create a Github [Issue](https://github.com/mymonero/mymonero-mobile/issues) on this project.
 
 If you're reporting a bug, be sure to include all information which we would need to reproduce the issue, such as the operating system and app version on which you saw the bug, and the steps you took, if you can tell. 
 
@@ -50,7 +63,7 @@ Please don't use the Issues tracker for general support or inquiries. You can al
 
 ## Installation
 
-Before installing, [download and install Node.js](https://nodejs.org/en/download/). For Android, you will also need [Android Studio](https://developer.android.com/studio). For iOS, you will need XCode.
+Before installing, [download and install Node.js](https://nodejs.org/en/download/). For Android, you will also need [Android Studio](https://developer.android.com/studio). For iOS, you will need Xcode (available on the Apple App Store).
 
 Clone the repo and install the dependencies.
 ```bash
