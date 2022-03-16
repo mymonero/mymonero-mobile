@@ -1,21 +1,27 @@
-# MyMonero Android Wallet 
+# MyMonero for Mobile
 
 <p align="center">
   <img alt="MyMonero" src="https://user-images.githubusercontent.com/1645428/146000939-b06f8fd3-9ed2-4a5e-bdd6-3981281dde9c.png">
 </p>
 
 <p align="center">
-  MyMonero Android Wallet
+  MyMonero for Mobile
 </p>
 
 <p align="center">
-  <a href="https://snyk.io/test/github/mymonero/mymonero-utils"><img src="https://snyk.io/test/github/mymonero/mymonero-android-js/badge.svg"></a>
+  <a href="https://snyk.io/test/github/mymonero/mymonero-mobile"><img src="https://snyk.io/test/github/mymonero/mymonero-mobile/badge.svg"></a>
   <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg"></a>
 </p>
 
+## Summary
+
+This repository contains the source code for the MyMonero mobile applications. The packages on the Apple Store and on Google Play are built from this repository.
+
 ## Downloads
 
-Download the latest version from our website at [Play Store](https://play.google.com/store/apps/details?id=com.mymonero.official_android_application) or from the [Releases tab](https://github.com/mymonero/mymonero-android-js/releases/latest).
+iOS download instructions to follow once beta is successfully finished.
+
+Download the latest Android version from the [Play Store](https://play.google.com/store/apps/details?id=com.mymonero.official_android_application) or from the [Releases tab](https://github.com/mymonero/mymonero-mobile/releases/latest).
 
 Developers and pre-release testers who would like to use and work on the app can run it by obtaining the source and running one of the build commands below.
 
@@ -25,6 +31,9 @@ To get set up with the source code, please see **Getting the Source Code** below
 
 * Android: The data is encrypted and saved to the Android device using an implementation that leverages AndroidKeyStore and SharedPreferences.
 * Web: The data is saved to the browser's local storage.
+* iOS: MyMonero uses SwiftKeychainWrapper for persistence.
+
+The plugin MyMonero uses for storage can be found [here](https://www.npmjs.com/package/capacitor-secure-storage-plugin)
 
 #### Data storage warnings: 
 
@@ -41,12 +50,12 @@ Please don't use the Issues tracker for general support or inquiries. You can al
 
 ## Installation
 
-Before installing, [download and install Node.js](https://nodejs.org/en/download/). You will also need [Android Studio](https://developer.android.com/studio)
+Before installing, [download and install Node.js](https://nodejs.org/en/download/). For Android, you will also need [Android Studio](https://developer.android.com/studio). For iOS, you will need XCode.
 
 Clone the repo and install the dependencies.
 ```bash
-git clone https://github.com/mymonero/mymonero-android-js.git
-cd mymonero-android-js
+git clone https://github.com/mymonero/mymonero-mobile.git
+cd mymonero-mobile
 ```
 ```bash
 npm install
@@ -57,12 +66,12 @@ To build the app
 npm run build
 ```
 
-To build the app, update Android and open Android Studio
+Android: To build the app, run the command below. Android Studio will be opened automatically.
 ```bash
 npm run build-android
 ```
 
-To build the app, update iOS and open Xcode
+iOS: To build the app, run the command below. XCode will be opened automatically.
 ```bash
 npm run build-ios
 ```
@@ -72,15 +81,17 @@ To run the app in a web browser, run the following
 npm start
 ```
 
-This will build and package the web version of the application in the `browser_build` folder. Once that is done, it will initialise all necessary build files for your Android application. Finally, it will attempt to open the project in Android Studio.  
+This will build and package the web version of the application in the `dist` folder. Once that is done, it will initialise all necessary build files for your Android application. Finally, it will attempt to open the project in Android Studio.  
 
 ## Suggested development workflow
 
-As the application is essentially a web application which gets transpiled into Java by Capacitor, rather than transpile and build each time, we do most of our development work by running a server that serves the browser_build folder, and accessing it in Chrome. Barring unusual cases, changes made and tested on Chrome will function properly once transpiled.
+As the application is essentially a web application which gets transpiled into Java by Capacitor, rather than transpile and build each time, we do most of our development work by running a server that serves the `dist` folder, and accessing it in Chrome. Barring unusual cases, changes made and tested on Chrome will function properly once transpiled.
 
 When developing in this fashion, one can run a server with hot-reload enabled by using the `npm run watch` command
 
-## Debugging the Android application
+## Debugging the application
+
+### Android
 
 Should you run into any issues with the transpiled application, you are able to debug the application by making use of Android WebView debugging and the Chrome browser. In order to do so, follow the instructions below: 
 
@@ -96,11 +107,14 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 4. Under "Remote Target", you should see a WebView titled "WebView in com.mymonero.android"
 5. Click "inspect" to open the WebView in DevTools
 
+### iOS
+
+Coming soon
 
 ## Building for Production
 
 1. Follow the steps under `Download and Build`.
-2. Use Android Studio to build the .APK file
+2. Use Android Studio or/and Xcode to build the project executables
 
 ## Contributing
 
@@ -123,13 +137,13 @@ If you have an improvement to the codebase and would like to have your code ship
 
 MyMonero Donation Address (XMR): 48yi8KBxh7fdZzwnX2kFCGALRcN1sNjwBHDfd5i9WLAWKs7G9rVbXNnbJTqZhhZCiudVtaMJKrXxmBeBR9kggBXr8X7PxPT
 
-Proceeds from donations are used to fund development on the MyMonero back-end server (a performant version of which we soon™ plan to open-source for anyone to run their own server at home). Any remaining funds will go towards product (app UI) R&D, and hosting costs.
+Proceeds from donations are used to fund development, R&D and hosting costs incurred by MyMonero. 
 
 ## License and Copyrights
 
 See `LICENSE.txt` for license.
 
-All app source code and assets copyright © 2014-2021 by MyMonero. All rights reserved.
+All app source code and assets copyright © 2014-2022 by MyMonero. All rights reserved.
 
 ## Acknowledgements
 
@@ -157,4 +171,4 @@ Contributors to each release are credited in release notes.
 
 See `LICENSE.txt` for license.
 
-All app source code and assets copyright © 2014-2021 by MyMonero. All rights reserved.
+All app source code and assets copyright © 2014-2022 by MyMonero. All rights reserved.
