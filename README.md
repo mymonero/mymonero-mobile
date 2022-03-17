@@ -26,7 +26,7 @@ To join the beta, DM @tekkzbadger on Reddit to be added.
 
 
 If you pick up any issues, please report all bugs on Github:
-https://github.com/mymonero/mymonero-android-js/issues
+https://github.com/mymonero/mymonero-mobile/issues
 
 This repository contains the source code for the MyMonero mobile applications. The packages on the Apple Store and on Google Play are built from this repository.
 
