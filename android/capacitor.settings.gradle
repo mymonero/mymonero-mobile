@@ -17,14 +17,17 @@ project(':capacitor-device').projectDir = new File('../node_modules/@capacitor/d
 include ':capacitor-filesystem'
 project(':capacitor-filesystem').projectDir = new File('../node_modules/@capacitor/filesystem/android')
 
+include ':capacitor-share'
+project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/share/android')
+
 include ':capacitor-toast'
 project(':capacitor-toast').projectDir = new File('../node_modules/@capacitor/toast/android')
 
 include ':johnbraum-capacitor-qrscanner'
 project(':johnbraum-capacitor-qrscanner').projectDir = new File('../node_modules/@johnbraum/capacitor-qrscanner/android')
 
-include ':capacitor-file-picker'
-project(':capacitor-file-picker').projectDir = new File('../node_modules/capacitor-file-picker/android')
+include ':mymonero-capacitor-file-picker'
+project(':mymonero-capacitor-file-picker').projectDir = new File('../node_modules/@mymonero/capacitor-file-picker/android')
 
 include ':capacitor-secure-storage-plugin'
 project(':capacitor-secure-storage-plugin').projectDir = new File('../node_modules/capacitor-secure-storage-plugin/android')

@@ -16,7 +16,9 @@ import monero_openalias_utils from '../../OpenAlias/monero_openalias_utils'
 import monero_config from '@mymonero/mymonero-monero-config'
 import monero_amount_format_utils from '@mymonero/mymonero-money-format'
 import jsQR from 'jsqr'
-import monero_requestURI_utils from '@mymonero/mymonero-request-utils'
+// TODO: move to @mymonero/mymonero-request-utils once v2.0.3 released
+// import monero_requestURI_utils from '@mymonero/mymonero-request-utils'
+import monero_requestURI_utils from '../../MoneroUtils/monero_requestURI_utils'
 import Currencies from '../../CcyConversionRates/Currencies'
 import YatMoneroLookup from '@mymonero/mymonero-yat-lookup/index.esm'
 import { BigInteger as JSBigInt } from '@mymonero/mymonero-bigint' // important: grab defined export

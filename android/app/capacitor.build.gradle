@@ -14,9 +14,10 @@ dependencies {
     implementation project(':capacitor-clipboard')
     implementation project(':capacitor-device')
     implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-share')
     implementation project(':capacitor-toast')
     implementation project(':johnbraum-capacitor-qrscanner')
-    implementation project(':capacitor-file-picker')
+    implementation project(':mymonero-capacitor-file-picker')
     implementation project(':capacitor-secure-storage-plugin')
 
 }

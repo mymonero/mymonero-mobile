@@ -20,6 +20,10 @@
 		"classpath": "com.capacitorjs.plugins.filesystem.FilesystemPlugin"
 	},
 	{
+		"pkg": "@capacitor/share",
+		"classpath": "com.capacitorjs.plugins.share.SharePlugin"
+	},
+	{
 		"pkg": "@capacitor/toast",
 		"classpath": "com.capacitorjs.plugins.toast.ToastPlugin"
 	},
@@ -28,7 +32,7 @@
 		"classpath": "de.golbros.capacitorqrscanner.CapacitorQRScanner"
 	},
 	{
-		"pkg": "capacitor-file-picker",
+		"pkg": "@mymonero/capacitor-file-picker",
 		"classpath": "com.epicshaggy.filepicker.FilePicker"
 	},
 	{

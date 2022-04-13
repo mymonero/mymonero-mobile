@@ -662,9 +662,7 @@ class DocumentPersister extends DocumentPersister_Interface {
           if (collectionName == 'Wallets') {
             // Delete passwordmeta since we have no more wallets, and don't want to be made to use the old password when a new wallet is added
             // We delete everything here, since we won't be able to decrypt old data using a new PIN unless it is exactly the same as the old one
-            SecureStoragePlugin.clear().then(() => {
-              // Cleared everything due to no wallets being left
-            })
+            this.__removeAllData() // Cleared everything due to no wallets being left
           } else {
             // Removed collection ${collectionName}
             SecureStoragePlugin.remove({ key: collectionName }).then(() => {
@@ -791,15 +789,29 @@ class DocumentPersister extends DocumentPersister_Interface {
 
   // This completely removes all objects saved
   __removeAllData (fn) {
-    // remove(options: { key: string }): Promise<{ value: boolean }>
-    // console.log("SecureStorage: invoked __removeAllData");
-    SecureStoragePlugin.clear().then(() => {
-      fn(null, 'SecureStorage: __removeAllData successful')
-    }).catch(error => {
-      // console.log("SecureStorage: Invoke removeAllData failed")
-      // console.log(error);
-      fn(error, null)
-    })
+		//console.log("SecureStorage: invoked __removeAllData");
+		SecureStoragePlugin.keys().then((responseData) => {
+      console.log(responseData);
+      let arrayIndex = responseData.value.findIndex((value, index) => {
+        if (value.includes("migratedOldIOSApp")) { // We use includes instead of equality to maintain web functionality
+          return true
+        }
+      })
+
+      let deleteArray = responseData.value;
+      deleteArray.splice(arrayIndex, 1)
+      deleteArray.forEach(element => {
+        // for web purposes, replace cap_sec_ with ''
+        let collectionToRemove = element.replace('cap_sec_', '')
+        console.log("Do remove: " + collectionToRemove);
+        SecureStoragePlugin.remove({ key: collectionToRemove })
+      });
+
+		}).catch(error => {
+			//console.log("SecureStorage: Invoke removeAllData failed")
+			//console.log(error);
+			fn(error, null);
+		});
   }
 }
 export default DocumentPersister

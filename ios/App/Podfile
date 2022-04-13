@@ -14,9 +14,10 @@ def capacitor_pods
   pod 'CapacitorClipboard', :path => '../../node_modules/@capacitor/clipboard'
   pod 'CapacitorDevice', :path => '../../node_modules/@capacitor/device'
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
+  pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
   pod 'JohnbraumCapacitorQrscanner', :path => '../../node_modules/@johnbraum/capacitor-qrscanner'
-  pod 'CapacitorFilePicker', :path => '../../node_modules/capacitor-file-picker'
+  pod 'MymoneroCapacitorFilePicker', :path => '../../node_modules/@mymonero/capacitor-file-picker'
   pod 'CapacitorSecureStoragePlugin', :path => '../../node_modules/capacitor-secure-storage-plugin'
 end
 

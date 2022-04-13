@@ -7,7 +7,7 @@ import RootView from './MainWindow/Views/RootView' // electron uses .web files a
 import setup_utils from './MMAppRendererSetup/renderer_setup.browser'
 import MyMoneroLibAppBridge from '@mymonero/mymonero-app-bridge'
 import indexContextBrowser from './MainWindow/Models/index_context.browser'
-import { App } from '@capacitor/app'
+import { App, URLOpenListenerEvent } from '@capacitor/app'
 import { Device } from '@capacitor/device'
 
 window.BootApp = async function () { // encased in a function to prevent scope being lost/freed on mobile
@@ -74,4 +74,19 @@ function onDeviceReady () {
   App.addListener('backButton', (event) => {
     App.exitApp()
   })
+
+  App.addListener('appUrlOpen', function (URLOpenListenerEvent) {
+    // Handle our deep links here
+    console.log("Yay! URL Opened me");
+    
+    if (URLOpenListenerEvent.url.indexOf("monero://") !== -1 || URLOpenListenerEvent.url.indexOf("mymonero://") !== -1) {
+      // We have a monero address
+    }
+    
+    // Probably Yat, let's check
+    if (URLOpenListenerEvent.url.indexOf("monero://") !== -1) {
+      
+    }
+
+  });
 }

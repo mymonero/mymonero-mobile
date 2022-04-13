@@ -11,9 +11,12 @@ function HydrateInstance (
   plaintextDocument
 ) {
   const self = walletInstance
-  //
-  // console.log("Invoked wallet_persistence_utils.HydrateInstance")
-  // console.log("plaintextDocument", plaintextDocument)
+  
+  // for yat persistence
+  if (plaintextDocument.eid !== 'undefined') {
+    self.eid = plaintextDocument.eid
+  }
+
   self.isLoggedIn = plaintextDocument.isLoggedIn
   self.isInViewOnlyMode = plaintextDocument.isInViewOnlyMode
 
@@ -139,6 +142,7 @@ function SaveToDisk (
   fn
 ) {
   const self = walletInstance
+  self.eid = ""
   // console.log('📝  Saving wallet to disk ', self.Description())
   //
   const persistencePassword = self.persistencePassword
@@ -214,7 +218,8 @@ function SaveToDisk (
 	  transactions: transactions,
 	  heights: heights,
 	  totals: totals,
-	  spent_outputs: self.spent_outputs || [] // maybe not fetched yet
+    spent_outputs: self.spent_outputs || [], // maybe not fetched yet
+    eid: self.eid // Optional Yat info
 	}
 
   if (typeof self.login__new_address !== 'undefined') {
