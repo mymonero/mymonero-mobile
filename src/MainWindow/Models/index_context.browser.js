@@ -13,7 +13,6 @@ import OpenAlias from '../../OpenAlias/OpenAliasResolver'
 import FundsRequestsListController from '../../RequestFunds/Controllers/FundsRequestsListController'
 import Passwords from '../../Passwords/Controllers/PasswordController.Full'
 import Settings from '../../Settings/Controllers/SettingsController'
-import URLOpeningCoordinator from '../../UrlOpening/UrlOpeningCoordinator.web'
 import UserIdle from '../../UserIdle/UserIdleInWindowController'
 import WalletsList from '../../WalletsList/Controllers/WalletsListController.Full'
 import WalletAppCoordinator from '../../WalletAppCoordinator/WalletAppCoordinator'
@@ -64,7 +63,6 @@ function NewHydratedContext (initialContext) {
         postWholeContextInitSetupFn.call(instance) // using 'call' so the function's "this" is instance
       }
   }
-  context.urlOpeningCoordinator = new URLOpeningCoordinator({}, context)
   context.capacitorBrowser = Browser
   return context
 }
