@@ -35,6 +35,7 @@ window.BootApp = async function () { // encased in a function to prevent scope b
       monero_utils: coreBridge_instance,
       deviceInfo: deviceInfo,
     })
+
     window.MyMonero_context = context
     { // configure native UI elements
       document.addEventListener('touchstart', function () {}, true) // to allow :active styles to work in your CSS on a page in Mobile Safari:
@@ -75,10 +76,17 @@ function onDeviceReady () {
     App.exitApp()
   })
 
-  App.addListener('appUrlOpen', function (URLOpenListenerEvent) {
+  App.addListener('appUrlOpen', async (URLOpenListenerEvent) => {
+    // TODO: Finish writing this functionality
     // Handle our deep links here
-    console.log("Yay! URL Opened me");
-    
+    let deviceInfo = await Device.getInfo();
+    if (deviceInfo.platform === 'android') {
+
+    } else if (deviceInfo.platform === 'ios') {
+
+    } else { // web
+      
+    }
     if (URLOpenListenerEvent.url.indexOf("monero://") !== -1 || URLOpenListenerEvent.url.indexOf("mymonero://") !== -1) {
       // We have a monero address
     }
