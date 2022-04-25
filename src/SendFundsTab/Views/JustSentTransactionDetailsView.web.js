@@ -6,7 +6,7 @@ class JustSentTransactionDetailsView extends TransactionDetailsView {
   setup () {
     super.setup()
     const self = this
-    console.log("Just sent 'transaction'……", self.transaction)
+    // console.log("Just sent 'transaction'……", self.transaction)
     // TODO: implement the contact on tx here
   }
 }

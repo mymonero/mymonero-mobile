@@ -92,7 +92,7 @@ class AddWallet_WizardController {
   // Lifecycle - Teardown
   TearDown () { // this is public and must be called manually by wallet
     const self = this
-    console.log('♻️  Tearing down a ' + self.constructor.name)
+    // console.log('♻️  Tearing down a ' + self.constructor.name)
   }
 
   //

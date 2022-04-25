@@ -172,11 +172,11 @@ class ContactFormView extends View {
   _overridable_initial_emoji_value () {
     const self = this
     const inUseEmojis = self.context.contactsListController.GivenBooted_CurrentlyInUseEmojis()
-    console.log('InUseEmojis')
-    console.log(inUseEmojis)
+    // console.log('InUseEmojis')
+    // console.log(inUseEmojis)
     const value = emoji_selection.EmojiWhichIsNotAlreadyInUse(inUseEmojis)
-    console.log(emoji_selection)
-    console.log(value)
+    // console.log(emoji_selection)
+    // console.log(value)
     return value
   }
 
@@ -301,7 +301,7 @@ class ContactFormView extends View {
     //
     const req = self.requestHandle_for_oaResolution
     if (typeof req !== 'undefined' && req !== null) {
-      console.log('💬  Aborting requestHandle_for_oaResolution')
+      // console.log('💬  Aborting requestHandle_for_oaResolution')
       req.abort()
     }
     self.requestHandle_for_oaResolution = null

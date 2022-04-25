@@ -81,7 +81,7 @@ class FundsRequestsListController extends ListBaseController {
     let hasActuallyFinishedThisFunction = false
     function completedOneInit () {
       if (hasActuallyFinishedThisFunction == false) {
-        console.log('Not calling fn because a new FundsRequest finished initializing before whole function did')
+        // console.log('Not calling fn because a new FundsRequest finished initializing before whole function did')
         return
       }
       if (waitingForInitOfNNew == 0) {
@@ -147,7 +147,7 @@ class FundsRequestsListController extends ListBaseController {
           readyToSort_records.push(record)
         } else {
           // leaving these behind - but they must be deleted or they will stack up in the app/user docs dir
-          console.log('Dropping request because wallet was removed: ', record)
+          // console.log('Dropping request because wallet was removed: ', record)
           self.givenBooted_deleteRecord_noListUpdatedEmit(record, function (err) {})
         }
       } else {

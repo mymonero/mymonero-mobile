@@ -1,5 +1,5 @@
 (function () {
-  console.log('ExchangeScript ran')
+  // console.log('ExchangeScript ran')
   const XMRcurrencyInput = document.getElementById('XMRcurrencyInput')
   const BTCcurrencyInput = document.getElementById('BTCcurrencyInput')
   const validationMessages = document.getElementById('validation-messages')
@@ -138,17 +138,17 @@
     const out_currency = 'BTC'
     try {
       const offer = ExchangeFunctions.getOfferWithOutAmount(in_currency, out_currency, out_amount).then((error, response) => {
-        console.log(error)
-        console.log(response)
-        console.log(ExchangeFunctions.offer)
+        // console.log(error)
+        // console.log(response)
+        // console.log(ExchangeFunctions.offer)
       }).then((error, response) => {
         const selectedWallet = document.getElementById('selected-wallet')
-        console.log('Karl here')
-        console.log(error)
-        console.log(response)
-        console.log(ExchangeFunctions)
-        console.log(btc_dest_address)
-        console.log(selectedWallet)
+        // console.log('Karl here')
+        // console.log(error)
+        // console.log(response)
+        // console.log(ExchangeFunctions)
+        // console.log(btc_dest_address)
+        // console.log(selectedWallet)
         ExchangeFunctions.createOrder(btc_dest_address, selectedWallet.dataset.walletpublicaddress).then((error, response) => {
           const orderStatusDiv = document.getElementById('exchangePage')
           document.getElementById('orderStatusPage').classList.remove('active')
@@ -158,7 +158,7 @@
           backBtn.innerHTML = '<div class="base-button hoverable-cell utility grey-menu-button disableable left-back-button" style="cursor: default; -webkit-app-region: no-drag; position: absolute; opacity: 1; left: 0px;"></div>'
           orderTimer = setInterval((response) => {
             ExchangeFunctions.getOrderStatus().then(function (response) {
-              console.log(response)
+              // console.log(response)
               Utils.renderOrderStatus(response)
               const expiryTime = response.expires_at
               const secondsElement = document.getElementById('secondsRemaining')
@@ -199,7 +199,7 @@
         orderStarted = false
       })
     } catch (Error) {
-      console.log(Error)
+      // console.log(Error)
     }
   })
 })()

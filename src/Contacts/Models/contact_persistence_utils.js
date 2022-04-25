@@ -59,7 +59,7 @@ function DeleteFromDisk (
   fn
 ) {
   const self = instance
-  console.log('📝  Deleting contact ', self.Description())
+  // console.log('📝  Deleting contact ', self.Description())
   self.context.persister.RemoveDocumentsWithIds(
     CollectionName,
     [self._id],
@@ -76,7 +76,7 @@ function DeleteFromDisk (
         fn(new Error("❌  Number of documents removed by _id'd remove was 0"))
         return // bail
       }
-      console.log('🗑  Deleted saved contact with _id ' + self._id + '.')
+      // console.log('🗑  Deleted saved contact with _id ' + self._id + '.')
       fn()
     }
   )

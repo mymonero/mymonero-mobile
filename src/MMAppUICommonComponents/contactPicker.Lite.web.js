@@ -82,7 +82,7 @@ function New_contactPickerLayer_Lite (
         }
         const wasOnlyModifierKey = code.indexOf('Meta') != -1 || code.indexOf('Alt') != -1 || code.indexOf('Control') != -1
         if (wasOnlyModifierKey) {
-          console.log('Input was only modifier key. Ignoring.')
+          // console.log('Input was only modifier key. Ignoring.')
           return
         }
         _inputLayer_receivedInputOrChanged(event)
@@ -93,7 +93,7 @@ function New_contactPickerLayer_Lite (
   //
   // imperatives
   containerLayer.Component_TearDown = function () {
-    console.log('♻️  Tearing down (Lite) contacts picker.')
+    // console.log('♻️  Tearing down (Lite) contacts picker.')
   }
   //
   return containerLayer

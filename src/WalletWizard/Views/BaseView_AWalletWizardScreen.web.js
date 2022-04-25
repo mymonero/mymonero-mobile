@@ -6,7 +6,7 @@ import commonComponents_forms from '../../MMAppUICommonComponents/forms.web'
 class AddWallet_LandingScreenView extends View {
   constructor (options, context) {
     super(options, context)
-    console.log('AddWallet Landing Screen')
+    // console.log('AddWallet Landing Screen')
     const self = this
     {
       self.wizardController = self.options.wizardController

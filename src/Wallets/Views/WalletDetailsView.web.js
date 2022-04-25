@@ -193,7 +193,7 @@ class WalletDetailsView extends View {
     self.layer.appendChild(layer)
   }
 
-  _new_fieldBaseView (entitled, isTruncatedPreviewForm, isSecretData) {
+  _new_fieldBaseView (title, isTruncatedPreviewForm, isSecretData, className = null) {
     const self = this
     const fieldView = new View({}, self.context)
     const layer = fieldView.layer
@@ -201,13 +201,16 @@ class WalletDetailsView extends View {
     //
     const fieldContainerLayer = commonComponents_tables.New_copyable_longStringValueField_component_fieldContainerLayer(
       self.context,
-      entitled,
+      title,
       '',
       self.context.pasteboard,
       'N/A',
       isTruncatedPreviewForm == true,
       false // isSecretData - NOTE: I have re-enabled copy on secret data for usability purposes
     )
+    if (className !== null) {
+     layer.classList.add(className);
+    }
     layer.appendChild(fieldContainerLayer)
     //
     fieldView.SetValue = function (value) {
@@ -223,12 +226,24 @@ class WalletDetailsView extends View {
     const self = this
     const previewView = new View({}, self.context)
     {
+      if (self.wallet.eid !== undefined) {
+        const preview__address_YatView = self._new_fieldBaseView('Yat', true, false, "yatField")
+        self.preview__address_YatView = preview__address_YatView
+        previewView.addSubview(preview__address_YatView)
+      }
+
       const preview__address_fieldView = self._new_fieldBaseView('Address', true, false)
       self.preview__address_fieldView = preview__address_fieldView
       previewView.addSubview(preview__address_fieldView)
     }
     const disclosedView = new View({}, self.context)
     {
+      if (self.wallet.eid !== undefined) {
+        const disclosed__address_YatView = self._new_fieldBaseView('Yat', true, false, "yatField")
+        self.disclosed__address_YatView = disclosed__address_YatView
+        disclosedView.addSubview(disclosed__address_YatView)
+      }
+      //
       const disclosed__address_fieldView = self._new_fieldBaseView('Address', false, false)
       self.disclosed__address_fieldView = disclosed__address_fieldView
       disclosedView.addSubview(disclosed__address_fieldView)
@@ -662,6 +677,10 @@ class WalletDetailsView extends View {
     if (wallet.didFailToBoot_flag == true) {
       // in this state, we should still have enough info to display
     }
+    if (self.wallet.eid !== undefined) {
+      self.preview__address_YatView.SetValue(wallet.eid)
+      self.disclosed__address_YatView.SetValue(wallet.eid)
+    }
     self.preview__address_fieldView.SetValue(addr)
     self.disclosed__address_fieldView.SetValue(addr)
     self.viewKey_fieldView.SetValue(viewKey)
@@ -1081,7 +1100,7 @@ class WalletDetailsView extends View {
     const headers = ['date', 'amount', 'status', 'tx id', 'payment_id']
     let csvContent = ''
     csvContent += headers.join(',') + '\r\n'
-    console.log(stateCachedTransactions)
+    // console.log(stateCachedTransactions)
     stateCachedTransactions.forEach(
       function (tx, i) {
         const received_JSBigInt = tx.total_received ? (typeof tx.total_received === 'string' ? new JSBigInt(tx.total_received) : tx.total_received) : new JSBigInt('0')
@@ -1095,7 +1114,7 @@ class WalletDetailsView extends View {
         csvContent += columns.join(',') + '\r\n'
       }
     )
-    console.log(csvContent)
+    // console.log(csvContent)
     self.context.filesystemUI.PresentDialogToSaveTextFile(
       csvContent,
       'Save CSV',

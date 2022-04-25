@@ -1825,6 +1825,23 @@ div#currency-table {
   margin: 8px 0px 0px 7px;
   font-weight: 300;
   float: none;
+  
+}
+
+/* We need this to make clickable areas larger */
+.clickableLinkButton {
+  position:relative;
+}
+
+/* We need this to make clickable areas larger */
+.clickableLinkButton:after {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: -10px;
+  min-width: 40px;
+  height: 36px;
+  width: 100%;
 }
 
 .full-width {

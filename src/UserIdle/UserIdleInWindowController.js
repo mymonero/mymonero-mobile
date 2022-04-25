@@ -58,25 +58,25 @@ class UserIdleInWindowController extends EventEmitter {
     const self = this
     self._numberOfRequestsToLockUserIdleAsDisabled += 1
     if (self._numberOfRequestsToLockUserIdleAsDisabled == 1) { // if we're requesting to disable without it already having been disabled, i.e. was 0, now 1
-      console.log('⏳  Temporarily disabling the user idle timer.')
+      // console.log('⏳  Temporarily disabling the user idle timer.')
       self.__disable_userIdle()
     } else {
-      console.log('⏳  Requested to temporarily disable user idle but already disabled. Incremented lock.')
+      // console.log('⏳  Requested to temporarily disable user idle but already disabled. Incremented lock.')
     }
   }
 
   ReEnable_userIdle () {
     const self = this
     if (self._numberOfRequestsToLockUserIdleAsDisabled == 0) {
-      console.log('⏳  ReEnable_userIdle, self._numberOfRequestsToLockUserIdleAsDisabled 0')
+      // console.log('⏳  ReEnable_userIdle, self._numberOfRequestsToLockUserIdleAsDisabled 0')
       return // don't go below 0
     }
     self._numberOfRequestsToLockUserIdleAsDisabled -= 1
     if (self._numberOfRequestsToLockUserIdleAsDisabled == 0) {
-      console.log('⏳  Re-enabling the user idle timer.')
+      // console.log('⏳  Re-enabling the user idle timer.')
       self.__reEnable_userIdle()
     } else {
-      console.log('⏳  Requested to re-enable user idle but other locks still exist.')
+      // console.log('⏳  Requested to re-enable user idle but other locks still exist.')
     }
   }
 
@@ -140,7 +140,7 @@ class UserIdleInWindowController extends EventEmitter {
     {
       self.isUserIdle = false // in case they were
     }
-    console.log('👀  User came back from having been idle.')
+    // console.log('👀  User came back from having been idle.')
     self.emit(self.EventName_userDidComeBackFromIdle())
   }
 
@@ -149,7 +149,7 @@ class UserIdleInWindowController extends EventEmitter {
     {
       self.isUserIdle = true
     }
-    console.log('⏲  User became idle.')
+    // console.log('⏲  User became idle.')
     self.emit(self.EventName_userDidBecomeIdle())
   }
 }

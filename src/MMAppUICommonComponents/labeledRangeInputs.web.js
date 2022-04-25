@@ -150,7 +150,7 @@ function New_fieldValue_labeledRangeInputView (params, context) {
   view._updateAndLayoutLabel() // initial
   //
   view.TearDown = function () { // NOTE: you must call this!
-    console.log('♻️  Tearing down labeled range input.')
+    // console.log('♻️  Tearing down labeled range input.')
     window.removeEventListener('resize', view._window_resize_fn)
   }
   //

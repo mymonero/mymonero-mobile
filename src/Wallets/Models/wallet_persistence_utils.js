@@ -142,7 +142,6 @@ function SaveToDisk (
   fn
 ) {
   const self = walletInstance
-  self.eid = ""
   // console.log('📝  Saving wallet to disk ', self.Description())
   //
   const persistencePassword = self.persistencePassword
@@ -255,6 +254,7 @@ function DeleteFromDisk (
       err,
       numRemoved
     ) {
+      // console.log("Invoked removeDocumentsWithIds");
       if (err) {
         console.error('Error while removing wallet:', err)
         fn(err)
@@ -264,7 +264,7 @@ function DeleteFromDisk (
         fn(new Error("❌  Number of documents removed by _id'd remove was 0"))
         return // bail
       }
-      console.log('🗑  Deleted saved wallet with _id ' + self._id + '.')
+      // console.log('🗑  Deleted saved wallet with _id ' + self._id + '.')
       fn()
     }
   )
