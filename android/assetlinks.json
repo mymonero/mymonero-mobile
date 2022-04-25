@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.mymonero.official_android_application",
+    "sha256_cert_fingerprints":
+    ["D4:71:C0:3D:82:3C:8E:68:06:CA:84:78:77:B3:A4:2A:C2:0C:C4:E6:05:5F:A7:E8:AD:75:E8:EC:CC:BD:B0:02"]
+  }
+}]
