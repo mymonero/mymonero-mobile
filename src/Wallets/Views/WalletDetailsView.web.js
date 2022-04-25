@@ -14,7 +14,6 @@ import InfoDisclosingView from '../../InfoDisclosingView/Views/InfoDisclosingVie
 import StackAndModalNavigationView from '../../StackNavigation/Views/StackAndModalNavigationView.web'
 import EditWalletView from './EditWalletView.web'
 import TransactionDetailsView from './TransactionDetailsView.web'
-import ImportTransactionsModalView from './ImportTransactionsModalView.web'
 import FundsRequestQRDisplayView from '../../RequestFunds/Views/FundsRequestQRDisplayView.web'
 import Currencies from '../../CcyConversionRates/Currencies'
 import monero_amount_format_utils from '@mymonero/mymonero-money-format'
@@ -508,10 +507,6 @@ class WalletDetailsView extends View {
     }
   }
 
-  //
-  //
-  // Lifecycle - Teardown
-  //
   TearDown () { // We're going to make sure we tear this down here as well as in VDA in case we get popped over back to root (thus never calling VDA but calling this)
     const self = this
     super.TearDown()
@@ -528,11 +523,6 @@ class WalletDetailsView extends View {
     if (typeof self.current_EditWalletView !== 'undefined' && self.current_EditWalletView) {
       self.current_EditWalletView.TearDown()
       self.current_EditWalletView = null
-    }
-    // … is this sufficient? might need/want to tear down the stack nav too?
-    if (self.currentlyPresented_ImportTransactionsModalView !== null && typeof self.currentlyPresented_ImportTransactionsModalView !== 'undefined') {
-      self.currentlyPresented_ImportTransactionsModalView.TearDown() // might not be necessary but method guards itself
-      self.currentlyPresented_ImportTransactionsModalView = null // must zero again and should free
     }
     if (self.currentlyPresented_qrDisplayView !== null && typeof self.currentlyPresented_qrDisplayView !== 'undefined') {
       self.currentlyPresented_qrDisplayView.TearDown() // might not be necessary but method guards itself
@@ -613,10 +603,6 @@ class WalletDetailsView extends View {
     }
   }
 
-  //
-  //
-  // Runtime - Accessors - Navigation
-  //
   Navigation_Title () {
     const self = this
     const wallet = self.wallet
@@ -673,24 +659,6 @@ class WalletDetailsView extends View {
     return true
   }
 
-  _wallet_shouldShowImportTxsBtn () {
-    const self = this
-    const wallet = self.wallet
-    const wallet_bootFailed = self._wallet_bootFailed()
-    let shouldShow_importTxsBtn = wallet.shouldDisplayImportAccountOption == true && wallet_bootFailed == false
-    if (wallet.HasEverFetched_transactions() !== false) {
-      const stateCachedTransactions = wallet.New_StateCachedTransactions()
-      if (stateCachedTransactions.length > 0) {
-        shouldShow_importTxsBtn = false
-      }
-    }
-    return shouldShow_importTxsBtn
-  }
-
-  //
-  //
-  // Runtime - Imperatives - UI Configuration
-  //
   _configureUIWithWallet__accountInfo () {
     const self = this
     const wallet = self.wallet
@@ -951,36 +919,13 @@ class WalletDetailsView extends View {
   _configureUIWithWallet__heightsAndImportAndFetchingState () {
     const self = this
     const wallet = self.wallet
-    const transactionsListLayerContainerLayer = self.transactionsListLayerContainerLayer
     const wallet_bootFailed = self._wallet_bootFailed()
-    const shouldShow_importTxsBtn = self._wallet_shouldShowImportTxsBtn()
-    if (shouldShow_importTxsBtn) {
-      if (!self.importTransactionsButtonView || typeof self.importTransactionsButtonView === 'undefined') {
-        const buttonView = commonComponents_tables.New_clickableLinkButtonView(
-          'IMPORT TRANSACTIONS',
-          self.context,
-          function () {
-            self._present_importTransactionsModal()
-          }
-        )
-        self.importTransactionsButtonView = buttonView
-        const layer = buttonView.layer
-        layer.style.position = 'absolute'
-        layer.style.left = '6px'
-        layer.style.top = '5px'
-        layer.style.width = '150px'
-        layer.style.height = '13px'
-        layer.style.float = 'none'
-        layer.style.clear = 'none' // doesn't matter tho
-        transactionsListLayerContainerLayer.appendChild(layer)
+
+    if (self.importTransactionsButtonView) {
+      if (self.importTransactionsButtonView.layer.parentNode) {
+        self.importTransactionsButtonView.layer.parentNode.removeChild(self.importTransactionsButtonView.layer)
       }
-    } else {
-      if (self.importTransactionsButtonView) {
-        if (self.importTransactionsButtonView.layer.parentNode) {
-          self.importTransactionsButtonView.layer.parentNode.removeChild(self.importTransactionsButtonView.layer)
-        }
-        self.importTransactionsButtonView = null
-      }
+      self.importTransactionsButtonView = null
     }
     const shouldShowActivityIndicator =
 			wallet.isBooted && // rule out still-logging-in (for now)
@@ -995,7 +940,7 @@ class WalletDetailsView extends View {
             if (nBlocks > 0) {
               return `${nBlocks} block${nBlocks != 1 ? 's' : ''} behind`
             } else {
-              return shouldShow_importTxsBtn != true ? 'Scanner up-to-date' : ''
+              return 'Scanner up-to-date'
             }
           }
           let messageText
@@ -1094,35 +1039,11 @@ class WalletDetailsView extends View {
     }
   }
 
-  _ifNecessary_autoPresent_importTxsModal_afterS (afterS) {
-    const self = this
-    // If this is the first time after logging in that we're displaying the import txs modal,
-    // then auto-display it for the user so they don't have to know to click on the button
-    if (self.hasEverAutomaticallyDisplayedImportModal !== true) {
-      if (self._wallet_shouldShowImportTxsBtn()) {
-        self.hasEverAutomaticallyDisplayedImportModal = true // immediately, in case login and viewDidAppear race
-        setTimeout(function () {
-          if (self.wallet.hasBeenTornDown != true) {
-            self._present_importTransactionsModal()
-          }
-        }, afterS * 1000)
-      }
-    }
-  }
-
-  //
-  //
-  // Runtime - Imperatives - Changing specific elements of the UI
-  //
   _reconfigureUIWithChangeTo_wallet__color () {
     const self = this
     self.balanceLabelView.SetWalletThemeColor(self.wallet.swatch)
   }
 
-  //
-  //
-  // Runtime - Imperatives - Navigation
-  //
   pushDetailsViewFor_transaction (transaction) {
     const self = this
     const _cmd = 'pushDetailsViewFor_transaction'
@@ -1159,17 +1080,6 @@ class WalletDetailsView extends View {
       // by tearing it down on self.viewDidAppear() below and on TearDown()
       self.current_transactionDetailsView = view
     }
-  }
-
-  _present_importTransactionsModal () {
-    const self = this
-    const view = new ImportTransactionsModalView({
-      wallet: self.wallet
-    }, self.context)
-    self.currentlyPresented_ImportTransactionsModalView = view
-    const navigationView = new StackAndModalNavigationView({}, self.context)
-    navigationView.SetStackViews([view])
-    self.navigationController.PresentView(navigationView, true)
   }
 
   //
@@ -1234,10 +1144,6 @@ class WalletDetailsView extends View {
     )
   }
 
-  //
-  //
-  // Runtime - Delegation - Navigation/View lifecycle
-  //
   viewWillAppear () {
     const self = this
     super.viewWillAppear()
@@ -1255,8 +1161,6 @@ class WalletDetailsView extends View {
       throw 'WalletDetailsView/viewDidAppear: self.wallet=nil'
     }
     self.wallet.requestFromUI_manualRefresh()
-    //
-    self._ifNecessary_autoPresent_importTxsModal_afterS(1)
   }
 
   // Runtime - Protocol / Delegation - Stack & modal navigation
@@ -1277,21 +1181,14 @@ class WalletDetailsView extends View {
     self.tearDownAnySpawnedReferencedPresentedViews()
   }
 
-  //
-  //
-  // Runtime - Delegation - Event handlers - Wallet
-  //
   _wallet_loggedIn () {
     const self = this
     self._configureUIWithWallet__accountInfo()
     self._configureUIWithWallet__balance()
     self._configureUIWithWallet__transactions()
     self._configureUIWithWallet__heightsAndImportAndFetchingState()
-    //
-    self._ifNecessary_autoPresent_importTxsModal_afterS(1)
   }
 
-  //
   _wallet_failedToLogIn () {
     const self = this
     self._configureUIWithWallet__accountInfo()
@@ -1301,7 +1198,6 @@ class WalletDetailsView extends View {
     self.hasEverAutomaticallyDisplayedImportModal = undefined // think we might as well un-set this here - i.e. on a 'log out'
   }
 
-  //
   wallet_EventName_walletLabelChanged () {
     const self = this
     self.navigationController.SetNavigationBarTitleNeedsUpdate()
@@ -1328,10 +1224,6 @@ class WalletDetailsView extends View {
     self._configureUIWithWallet__heightsAndImportAndFetchingState()
   }
 
-  //
-  //
-  // Runtime - Delegation - Interactions
-  //
   _didClickTransaction (transaction, atIndex) {
     const self = this
     self.pushDetailsViewFor_transaction(transaction)
