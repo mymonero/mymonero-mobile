@@ -28,13 +28,13 @@ class ExchangeFunctions {
         return new Promise((resolve, reject) => {
             axios.post(endpoint, data)
                 .then(function (response) {
-                    console.log('outAmount', response);
+                    // console.log('outAmount', response);
                     self.offer = response.data;
                     self.offer.out_amount = out_amount;
                     resolve(self.offer);
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    // console.log(error);
                     reject(error);
                 });
         });
@@ -53,12 +53,12 @@ class ExchangeFunctions {
         return new Promise((resolve, reject) => {
             axios.post(endpoint, data)
                 .then(function (response) {
-                    console.log('resp from getOfferwithtinamount', response);
+                    // console.log('resp from getOfferwithtinamount', response);
                     self.offer = response.data;
                     resolve(self.offer);
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    // console.log(error);
                     reject(error);
                 });
         });
@@ -80,7 +80,7 @@ class ExchangeFunctions {
                     resolve(self.orderStatus);
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    // console.log(error);
                     reject(error);
                 });
         });
@@ -112,7 +112,7 @@ class ExchangeFunctions {
         } else if (self.offer_type == "in_amount") {
             delete data.out_amount;
         }
-        console.log(data);
+        // console.log(data);
         return new Promise((resolve, reject) => {
             try {
                 axios.post(endpoint, data)

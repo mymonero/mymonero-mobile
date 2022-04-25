@@ -1190,7 +1190,7 @@ class WalletDetailsView extends View {
     const headers = ['date', 'amount', 'status', 'tx id', 'payment_id']
     let csvContent = ''
     csvContent += headers.join(',') + '\r\n'
-    console.log(stateCachedTransactions)
+    // console.log(stateCachedTransactions)
     stateCachedTransactions.forEach(
       function (tx, i) {
         const received_JSBigInt = tx.total_received ? (typeof tx.total_received === 'string' ? new JSBigInt(tx.total_received) : tx.total_received) : new JSBigInt('0')
@@ -1204,7 +1204,7 @@ class WalletDetailsView extends View {
         csvContent += columns.join(',') + '\r\n'
       }
     )
-    console.log(csvContent)
+    // console.log(csvContent)
     self.context.filesystemUI.PresentDialogToSaveTextFile(
       csvContent,
       'Save CSV',

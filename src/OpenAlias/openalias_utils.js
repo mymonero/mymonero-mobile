@@ -12,12 +12,12 @@ function ValidatedOARecordsFromTXTRecordsWithOpenAliasPrefix (
   let oaRecords = []
 	if (dnssec_used) {
     if (secured) {
-      console.log('DNSSEC validation successful')
+      // console.log('DNSSEC validation successful')
     } else {
       throw 'DNSSEC validation failed for ' + domain + ': ' + dnssec_fail_reason
     }
   } else {
-    console.log('DNSSEC Not used')
+    // console.log('DNSSEC Not used')
 	}
   for (let i = 0; i < records.length; i++) {
     let record = records[i]
@@ -55,7 +55,7 @@ function New_ParsedDescriptionFromOpenAliasRecordWithOpenAliasPrefix (
   function parsed_paramValueWithName (valueName) {
     let pos = record.indexOf(valueName + '=')
     if (pos === -1) { // Record does not contain param
-      console.log('⚠️  ' + valueName + ' not found in OA record.')
+      // console.log('⚠️  ' + valueName + ' not found in OA record.')
       return undefined
     }
     pos += valueName.length + 1

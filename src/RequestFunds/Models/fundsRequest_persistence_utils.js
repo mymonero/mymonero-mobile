@@ -33,7 +33,7 @@ function SaveToDisk (
   fn
 ) {
   const self = instance
-  console.log('📝  Saving fundsRequest to disk ', self.Description())
+  // console.log('📝  Saving fundsRequest to disk ', self.Description())
   {
     fn = fn || function (err) { console.error(err); console.trace('No fn provided to SaveToDisk') }
   }
@@ -78,7 +78,7 @@ function DeleteFromDisk (
   fn
 ) {
   const self = instance
-  console.log('📝  Deleting fundsRequest ', self.Description())
+  // console.log('📝  Deleting fundsRequest ', self.Description())
   self.context.persister.RemoveDocumentsWithIds(
     CollectionName,
     [self._id],
@@ -95,7 +95,7 @@ function DeleteFromDisk (
         fn(new Error("❌  Number of documents removed by _id'd remove was 0"))
         return // bail
       }
-      console.log('🗑  Deleted saved fundsRequest with _id ' + self._id + '.')
+      // console.log('🗑  Deleted saved fundsRequest with _id ' + self._id + '.')
       fn()
     }
   )

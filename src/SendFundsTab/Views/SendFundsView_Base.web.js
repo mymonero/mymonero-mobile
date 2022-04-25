@@ -841,7 +841,7 @@ class SendFundsView extends View {
     //
     const req = self.requestHandle_for_oaResolution
     if (typeof req !== 'undefined' && req !== null) {
-      console.log('💬  Aborting requestHandle_for_oaResolution')
+      // console.log('💬  Aborting requestHandle_for_oaResolution')
       req.abort()
     }
     self.requestHandle_for_oaResolution = null
@@ -1952,7 +1952,7 @@ class SendFundsView extends View {
           return
         }
         if (err) {
-          console.log('err.toString()', err.toString())
+          // console.log('err.toString()', err.toString())
           self.validationMessageLayer.SetValidationError(err.toString())
           return
         }
@@ -1973,7 +1973,7 @@ class SendFundsView extends View {
           if (self.manualPaymentIDInputLayer_containerLayer.style.display != 'block') { // if manual payment field not showing
             self.addPaymentIDButtonView.layer.style.display = 'block' // then make sure we are at least shwign the + payment ID btn
           } else { // then one or the other is already visible - respect existing state
-            console.log('💬  It should be the case that either add pymt id btn or manual payment field is visible')
+            // console.log('💬  It should be the case that either add pymt id btn or manual payment field is visible')
           }
         }
         //
@@ -2117,20 +2117,20 @@ class SendFundsView extends View {
 						if (payment_id_orNull) { // request has pid
 							if (contact.payment_id && typeof contact.payment_id !== 'undefined') { // contact has pid
 								if (contact.payment_id !== payment_id_orNull) {
-									console.log("contact has same address as request but different payment id!")
+									// console.log("contact has same address as request but different payment id!")
 									continue // TODO (?) keep this continue? or allow and somehow use the pid from the request?
 								} else {
 									// contact has same pid as request pid
-									console.log("contact has same pid as request pid")
+									// console.log("contact has same pid as request pid")
 								}
 							} else { // contact has no pid
-								console.log("request pid exists but contact has no request pid")
+								// console.log("request pid exists but contact has no request pid")
 							}
 						} else { // request has no pid
 							if (contact.payment_id && typeof contact.payment_id !== 'undefined') { // contact has pid
-								 console.log("contact has pid but request has no pid")
+								 // console.log("contact has pid but request has no pid")
 							} else { // contact has no pid
-								console.log("neither request nor contact have pid")
+								// console.log("neither request nor contact have pid")
 								// this is fine - we can use this contact
 							}
 						}
