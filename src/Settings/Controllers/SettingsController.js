@@ -3,13 +3,13 @@
 import EventEmitter from 'events'
 import uuidV1 from 'uuid/v1'
 import Currencies from '../../CcyConversionRates/Currencies'
-import iOSMigrationController from "../../DocumentPersister/iOSMigrationController"
-import DocumentPersister from "../../DocumentPersister/DocumentPersister.SecureStorage"
+import iOSMigrationController from '../../DocumentPersister/iOSMigrationController'
+
 const CollectionName = 'Settings'
 
 const k_defaults_record =
 {
-  specificAPIAddressURLAuthority: '',
+  specificAPIAddressURLAuthority: 'https://api.mymonero.com',
   appTimeoutAfterS: 6 * 60, // 6 mins
   invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount: false,
   displayCcySymbol: Currencies.ccySymbolsByCcy.XMR, // default
@@ -17,7 +17,7 @@ const k_defaults_record =
   authentication_requireWhenDisclosingWalletSecrets: true,
   autoDownloadUpdatesEnabled: true
 }
-//
+
 class SettingsController extends EventEmitter {
   constructor (options, context) {
     super()
@@ -63,24 +63,23 @@ class SettingsController extends EventEmitter {
     if (self.context.deviceInfo.platform === 'ios' || self.context.deviceInfo.platform === 'web') {
       let iosMigrationController
       if (self.context.deviceInfo.platform === 'ios') {
-        iosMigrationController = new iOSMigrationController(self.context);
+        iosMigrationController = new iOSMigrationController(self.context)
       } else { // web
-        iosMigrationController = new iOSMigrationController(self.context, true);
+        iosMigrationController = new iOSMigrationController(self.context, true)
       }
-      
-      let hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated;
-      self.context.shouldDisplayExistingPinScreenForMigration = !hasPreviouslyMigrated;
-      //iosMigrationController.touchFile(); // For debugging if you're not sure which folder your simulator is running in
-      self.context.iosMigrationController = iosMigrationController;
-      let migrationFileData = await iosMigrationController.getMigrationFiles();
-      
-      let migrationPreviouslyPerformed = hasPreviouslyMigrated
-      
+
+      const hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated
+      self.context.shouldDisplayExistingPinScreenForMigration = !hasPreviouslyMigrated
+      // iosMigrationController.touchFile(); // For debugging if you're not sure which folder your simulator is running in
+      self.context.iosMigrationController = iosMigrationController
+      const migrationFileData = await iosMigrationController.getMigrationFiles()
+
+      const migrationPreviouslyPerformed = hasPreviouslyMigrated
 
       // console.log("migrated previously?");
       if (!(hasPreviouslyMigrated === true)) {
         // Check if previously migrated. If no, we may need to migrate from the old Swift proprietary file format to the new SecureStorage persistence
-        let migrationFiles = await iosMigrationController.getMigrationFiles();        
+        const migrationFiles = await iosMigrationController.getMigrationFiles()
         // if (migrationFiles !== false) {
         //   console.log("Since this didn't return false, we set a context variable to denote that we should display the existing password screen")
         //   self.context.shouldDisplayExistingPinScreenForMigration = true;
@@ -95,10 +94,9 @@ class SettingsController extends EventEmitter {
       }
     }
 
-    
     //
     // first, check if any password model has been stored
-    
+
     self.context.persister.AllDocuments(
       CollectionName,
       function (err, contentStrings) {
@@ -192,7 +190,7 @@ class SettingsController extends EventEmitter {
   _setBooted () {
     const self = this
     if (self.hasBooted == true) {
-      throw 'code fault: _setBooted called while self.hasBooted=true'
+      throw Error('code fault: _setBooted called while self.hasBooted=true')
     }
     self.hasBooted = true
     const fns_length = self._whenBooted_fns.length
@@ -205,10 +203,6 @@ class SettingsController extends EventEmitter {
     self._whenBooted_fns = [] // flash for next time
   }
 
-  //
-  //
-  // Runtime - Accessors
-  //
   EventName_settingsChanged_specificAPIAddressURLAuthority () {
     return 'EventName_settingsChanged_specificAPIAddressURLAuthority'
   }
@@ -233,7 +227,6 @@ class SettingsController extends EventEmitter {
     return 'EventName_settingsChanged_autoDownloadUpdatesEnabled'
   }
 
-  //
   AppTimeoutNeverValue () {
     return -1
   }
@@ -242,14 +235,7 @@ class SettingsController extends EventEmitter {
     return k_defaults_record.autoDownloadUpdatesEnabled
   }
 
-  //
-  //
-  // Runtime - Imperatives - Settings Values
-  //
-  Set_settings_valuesByKey (
-    valuesByKey,
-    fn // (err?) -> Void
-  ) {
+  Set_settings_valuesByKey (valuesByKey, fn) {
     const self = this
     self.executeWhenBooted(
       function () {
@@ -360,16 +346,16 @@ class SettingsController extends EventEmitter {
       function () {
         console.log('📝  Saving ' + CollectionName + ' to disk.')
         const persistableDocument =
-				{
-				  _id: self._id, // important to set for updates
-				  specificAPIAddressURLAuthority: self.specificAPIAddressURLAuthority,
-				  appTimeoutAfterS: self.appTimeoutAfterS,
-				  invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount: self.invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount,
-				  displayCcySymbol: self.displayCcySymbol,
-				  authentication_requireWhenSending: self.authentication_requireWhenSending,
-				  authentication_requireWhenDisclosingWalletSecrets: self.authentication_requireWhenDisclosingWalletSecrets,
-				  autoDownloadUpdatesEnabled: self.autoDownloadUpdatesEnabled
-				}
+        {
+          _id: self._id, // important to set for updates
+          specificAPIAddressURLAuthority: self.specificAPIAddressURLAuthority,
+          appTimeoutAfterS: self.appTimeoutAfterS,
+          invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount: self.invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount,
+          displayCcySymbol: self.displayCcySymbol,
+          authentication_requireWhenSending: self.authentication_requireWhenSending,
+          authentication_requireWhenDisclosingWalletSecrets: self.authentication_requireWhenDisclosingWalletSecrets,
+          autoDownloadUpdatesEnabled: self.autoDownloadUpdatesEnabled
+        }
         if (self._id === null || typeof self._id === 'undefined') {
           _proceedTo_insertNewDocument(persistableDocument)
         } else {
@@ -392,7 +378,7 @@ class SettingsController extends EventEmitter {
               }
               self._id = _id // must save it back
               console.log('✅  Saved newly inserted ' + CollectionName + ' record with _id ' + self._id + '.')
-              //console.log(jsonString)
+              // console.log(jsonString)
               fn()
             }
           )
@@ -417,12 +403,7 @@ class SettingsController extends EventEmitter {
     )
   }
 
-  //
-  // Runtime/Boot - Delegation - Private
-  passwordController_ChangePassword (
-    toPassword,
-    fn // this MUST get called
-  ) {
+  passwordController_ChangePassword (toPassword, fn) {
     const self = this
     if (self.hasBooted !== true) {
       console.warn('⚠️  ' + self.constructor.name + ' asked to ChangePassword but not yet booted.')
