@@ -67,7 +67,7 @@ class Wallet extends EventEmitter {
         self.didFailToInitialize_errOrNil = err
       }
       setTimeout(function () {
-        console.log('Wallet.js: failedToInitialize_cb setTimeout')
+        // console.log('Wallet.js: failedToInitialize_cb setTimeout')
         const fn = self.options.failedToInitialize_cb || function (err, walletInstance) {}
         fn(err, self)
       })
@@ -192,14 +192,14 @@ class Wallet extends EventEmitter {
   // Important: You must manually call TearDown() based on how you retain self
 
   TearDown () {
-    console.log('Wallet.js: Teardown')
+    // console.log('Wallet.js: Teardown')
     const self = this
     self.hasBeenTornDown = true
     self.tearDownRuntime()
   }
 
   tearDownRuntime () {
-    console.log('Wallet.js: tearDownRuntime')
+    // console.log('Wallet.js: tearDownRuntime')
     const self = this
     self.isLoggingIn = false
     self._tearDown_polling()
@@ -211,11 +211,11 @@ class Wallet extends EventEmitter {
   }
 
   abortAnyLogInRequest () { // acct info
-    console.log('Wallet.js: abortAnyLogInRequest')
+    // console.log('Wallet.js: abortAnyLogInRequest')
     const self = this
     const req = self.requestHandle_for_logIn
     if (typeof req !== 'undefined' && req !== null) {
-      console.log('💬  Aborting running login request')
+      // console.log('💬  Aborting running login request')
       req.abort()
     }
     self.requestHandle_for_logIn = null
@@ -223,7 +223,7 @@ class Wallet extends EventEmitter {
   }
 
   _tearDown_polling () {
-    console.log('Wallet.js: tearDown_polling')
+    // console.log('Wallet.js: tearDown_polling')
     const self = this
     if (typeof self.hostPollingController !== 'undefined' && self.hostPollingController !== null) {
       self.hostPollingController.TearDown()
@@ -235,7 +235,7 @@ class Wallet extends EventEmitter {
   // Runtime (Post init, pre-boot) - Accessors - Public - Creating new wallets
 
   MnemonicStringWhichWasGeneratedOnInit () {
-    console.log('Wallet.js: MnemonicStringWhichWasGeneratedOnInit')
+    // console.log('Wallet.js: MnemonicStringWhichWasGeneratedOnInit')
     return self.generatedOnInit_walletDescription.mnemonicString
   }
   // TODO: there may be room for a 'regenerate mnemonic' with new wordset imperative function
@@ -249,7 +249,7 @@ class Wallet extends EventEmitter {
     swatch,
     fn
   ) {
-    console.log('Wallet.js: Boot_byLoggingIn_givenNewlyCreatedWallet')
+    // console.log('Wallet.js: Boot_byLoggingIn_givenNewlyCreatedWallet')
     const self = this
     //
     self.persistencePassword = persistencePassword || null
@@ -474,7 +474,7 @@ class Wallet extends EventEmitter {
         self._trampolineFor_successfullyBooted(fn)
         // so we're doing the same thing as Boot_havingLoadedDecryptedExistingInitDoc in the iOS app - since record load architecture differs slightly
       } else {
-        console.log('Wallet which was unable to log in was loaded. Attempting to reboot.')
+        // console.log('Wallet which was unable to log in was loaded. Attempting to reboot.')
         //
         // going to treat this as a wallet which was saved but which failed to log in
         self.logOutAndSaveThenLogBackIn(persistencePassword)
@@ -487,7 +487,7 @@ class Wallet extends EventEmitter {
   //
   // Runtime - Imperatives - Rebooting / Debooting
   deBoot () {
-    console.log('Wallet.js: deBoot')
+    // console.log('Wallet.js: deBoot')
     const self = this
     const old__total_received = self.total_received
     const old__total_sent = self.total_sent
@@ -541,19 +541,19 @@ class Wallet extends EventEmitter {
     }
     self.saveToDisk(function (err) {
       if (err) {
-        console.log('Error while saving during a deBoot(): ' + err)
+        // console.log('Error while saving during a deBoot(): ' + err)
       }
     })
   }
 
   logOutAndSaveThenLogBackIn (persistencePassword) {
-    console.log('Wallet.js: logOutAndSaveThenLogBackIn')
+    // console.log('Wallet.js: logOutAndSaveThenLogBackIn')
     const self = this
     const fn = function (err) {
       if (err) {
-        console.log('❌  Error while trying to log back in:', err)
+        // console.log('❌  Error while trying to log back in:', err)
       } else {
-        console.log('✅  Logged back in')
+        // console.log('✅  Logged back in')
       }
     }
     if (self.isLoggedIn || self.isBooted || self.didFailToBoot_flag) {
@@ -603,7 +603,7 @@ class Wallet extends EventEmitter {
         if (areMnemonicsEqual == false) { // would be rather odd
           throw 'Different mnemonicString derived from accountSeed than was entered for login'
         }
-        console.log("Not setting mnemonicSeed because the instance was initialized with one and it's the same as the one derived from the account_seed.")
+        // console.log("Not setting mnemonicSeed because the instance was initialized with one and it's the same as the one derived from the account_seed.")
       }
       self.mnemonicString = derived_mnemonicString // in all cases, save derived mnemonic in case input mnemonic was truncated words form - so we always recover full form
     }
@@ -663,7 +663,7 @@ class Wallet extends EventEmitter {
           if (self.IsTransactionConfirmed(existing_tx) == false ||
 						existing_tx.mempool == true) {
             if (existing_tx.isFailed != true/* already */) {
-              console.log('Marking transaction as dead: ', existing_tx)
+              // console.log('Marking transaction as dead: ', existing_tx)
               //
               didChangeAny = true
               existing_tx.isFailed = true // this flag does not need to get preserved on existing_txs when overwritten by an incoming_tx because if it's returned by the server, it can't be dead
@@ -949,7 +949,7 @@ class Wallet extends EventEmitter {
       // return 0
     }
     const pctFloat = self.account_scanned_height / self.transaction_height
-    console.log(`CatchingUpPercentageFloat ${self.account_scanned_height}/${self.transaction_height}=${pctFloat.toFixed(2)}%`)
+    // console.log(`CatchingUpPercentageFloat ${self.account_scanned_height}/${self.transaction_height}=${pctFloat.toFixed(2)}%`)
     return pctFloat
   }
 
@@ -1446,7 +1446,7 @@ class Wallet extends EventEmitter {
           console.error('Failed to change password with error', err)
           self.persistencePassword = old_persistencePassword // revert
         } else {
-          console.log('Successfully changed password.')
+          // console.log('Successfully changed password.')
         }
         fn(err)
       }
@@ -1488,7 +1488,7 @@ class Wallet extends EventEmitter {
         if (err) {
           console.error('Failed to save new valuesByKey', err)
         } else {
-          console.log('📝  Successfully saved ' + self.constructor.name + ' update ', JSON.stringify(valuesByKey))
+          // console.log('📝  Successfully saved ' + self.constructor.name + ' update ', JSON.stringify(valuesByKey))
           if (didUpdate_walletLabel) {
             self.emit(self.EventName_walletLabelChanged(), self.walletLabel)
           }
@@ -1827,13 +1827,13 @@ class Wallet extends EventEmitter {
     old_locked_balance
   ) {
     const self = this
-    console.log('💬  Received an update to balance')
+    // console.log('💬  Received an update to balance')
     self.emit(self.EventName_balanceChanged(), self, old_total_received, old_total_sent, old_locked_balance)
   }
 
   ___didReceiveActualChangeTo_spentOutputs (old_spent_outputs) {
     const self = this
-    console.log('💬  Received an update to spent outputs')
+    // console.log('💬  Received an update to spent outputs')
     self.emit(self.EventName_spentOutputsChanged(), self, (old_spent_outputs || []))
   }
 
@@ -1848,7 +1848,7 @@ class Wallet extends EventEmitter {
     // console.log("💬  Got an update to txs list")
     self.emit(self.EventName_transactionsChanged(), self, oldTransactions)
     if (numberOfTransactionsAdded > 0) {
-      console.log(`💬  ${numberOfTransactionsAdded} new transaction(s) added`)
+      // console.log(`💬  ${numberOfTransactionsAdded} new transaction(s) added`)
       self.emit(self.EventName_transactionsAdded(), self, numberOfTransactionsAdded, newTransactions)
     }
   }

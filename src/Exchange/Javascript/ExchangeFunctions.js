@@ -25,7 +25,7 @@ class ExchangeFunctions {
     //                 resolve(self.orderStatus);
     //             })
     //             .catch(function (error) {
-    //                 console.log(error);
+    //                 // console.log(error);
     //                 reject(error);
     //             });
     //     });
@@ -61,7 +61,7 @@ class ExchangeFunctions {
     //                 resolve(response);
     //               })
     //               .catch(function (error) {
-    //                 console.log(error);
+    //                 // console.log(error);
     //                 reject(error);
     //               });
 
@@ -75,7 +75,7 @@ class ExchangeFunctions {
     //             //         "uuid": "234567890121"
     //             //     })
     //             // }, 200).then((resolve, reject) => {
-    //             //     console.log(resolve);
+    //             //     // console.log(resolve);
     //             //     return resolve;
     //             // });
 
@@ -106,7 +106,7 @@ class ExchangeFunctions {
     //                 resolve(response);
     //             })
     //             .catch(function (error) {
-    //                 console.log(error);
+    //                 // console.log(error);
     //                 reject(error);
     //             });
     //     })

@@ -96,7 +96,7 @@ class Contact extends EventEmitter {
           self.__setup_didFailToBoot(err)
           return
         }
-        console.log('📝  Successfully saved new contact.')
+        // console.log('📝  Successfully saved new contact.')
         //
         self.__setup_didBoot()
       }
@@ -396,7 +396,7 @@ class Contact extends EventEmitter {
           console.error('Failed to change password with error', err)
           self.persistencePassword = old_persistencePassword // revert
         } else {
-          console.log('Successfully changed password.')
+          // console.log('Successfully changed password.')
         }
         fn(err)
       }

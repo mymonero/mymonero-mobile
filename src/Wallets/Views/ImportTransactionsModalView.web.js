@@ -290,7 +290,7 @@ class ImportTransactionsModalView extends View {
     //
     const req = self.requestHandle_for_importRequestInfoAndStatus
     if (typeof req !== 'undefined' && req !== null) {
-      console.log('💬  Aborting requestHandle_for_importRequestInfoAndStatus')
+      // console.log('💬  Aborting requestHandle_for_importRequestInfoAndStatus')
       req.abort()
     }
     self.requestHandle_for_importRequestInfoAndStatus = null
@@ -539,7 +539,7 @@ class ImportTransactionsModalView extends View {
           self.enable_submitButton()
           //
           // TODO: output the fee receipt status somehow…?
-          console.log('fee receipt status is…', feeReceiptStatus)
+          // console.log('fee receipt status is…', feeReceiptStatus)
         }
       )
       self.requestHandle_for_importRequestInfoAndStatus = requestHandle

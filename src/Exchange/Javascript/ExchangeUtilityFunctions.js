@@ -51,7 +51,7 @@ function sendFunds(wallet, xmr_amount, xmr_send_address, sweep_wallet, validatio
 
 
 function validateBTCAddress(address) {
-    console.log(validate(address));
+    // console.log(validate(address));
     if (validate(address) == false) {
         return false;
     }

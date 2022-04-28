@@ -33,7 +33,7 @@ class WalletHostPollingController {
 
   TearDown () { // this is public and must be called manually by wallet
     const self = this
-    console.log(`♻️  Tearing down ${self.constructor.name}`)
+    // console.log(`♻️  Tearing down ${self.constructor.name}`)
     self._tearDownStopTimers()
     self._tearDownAbortAndFreeRequests()
   }
@@ -51,7 +51,7 @@ class WalletHostPollingController {
     { // acct info
       const req = self.requestHandle_for_accountInfo
       if (typeof req !== 'undefined' && req !== null) {
-        console.log('💬  Aborting running acct info request')
+        // console.log('💬  Aborting running acct info request')
         req.abort()
       }
       self.requestHandle_for_accountInfo = null
@@ -59,7 +59,7 @@ class WalletHostPollingController {
     { // acct info
       const req = self.requestHandle_for_transactions
       if (typeof req !== 'undefined' && req !== null) {
-        console.log('💬  Aborting running transactions history request')
+        // console.log('💬  Aborting running transactions history request')
         req.abort()
       }
       self.requestHandle_for_transactions = null

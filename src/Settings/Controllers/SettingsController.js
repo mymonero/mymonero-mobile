@@ -54,7 +54,7 @@ class SettingsController extends EventEmitter {
     //     console.error('deleteEverything callbackFn failed')
     //     throw 'PasswordController.InitiateDeleteEverything failed'
     //   }
-    //   console.log('callbackFn called successfully')
+    //   // console.log('callbackFn called successfully')
     // }
     // const deleteResponse = self.context.persister.RemoveAllData(callbackFn);
 
@@ -81,13 +81,13 @@ class SettingsController extends EventEmitter {
         // Check if previously migrated. If no, we may need to migrate from the old Swift proprietary file format to the new SecureStorage persistence
         const migrationFiles = await iosMigrationController.getMigrationFiles()
         // if (migrationFiles !== false) {
-        //   console.log("Since this didn't return false, we set a context variable to denote that we should display the existing password screen")
+        //   // console.log("Since this didn't return false, we set a context variable to denote that we should display the existing password screen")
         //   self.context.shouldDisplayExistingPinScreenForMigration = true;
         //   // We should now have a list of all possible files
-        //   //console.log(migrationFiles)
+        //   //// console.log(migrationFiles)
         //   let migrationFileData = await iOSMigrationController.getFileData(migrationFiles);
         //   // store these files in context for once the wallet gets unlocked
-        //   console.log("We will be processing the in-memory values once someone logs in successfully - migration process is finalised in PasswordEntryViewController");
+        //   // console.log("We will be processing the in-memory values once someone logs in successfully - migration process is finalised in PasswordEntryViewController");
         //   self.context.migrationFileData = migrationFileData;
         //   self.context.migrationPerformed = false;
         // }
@@ -275,7 +275,7 @@ class SettingsController extends EventEmitter {
             } else {
               // console.log('📝  Successfully saved ' + self.constructor.name + ' update ', JSON.stringify(valuesByKey))
               if (didUpdate_specificAPIAddressURLAuthority) {
-                console.log('Settings: Emitted didUpdate_specificAPIAddressURLAuthority')
+                // console.log('Settings: Emitted didUpdate_specificAPIAddressURLAuthority')
 
                 self.emit(
                   self.EventName_settingsChanged_specificAPIAddressURLAuthority(),
@@ -283,35 +283,35 @@ class SettingsController extends EventEmitter {
                 )
               }
               if (didUpdate_appTimeoutAfterS) {
-                console.log('Settings: Emitted didUpdate_appTimeoutAfterS')
+                // console.log('Settings: Emitted didUpdate_appTimeoutAfterS')
                 self.emit(
                   self.EventName_settingsChanged_appTimeoutAfterS(),
                   self.appTimeoutAfterS
                 )
               }
               if (didUpdate_displayCcySymbol) {
-                console.log('Settings: Emitted didUpdate_displayCcySymbol')
+                // console.log('Settings: Emitted didUpdate_displayCcySymbol')
                 self.emit(
                   self.EventName_settingsChanged_displayCcySymbol(),
                   self.displayCcySymbol
                 )
               }
               if (didUpdate_authentication_requireWhenSending) {
-                console.log('Settings: Emitted didUpdate_authentication_requireWhenSending')
+                // console.log('Settings: Emitted didUpdate_authentication_requireWhenSending')
                 self.emit(
                   self.EventName_settingsChanged_authentication_requireWhenSending(),
                   self.authentication_requireWhenSending
                 )
               }
               if (didUpdate_authentication_requireWhenDisclosingWalletSecrets) {
-                console.log('Settings: Emitted didUpdate_authentication_requireWhenDisclosingWalletSecrets')
+                // console.log('Settings: Emitted didUpdate_authentication_requireWhenDisclosingWalletSecrets')
                 self.emit(
                   self.EventName_settingsChanged_authentication_requireWhenDisclosingWalletSecrets(),
                   self.authentication_requireWhenDisclosingWalletSecrets
                 )
               }
               if (didUpdate_autoDownloadUpdatesEnabled) {
-                console.log('Settings: Emitted didUpdate_autoDownloadUpdatesEnabled')
+                // console.log('Settings: Emitted didUpdate_autoDownloadUpdatesEnabled')
                 self.emit(
                   self.EventName_settingsChanged_autoDownloadUpdatesEnabled(),
                   self.autoDownloadUpdatesEnabled
@@ -344,7 +344,7 @@ class SettingsController extends EventEmitter {
     const self = this
     self.executeWhenBooted(
       function () {
-        console.log('📝  Saving ' + CollectionName + ' to disk.')
+        // console.log('📝  Saving ' + CollectionName + ' to disk.')
         const persistableDocument =
         {
           _id: self._id, // important to set for updates
@@ -377,8 +377,8 @@ class SettingsController extends EventEmitter {
                 return
               }
               self._id = _id // must save it back
-              console.log('✅  Saved newly inserted ' + CollectionName + ' record with _id ' + self._id + '.')
-              // console.log(jsonString)
+              // console.log('✅  Saved newly inserted ' + CollectionName + ' record with _id ' + self._id + '.')
+              //// console.log(jsonString)
               fn()
             }
           )

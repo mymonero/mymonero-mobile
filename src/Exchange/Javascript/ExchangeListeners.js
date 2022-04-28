@@ -15,7 +15,7 @@ let currencyInputTimer
 const BTCAddressInputListener = function () {
   const div = document.getElementById('btc-invalid')
   const btcAddressInput = document.getElementById('btcAddress')
-  console.log(Utils.validateBTCAddress(btcAddressInput.value))
+  // console.log(Utils.validateBTCAddress(btcAddressInput.value))
   if ((Utils.validateBTCAddress(btcAddressInput.value) == false) && div == null) {
     const error = document.createElement('div')
     error.classList.add('message-label')
@@ -76,12 +76,12 @@ const CurrencyInputKeydownListener = function (event) {
 }
 
 const xmrBalanceChecks = function (exchangeFunctions) {
-  console.log(exchangeFunctions)
+  // console.log(exchangeFunctions)
   serverValidation.innerHTML = ''
   let BTCToReceive
   const XMRbalance = parseFloat(XMRcurrencyInput.value)
   const in_amount = XMRbalance.toFixed(12)
-  console.log(currencyInputTimer)
+  // console.log(currencyInputTimer)
   BTCcurrencyInput.value = 'Loading...'
   if (currencyInputTimer !== undefined) {
     clearTimeout(currencyInputTimer)
@@ -107,7 +107,7 @@ const xmrBalanceChecks = function (exchangeFunctions) {
   currencyInputTimer = setTimeout(() => {
     exchangeFunctions.getOfferWithInAmount(exchangeFunctions.in_currency, exchangeFunctions.out_currency, in_amount)
       .then((response) => {
-        console.log('async return', response)
+        // console.log('async return', response)
         BTCToReceive = parseFloat(response.out_amount)
         const selectedWallet = document.getElementById('selected-wallet')
         const tx_feeElem = document.getElementById('tx-fee')
@@ -149,7 +149,7 @@ const xmrBalanceChecks = function (exchangeFunctions) {
 }
 
 const btcBalanceChecks = function (exchangeFunctions) {
-  console.log(exchangeFunctions)
+  // console.log(exchangeFunctions)
 
   let BTCToReceive
   const BTCbalance = parseFloat(BTCcurrencyInput.value)
@@ -236,9 +236,9 @@ const backButtonClickListener = function () {
   loaderPage.classList.remove('active')
   orderStatusDiv.classList.remove('active')
   exchangeXmrDiv.classList.remove('active')
-  console.log(viewOrderBtn)
+  // console.log(viewOrderBtn)
   viewOrderBtn.style.display = 'block'
-  console.log(viewOrderBtn)
+  // console.log(viewOrderBtn)
 }
 
 function clearCurrencies () {
