@@ -141,19 +141,6 @@ class PasswordEntryViewController extends EventEmitter {
         )
       }
     )
-    controller.on(
-      controller.EventName_SingleObserver_getUserToEnterNewPasswordAndTypeWithCB(),
-      function (isForChangePassword, enterPasswordAndType_cb) {
-        if (self.view === null || typeof self.view === 'undefined') {
-          self.view = self._new_passwordEntryView()
-        }
-        self.view.GetUserToEnterNewPasswordAndTypeWithCB(
-          self.root_tabBarViewAndContentView,
-          isForChangePassword,
-          enterPasswordAndType_cb
-        )
-      }
-    )
     //
     // we don't want changing the pw to affect locking & deconstructing the UI if idle timer engages
     controller.on(

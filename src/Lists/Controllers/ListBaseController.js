@@ -132,7 +132,7 @@ class ListBaseController extends EventEmitter {
             return
           }
           const justMigratedSuccessfully = false
-          if (self.context.deviceInfo.platform === 'ios' || self.context.deviceInfo.platform === 'web') {
+          if (self.context.deviceInfo.platform === 'ios') {
             const justMigratedSuccessfully = self.context.iosMigrationController.justMigratedSuccessfully
           }
           if (ids.length === 0 && justMigratedSuccessfully !== true) { // do not cause the pw to be requested yet
