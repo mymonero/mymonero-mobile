@@ -19,7 +19,7 @@ window.BootApp = async function () { // encased in a function to prevent scope b
     reporting_processName: 'BrowserWindow'
   })
 
-  let deviceInfo = await Device.getInfo();
+  const deviceInfo = await Device.getInfo()
   //
   // context
   MyMoneroLibAppBridge({}).then(function (coreBridge_instance) {
@@ -33,7 +33,7 @@ window.BootApp = async function () { // encased in a function to prevent scope b
       appDownloadLink_domainAndPath: 'mymonero.com',
       HostedMoneroAPIClient_DEBUGONLY_mockSendTransactionSuccess: false,
       monero_utils: coreBridge_instance,
-      deviceInfo: deviceInfo,
+      deviceInfo: deviceInfo
     })
 
     window.MyMonero_context = context
@@ -49,8 +49,8 @@ window.BootApp = async function () { // encased in a function to prevent scope b
       // manually attach the rootView to the DOM and specify view's usual managed reference(s)
       const superlayer = document.body
       rootView.superlayer = superlayer
-      rootView.layer.id = "rootView";
-      superlayer.classList.add(`${deviceInfo.platform}`);
+      rootView.layer.id = 'rootView'
+      superlayer.classList.add(`${deviceInfo.platform}`)
       superlayer.appendChild(rootView.layer) // the `layer` is actually the DOM element
     }
     { // and remove the loader (possibly fade this out)
@@ -151,7 +151,7 @@ function onDeviceReady () {
   App.addListener('appUrlOpen', async (URLOpenListenerEvent) => {
     // TODO: Finish writing this functionality
     // Handle our deep links here
-    let deviceInfo = await Device.getInfo();
+    const deviceInfo = await Device.getInfo()
     let stringArr = URLOpenListenerEvent.url.split("eid=")
     if (stringArr.length > 1) { // we split on eid= because we have "eid=" in the url
     
@@ -172,14 +172,13 @@ function onDeviceReady () {
     } else { // web
       // Not implemented
     }
-    if (URLOpenListenerEvent.url.indexOf("monero://") !== -1 || URLOpenListenerEvent.url.indexOf("mymonero://") !== -1) {
+    if (URLOpenListenerEvent.url.indexOf('monero://') !== -1 || URLOpenListenerEvent.url.indexOf('mymonero://') !== -1) {
       // We have a monero address
     }
 
     // Probably Yat, let's check
-    if (URLOpenListenerEvent.url.indexOf("monero://") !== -1) {
-      
-    }
+    if (URLOpenListenerEvent.url.indexOf('monero://') !== -1) {
 
-  });
+    }
+  })
 }

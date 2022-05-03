@@ -1,5 +1,6 @@
 'use strict'
 import WebComponents from '@mymonero/mymonero-web-components'
+import HostedMoneroAPIClient from '../../HostedMoneroAPIClient/HostedMoneroAPIClient'
 import TXTRecordResolver from '../../OpenAlias/TXTResolver.web'
 import Pasteboard from '../../Pasteboard/Pasteboard.browser'
 import FilesystemUI from '../../FilesystemUI/FilesystemUI.browser'
@@ -8,7 +9,6 @@ import CcyConversionRates from '../../CcyConversionRates/Controller'
 import ContactsListController from '../../Contacts/Controllers/ContactsListController'
 import DocumentPersister from '../../DocumentPersister/DocumentPersister.SecureStorage'
 import BackgroundAPIResponseParser from '@mymonero/mymonero-response-parser-utils'
-import HostedMoneroAPIClient from '@mymonero/mymonero-hosted-api'
 import OpenAlias from '../../OpenAlias/OpenAliasResolver'
 import FundsRequestsListController from '../../RequestFunds/Controllers/FundsRequestsListController'
 import Passwords from '../../Passwords/Controllers/PasswordController.Full'
@@ -56,12 +56,12 @@ function NewHydratedContext (initialContext) {
   for (const i in contextKeys) {
     // It seems like the ES spread method used when invoking super in capacitorBrowser leads the following loop to believe that const postWholeContextInitSetupFn is defined, when it isn't
     const contextKey = contextKeys[i]
-      const instance = context[contextKey]
-      // This calls an optional function that classes can implement to get control after the whole context is set up
-      const postWholeContextInitSetupFn = instance.RuntimeContext_postWholeContextInit_setup
-      if (typeof postWholeContextInitSetupFn !== 'undefined') {
-        postWholeContextInitSetupFn.call(instance) // using 'call' so the function's "this" is instance
-      }
+    const instance = context[contextKey]
+    // This calls an optional function that classes can implement to get control after the whole context is set up
+    const postWholeContextInitSetupFn = instance.RuntimeContext_postWholeContextInit_setup
+    if (typeof postWholeContextInitSetupFn !== 'undefined') {
+      postWholeContextInitSetupFn.call(instance) // using 'call' so the function's "this" is instance
+    }
   }
   context.capacitorBrowser = Browser
   return context
