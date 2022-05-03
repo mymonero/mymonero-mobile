@@ -58,15 +58,13 @@ class SettingsController extends EventEmitter {
     // }
     // const deleteResponse = self.context.persister.RemoveAllData(callbackFn);
 
-    // TODO: Remove web
-    // debug: if (self.context.deviceInfo.platform === 'ios' || self.context.deviceInfo.platform === 'web') {
-    if (self.context.deviceInfo.platform === 'ios' || self.context.deviceInfo.platform === 'web') {
+    // debug: for when you want to emulate iOS migration, add: || `self.context.deviceInfo.platform === 'web')`
+    if (self.context.deviceInfo.platform === 'ios') {
       let iosMigrationController
-      if (self.context.deviceInfo.platform === 'ios') {
-        iosMigrationController = new iOSMigrationController(self.context)
-      } else { // web
-        iosMigrationController = new iOSMigrationController(self.context, true)
-      }
+      // debug: for when you want to emulate iOS migration, add: `iosMigrationController = new iOSMigrationController(self.context)`
+      //if (self.context.deviceInfo.platform === 'ios') {
+      iosMigrationController = new iOSMigrationController(self.context)
+      //}
 
       const hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated
       self.context.shouldDisplayExistingPinScreenForMigration = !hasPreviouslyMigrated

@@ -910,7 +910,9 @@ class PasswordController_Base extends EventEmitter {
             detail: persistableDocument
           })
           document.dispatchEvent(passwordMetaSaveEvent)
-          let migrationResult = await context.iosMigrationController.performMigration(context.passwordController.password)
+          if (context.deviceInfo.platform === 'ios') {
+            let migrationResult = await context.iosMigrationController.performMigration(context.passwordController.password)
+          }
           self._didObtainPassword(self.context.passwordController.password)
           self.unguard_getNewOrExistingPassword()
           setTimeout(() => {
