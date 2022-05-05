@@ -338,8 +338,6 @@ class iOSMigrationController {
                     resolve(true);
                 }
                 resolve(false);
-                self.didMigratePreviously = true;
-                return result;
             }
     
             let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
