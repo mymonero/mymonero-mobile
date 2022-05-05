@@ -521,7 +521,7 @@ class ContactDetailsView extends View {
           __trampolineFor_didFinish()
           return
         }
-        console.log('Downloaded QR code')
+        // console.log('Downloaded QR code')
         Toast.show({
           text: 'QR code saved to Android\'s shared Documents folder successfully!',
           duration: 'long'

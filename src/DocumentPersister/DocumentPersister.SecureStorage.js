@@ -84,53 +84,53 @@ class DocumentPersister extends DocumentPersister_Interface {
     // SecureStoragePlugin.get({ key: collectionName }).then((returnData) => {
     // 	let jsonString = returnData.value;
     // 	let obj = JSON.parse(jsonString);
-    // 	//console.log("This is what we have for " + parameters.collectionName);
-    // 	//console.log(obj);
+    // 	//// console.log("This is what we have for " + parameters.collectionName);
+    // 	//// console.log(obj);
     // 	let strings = [];
 
     // 	let promiseArr = [];
     // 	// since we could get multiple ids back, we need to create a number of promises and return the values of them
     // 	for (let i = 0; i < obj.length; i++) {
-    // 		//console.log(`Promise ${i}`);
-    // 		//console.log(obj);
-    // 		//console.log(obj[0]);
+    // 		//// console.log(`Promise ${i}`);
+    // 		//// console.log(obj);
+    // 		//// console.log(obj[0]);
     // 		let retrievalObj = {
     // 			key: collectionName + obj[i]
     // 		}
 
-    // 		//console.log(retrievalObj);
+    // 		//// console.log(retrievalObj);
 
     // 		promiseArr[i] = SecureStoragePlugin.get(retrievalObj).catch(error => {
-    // 			//console.log("There was a problem with promise number");
-    // 			//console.log(i);
-    // 			//console.log(error);
+    // 			//// console.log("There was a problem with promise number");
+    // 			//// console.log(i);
+    // 			//// console.log(error);
     // 			// let's get keys and output them
     // 			let keys = SecureStoragePlugin.keys().then(keys => {
-    // 				//console.log("Promise problem: keys");
-    // 				//console.log(keys);
+    // 				//// console.log("Promise problem: keys");
+    // 				//// console.log(keys);
     // 			});
     // 		})
     // 	}
 
     // 	Promise.all(promiseArr).then((values) => {
-    // 		//console.log("Here are the allDocument values ");
+    // 		//// console.log("Here are the allDocument values ");
     // 		var documentCollectionArr = [];
     // 		for (let j = 0; j < values.length; j++) {
     // 			let returnedObj = JSON.parse(values[j].value);
-    // 			//console.log(`returnedObj for ${j}`)
-    // 			//console.log(returnedObj);
+    // 			//// console.log(`returnedObj for ${j}`)
+    // 			//// console.log(returnedObj);
     // 			documentCollectionArr.push(returnedObj);
     // 		}
-    // 		//console.log(values);
+    // 		//// console.log(values);
     // 		setTimeout(function() { // maintain async
     // 			fn(null, documentCollectionArr)
     // 		})
     // 	}).catch(error => {
-    // 		//console.log("There was a problem retrieveing allDocument values ");
-    // 		//console.log(error);
+    // 		//// console.log("There was a problem retrieveing allDocument values ");
+    // 		//// console.log(error);
     // 	});
 
-    // 	//console.log("Originally returned this: ");
+    // 	//// console.log("Originally returned this: ");
     // 	// const collectionStringsById = self.store[collectionName] || {}
     // 	// const ids = Object.keys(collectionStringsById)
     // 	// const ids_length = ids.length
@@ -140,11 +140,11 @@ class DocumentPersister extends DocumentPersister_Interface {
     // 	// 	const stringWithId = collectionStringsById[id] || null
     // 	// 	strings.push(stringWithId)
     // 	// }
-    // 	// //console.log(strings)
+    // 	// //// console.log(strings)
 
     // }).catch((error) => {
-    // 	//console.log(`Catch error on allDocuments for ${parameters.collectionName}`);
-    // 	//console.log(error);
+    // 	//// console.log(`Catch error on allDocuments for ${parameters.collectionName}`);
+    // 	//// console.log(error);
     // 	let strings = [];
     // 	setTimeout(function() { // maintain async
     // 		fn(null, strings)
@@ -273,7 +273,7 @@ class DocumentPersister extends DocumentPersister_Interface {
       // 	const stringWithId = collectionStringsById[id] || null
       // 	strings.push(stringWithId)
       // }
-      // //console.log(strings)
+      // //// console.log(strings)
     }).catch((error) => {
       // console.log(`Catch error on allDocuments for ${parameters.collectionName}`);
       // console.log(error);
@@ -289,27 +289,27 @@ class DocumentPersister extends DocumentPersister_Interface {
     // 		key: collectionName
     // 	}
     // 	SecureStoragePlugin.get(options).then((returnData) => {
-    // 		//console.log(`Retrieved data for ${collectionName}`);
-    // 		//console.log(returnData);
+    // 		//// console.log(`Retrieved data for ${collectionName}`);
+    // 		//// console.log(returnData);
     // 		const strings = []
     // 		const returnArray = []
     // 		let dataObj = JSON.parse(returnData.value);
 
-    // 		////console.log(dataObj);
+    // 		////// console.log(dataObj);
     // 		fn(null, returnData);
     // 		return;
     // 	}).catch(error => {
-    // 		//console.log(`No data for key ${collectionName}`);
-    // 		//console.log(error);
+    // 		//// console.log(`No data for key ${collectionName}`);
+    // 		//// console.log(error);
     // 		fn(null, []);
     // 	});
     // } catch (e) {
-    // 	//console.log("Error: Could not access SecureStorage for some reason");
-    // 	//console.log(e);
+    // 	//// console.log("Error: Could not access SecureStorage for some reason");
+    // 	//// console.log(e);
     // }
     // let rootObj = SecureStoragePlugin.get({ key: "DataStore"}).then((rootObject) => {
-    // 	//console.log("Root object looks like this:");
-    // 	//console.log(rootObject);
+    // 	//// console.log("Root object looks like this:");
+    // 	//// console.log(rootObject);
 
     // 	setTimeout(function() { // maintain async
     // 		fn(null, [])
@@ -406,8 +406,8 @@ class DocumentPersister extends DocumentPersister_Interface {
       })
 
       // this code exists for debug -- we want to hop to catch expression
-      /// /console.log("this code exists for debug -- we want to hop to catch expression");
-      /// /console.log(nonExistant);
+      /// /// console.log("this code exists for debug -- we want to hop to catch expression");
+      /// /// console.log(nonExistant);
 
       // if (keys.length == 0) {
       // 	let documents = [];
@@ -416,8 +416,8 @@ class DocumentPersister extends DocumentPersister_Interface {
 
       // // insert into index, then save object with appropriate ID
       // let rootObjData = returnData.value;
-      // //console.log("Root obj")
-      // //console.log(rootObjData);
+      // //// console.log("Root obj")
+      // //// console.log(rootObjData);
 
       // let dataObj = {
       // 	_id: id,
@@ -430,10 +430,10 @@ class DocumentPersister extends DocumentPersister_Interface {
       // 	value: documents
       // }
 
-      // //console.log(JSON.stringify(data))
+      // //// console.log(JSON.stringify(data))
 
       // SecureStoragePlugin.set(data).then(() => {
-      // 	//console.log("Saved document successfully");
+      // 	//// console.log("Saved document successfully");
       // 	fn(null, documentToInsert)
       // })
 
@@ -472,7 +472,7 @@ class DocumentPersister extends DocumentPersister_Interface {
       // console.log("We would create an index with this obj");
       // console.log(collectionObj);
       const indexPromise = SecureStoragePlugin.set({ key: collectionName, value: JSON.stringify(collectionObj) }).then(() => {
-			 	//console.log("Saved successfully");
+			 	//// console.log("Saved successfully");
       })
 
       // Promise to create object using its id as a key
@@ -508,9 +508,9 @@ class DocumentPersister extends DocumentPersister_Interface {
       })
 
       // rootObject[collectionName].push(saveObj);
-      // //console.log(rootObject);
+      // //// console.log(rootObject);
       // SecureStoragePlugin.set({ key: "DataStore", value: JSON.stringify(rootObject) }).then(() =>  {
-      // 	//console.log("Saved successfully");
+      // 	//// console.log("Saved successfully");
       // })
     })
   }
@@ -677,8 +677,8 @@ class DocumentPersister extends DocumentPersister_Interface {
             // console.log("Updated index successfully");
             // fn(null, obj)
             // setTimeout(function() { // maintain async
-            // 	//console.log("SecureStorage: __removeDocumentsWithIds async return");
-            // 	//console.log(obj);
+            // 	//// console.log("SecureStorage: __removeDocumentsWithIds async return");
+            // 	//// console.log(obj);
             // 	fn(null, obj)
             // })
           })
@@ -745,17 +745,17 @@ class DocumentPersister extends DocumentPersister_Interface {
 
     // setTimeout(function() {
     // 	let keys = SecureStoragePlugin.keys().then(keys => {
-    // 		//console.log("All set keys");
-    // 		//console.log(keys);
+    // 		//// console.log("All set keys");
+    // 		//// console.log(keys);
     // 	});
     // 	fn(null, numRemoved)
     // })
-    // //console.log("SecureStorage: invoked __removeDocumentsWithIds");
-    // //console.log(idsToRemove);
+    // //// console.log("SecureStorage: invoked __removeDocumentsWithIds");
+    // //// console.log(idsToRemove);
     // const self = this
     // const collectionStringsById = self.store[collectionName] || {}
     // var numRemoved = 0
-    // //console.log(self.store);
+    // //// console.log(self.store);
     // const idsToRemove_length = idsToRemove.length
     // for (var i = 0 ; i < idsToRemove_length ; i++) {
     // 	const id = idsToRemove[i]
@@ -789,9 +789,9 @@ class DocumentPersister extends DocumentPersister_Interface {
 
   // This completely removes all objects saved
   __removeAllData (fn) {
-		//console.log("SecureStorage: invoked __removeAllData");
+		//// console.log("SecureStorage: invoked __removeAllData");
 		SecureStoragePlugin.keys().then((responseData) => {
-      console.log(responseData);
+      // console.log(responseData);
       let arrayIndex = responseData.value.findIndex((value, index) => {
         if (value.includes("migratedOldIOSApp")) { // We use includes instead of equality to maintain web functionality
           return true
@@ -803,13 +803,13 @@ class DocumentPersister extends DocumentPersister_Interface {
       deleteArray.forEach(element => {
         // for web purposes, replace cap_sec_ with ''
         let collectionToRemove = element.replace('cap_sec_', '')
-        console.log("Do remove: " + collectionToRemove);
+        // console.log("Do remove: " + collectionToRemove);
         SecureStoragePlugin.remove({ key: collectionToRemove })
       });
 
 		}).catch(error => {
-			//console.log("SecureStorage: Invoke removeAllData failed")
-			//console.log(error);
+			//// console.log("SecureStorage: Invoke removeAllData failed")
+			//// console.log(error);
 			fn(error, null);
 		});
   }

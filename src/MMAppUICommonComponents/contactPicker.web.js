@@ -82,7 +82,7 @@ function New_contactPickerLayer (
         }
         const wasOnlyModifierKey = code.indexOf('Meta') != -1 || code.indexOf('Alt') != -1 || code.indexOf('Control') != -1
         if (wasOnlyModifierKey) {
-          console.log('Input was only modifier key. Ignoring.')
+          // console.log('Input was only modifier key. Ignoring.')
           return
         }
         _inputLayer_receivedInputOrChanged(event)
@@ -204,7 +204,7 @@ function New_contactPickerLayer (
       contact,
       function (this_pickedContactLayer) {
         if (inputLayer.disabled === true) { // TODO: modify this once we have an public interface for disabling the contact picker
-          console.log('💬  Disallowing user unpick of contact while inputLayer is disabled.')
+          // console.log('💬  Disallowing user unpick of contact while inputLayer is disabled.')
           return
         }
         _unpickExistingContact_andRedisplayPickInput() // allow to autofocus layer
@@ -243,7 +243,7 @@ function New_contactPickerLayer (
     _contactsListController_EventName_deletedRecordWithId_fn
   )
   containerLayer.Component_TearDown = function () { // IMPORTANT: You must call this when you're done with this component
-    console.log('♻️  Tearing down contacts picker.')
+    // console.log('♻️  Tearing down contacts picker.')
     contactsListController.removeListener(
       contactsListController.EventName_deletedRecordWithId(),
       _contactsListController_EventName_deletedRecordWithId_fn

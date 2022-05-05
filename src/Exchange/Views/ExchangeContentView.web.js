@@ -55,7 +55,7 @@ class ExchangeContentView extends View {
   _setup_views () {
     const self = this
     // self._refresh_sending_fee();
-    console.log('Setup view stuff')
+    // console.log('Setup view stuff')
   }
 
   // New refactored
@@ -151,7 +151,7 @@ class ExchangeContentView extends View {
     //     const sweep_wallet = false // TODO: Add sweeping functionality
     //     try {
     //       if (context.walletsListController.hasOwnProperty('orderSent')) {
-    //         console.log('Order already sent previously')
+    //         // console.log('Order already sent previously')
     //         return;
     //       } else {
     //         context.walletsListController.orderSent = false
@@ -159,7 +159,7 @@ class ExchangeContentView extends View {
 
     //       sendFunds(context.walletsListController.records[0], in_amount, send_address, sweep_wallet, exchangeHelper.sendFundsValidationStatusCallback, exchangeHelper.handleSendFundsResponseCallback, context)
     //     } catch (error) {
-    //       console.log(error)
+    //       // console.log(error)
     //     }
     //   })
 

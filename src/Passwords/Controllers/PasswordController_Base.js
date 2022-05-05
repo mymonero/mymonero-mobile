@@ -41,7 +41,7 @@ class PasswordController_Base extends EventEmitter {
     //     console.error('deleteEverything callbackFn failed')
     //     throw 'PasswordController.InitiateDeleteEverything failed'
     //   }
-    //   console.log('callbackFn called successfully')
+    //   // console.log('callbackFn called successfully')
     // }
     // const deleteResponse = self.context.persister.RemoveAllData(callbackFn);
   }
@@ -139,11 +139,11 @@ class PasswordController_Base extends EventEmitter {
       function () {
         if (self.hasUserSavedAPassword !== true) {
           // nothing to do here because the app is not unlocked and/or has no data which would be locked
-          console.log('💬  User became idle but no password has ever been entered/no saved data should exist.')
+          // console.log('💬  User became idle but no password has ever been entered/no saved data should exist.')
           return
         } else if (self.HasUserEnteredValidPasswordYet() !== true) {
           // user has saved data but hasn't unlocked the app yet
-          console.log("💬  User became idle and saved data/pw exists, but user hasn't unlocked app yet.")
+          // console.log("💬  User became idle and saved data/pw exists, but user hasn't unlocked app yet.")
           return
         }
         self._didBecomeIdleAfterHavingPreviouslyEnteredPassword()
@@ -341,7 +341,7 @@ class PasswordController_Base extends EventEmitter {
     }
     function ___guardAllCallBacks () {
       if (hasCalledBack === true) {
-        console.log('PasswordController/WhenBootedAndPasswordObtained_PasswordAndType hasCalledBack already true')
+        // console.log('PasswordController/WhenBootedAndPasswordObtained_PasswordAndType hasCalledBack already true')
         console.trace()
         return false // ^- shouldn't happen but just in case…
       }
@@ -607,9 +607,9 @@ class PasswordController_Base extends EventEmitter {
         unlock_timeout = null // not strictly necessary
       }
       const unlockInT_s = 10 // allows them to try again every 20 s, but resets timer if they submit w/o waiting
-      console.log(`🚫 Too many password entry attempts within ${unlockInT_s}s. ${!wasAlreadyLockedOut ? 'Locking out' : 'Extending lockout.'}.`)
+      // console.log(`🚫 Too many password entry attempts within ${unlockInT_s}s. ${!wasAlreadyLockedOut ? 'Locking out' : 'Extending lockout.'}.`)
       unlock_timeout = setTimeout(function () {
-        console.log('⭕️  Unlocking password entry.')
+        // console.log('⭕️  Unlocking password entry.')
         isCurrentlyLockedOut = false
         fn(null, '', null) // this is _sort_ of a hack and should be made more explicit in API but I'm sending an empty string, and not even an Error, to clear the validation error so the user knows to try again
       }, unlockInT_s * 1000)
@@ -648,7 +648,7 @@ class PasswordController_Base extends EventEmitter {
               const noMoreThanNTriesWithin_s = 30
               if (s_since_firstPWTryDuringThisTimePeriod > noMoreThanNTriesWithin_s) { // enough time has passed since this group began - only reset the "time period" with tries->0 and let this pass through as valid check
                 dateOf_firstPWTryDuringThisTimePeriod = null // not strictly necessary to do here as we reset the number of tries during this time period to zero just above
-                console.log(`There were more than ${maxLegal_numberOfTriesDuringThisTimePeriod} password entry attempts during this time period but the last attempt was more than ${noMoreThanNTriesWithin_s}s ago, so letting this go.`)
+                // console.log(`There were more than ${maxLegal_numberOfTriesDuringThisTimePeriod} password entry attempts during this time period but the last attempt was more than ${noMoreThanNTriesWithin_s}s ago, so letting this go.`)
               } else { // simply too many tries!…
                 // lock it out for the next time (supposing this try does not pass)
                 isCurrentlyLockedOut = true
@@ -656,7 +656,7 @@ class PasswordController_Base extends EventEmitter {
             }
           }
           if (isCurrentlyLockedOut == true) { // do not try to check pw - return as validation err
-            console.log('🚫  Received password entry attempt but currently locked out.')
+            // console.log('🚫  Received password entry attempt but currently locked out.')
             validationErr_orNil = new Error('As a security precaution, please wait a few moments before trying again.')
             // setup or extend unlock timer - NOTE: this is pretty strict - we don't strictly need to extend the timer each time to prevent spam unlocks
             __cancelAnyAndRebuild_unlock_timeout()
@@ -747,7 +747,7 @@ class PasswordController_Base extends EventEmitter {
         }
         //
         // II. hang onto new pw, pw type, and state(s)
-        console.log('💬  Obtained ' + userSelectedTypeOfPassword + ' ' + obtainedPasswordString.length + ' chars long')
+        // console.log('💬  Obtained ' + userSelectedTypeOfPassword + ' ' + obtainedPasswordString.length + ' chars long')
         self._didObtainPassword(obtainedPasswordString)
         self.userSelectedTypeOfPassword = userSelectedTypeOfPassword
         //
@@ -910,7 +910,9 @@ class PasswordController_Base extends EventEmitter {
             detail: persistableDocument
           })
           document.dispatchEvent(passwordMetaSaveEvent)
-          let migrationResult = await context.iosMigrationController.performMigration(context.passwordController.password)
+          if (context.deviceInfo.platform === 'ios') {
+            let migrationResult = await context.iosMigrationController.performMigration(context.passwordController.password)
+          }
           self._didObtainPassword(self.context.passwordController.password)
           self.unguard_getNewOrExistingPassword()
           setTimeout(() => {
@@ -1017,7 +1019,7 @@ class PasswordController_Base extends EventEmitter {
         // 					cb(err)
         // 					return
         // 				}
-        // 				console.log("🗑  Deleted password record.")
+        // 				// console.log("🗑  Deleted password record.")
         // 				self.setupAndBoot() // now trigger a boot before we call cb (tho we could do it after - consumers will wait for boot)
         // 				//
         // 				cb(err)
@@ -1075,7 +1077,7 @@ class PasswordController_Base extends EventEmitter {
       console.warn('⚠️  Asked to LockDownAppAndRequirePassword but no password entered yet.')
       return
     }
-    console.log('💬  Will LockDownAppAndRequirePassword')
+    // console.log('💬  Will LockDownAppAndRequirePassword')
     self._deconstructBootedStateAndClearPassword(
       false // not for a 'delete everything'
     )

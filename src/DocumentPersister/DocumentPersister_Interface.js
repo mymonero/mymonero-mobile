@@ -61,17 +61,17 @@ class DocumentPersister_Interface {
   __documentContentStringsWithIds (collectionName, ids, fn) { // fn: (err, docs) -> Void
     const self = this
     //
-    console.log('Error: You must override __documentContentStringsWithIds in ', self)
+    // console.log('Error: You must override __documentContentStringsWithIds in ', self)
   }
 
   __idsOfAllDocuments (collectionName, fn) {
     const self = this
-    console.log('Error: You must override __idsOfAllDocuments in ', self)
+    // console.log('Error: You must override __idsOfAllDocuments in ', self)
   }
 
   __allDocuments (collectionName, fn) {
     const self = this
-    console.log('Error: You must override __allDocuments in ', self)
+    // console.log('Error: You must override __allDocuments in ', self)
   }
 
   /// /////////////////////////////////////////////////////////////////////////////
@@ -79,22 +79,22 @@ class DocumentPersister_Interface {
 
   __insertDocument (collectionName, id, documentToInsert, fn) { // fn: (err, newDocument) -> Void
     const self = this
-    console.log('Error: You must override __insertDocument in', self)
+    // console.log('Error: You must override __insertDocument in', self)
   }
 
   __updateDocumentWithId (collectionName, id, update, fn) { // fn: (err) -> Void
     const self = this
-    console.log('Error: You must override __updateDocumentWithId in', self)
+    // console.log('Error: You must override __updateDocumentWithId in', self)
   }
 
   __removeDocumentsWithIds (collectionName, ids, fn) { // fn: (err, numRemoved) -> Void
     const self = this
-    console.log('Error: You must override __removeDocumentsWithIds in', self)
+    // console.log('Error: You must override __removeDocumentsWithIds in', self)
   }
 
   __removeAllCollectionDocuments (collectionName, fn) {
     const self = this
-    console.log('Error: You must override __removeAllDocuments in', self)
+    // console.log('Error: You must override __removeAllDocuments in', self)
   }
 
   /// /////////////////////////////////////////////////////////////////////////////

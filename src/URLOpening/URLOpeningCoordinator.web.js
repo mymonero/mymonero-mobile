@@ -25,12 +25,12 @@ class URLOpeningCoordinator extends EventEmitter {
       function (url) {
         if (self.isAllowedToReceiveURLs() == false) {
           if (self.context.passwordController.IsUserChangingPassword() === true) {
-            console.log("User is changing pw - not waiting for that to finish since the user probably doesn't want to open the URL in this state anyway")
+            // // // console.log("User is changing pw - not waiting for that to finish since the user probably doesn't want to open the URL in this state anyway")
             return false
           }
           // This is commented because... it'll always be true! Better would be to have a check that says "no wallets saved to disk"
           // if (!self.context.walletsListController.records || self.context.walletsListController.records.length == 0) {
-          // 	console.log("No wallet - not waiting for PW entry to open this URL since that may not be what the user intends")
+          // 	// // // console.log("No wallet - not waiting for PW entry to open this URL since that may not be what the user intends")
           // 	return false
           // }
           const hasUserSavedAPassword = self.context.passwordController.hasUserSavedAPassword
@@ -77,15 +77,15 @@ class URLOpeningCoordinator extends EventEmitter {
   isAllowedToReceiveURLs () {
     const self = this
     if (self.context.passwordController.HasUserEnteredValidPasswordYet() === false) {
-      console.log("User hasn't entered valid pw yet")
+      // // // console.log("User hasn't entered valid pw yet")
       return false
     }
     if (self.context.passwordController.IsUserChangingPassword() === true) {
-      console.log('User is changing pw.')
+      // // // console.log('User is changing pw.')
       return false
     }
     if (!self.context.walletsListController.records || self.context.walletsListController.records.length == 0) {
-      console.log('No wallets.')
+      // // // console.log('No wallets.')
       return false
     }
     return true

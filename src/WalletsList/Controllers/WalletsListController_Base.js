@@ -194,7 +194,7 @@ class WalletsListController extends ListBaseController {
     fn, // fn: (err: Error?, walletInstance: Wallet) -> Void
     optl__userCanceledPasswordEntry_fn
   ) {
-    console.log('WalletsListControllerBase: WhenBooted_ObtainPW_AddNewlyGeneratedWallet invoked')
+    // console.log('WalletsListControllerBase: WhenBooted_ObtainPW_AddNewlyGeneratedWallet invoked')
     const userCanceledPasswordEntry_fn = optl__userCanceledPasswordEntry_fn || function () {}
     const self = this
     const context = self.context
@@ -235,7 +235,7 @@ class WalletsListController extends ListBaseController {
     fn, // fn: (err: Error?, walletInstance: Wallet, wasWalletAlreadyInserted: Bool?) -> Void
     optl__userCanceledPasswordEntry_fn
   ) {
-    console.log('WalletsListControllerBase: WhenBooted_ObtainPW_AddExtantWalletWith_MnemonicString invoked')
+    // console.log('WalletsListControllerBase: WhenBooted_ObtainPW_AddExtantWalletWith_MnemonicString invoked')
     const userCanceledPasswordEntry_fn = optl__userCanceledPasswordEntry_fn || function () {}
     const self = this
     const context = self.context
@@ -293,7 +293,7 @@ class WalletsListController extends ListBaseController {
 					  didReceiveUpdateToAccountTransactions: function () { // TODO: bubble?
 					  }
 					}
-          console.log('About to invoke new Wallet(options, context)')
+          // console.log('About to invoke new Wallet(options, context)')
           // console.log(options)
           // console.log(context)
           const wallet = new Wallet(options, context)
@@ -311,7 +311,7 @@ class WalletsListController extends ListBaseController {
     fn, // fn: (err: Error?, walletInstance: Wallet, wasWalletAlreadyInserted: Bool?) -> Void
     optl__userCanceledPasswordEntry_fn
   ) {
-    console.log('WalletsListControllerBase: WhenBooted_ObtainPW_AddExtantWalletWith_AddressAndKeys invoked')
+    // console.log('WalletsListControllerBase: WhenBooted_ObtainPW_AddExtantWalletWith_AddressAndKeys invoked')
     const userCanceledPasswordEntry_fn = optl__userCanceledPasswordEntry_fn || function () {}
     const self = this
     const context = self.context
@@ -327,7 +327,7 @@ class WalletsListController extends ListBaseController {
         )
         function _proceedWithPassword (persistencePassword) {
           const walletAlreadyExists = false
-          console.log(self.records)
+          // console.log(self.records)
           const wallets_length = self.records.length
           for (let i = 0; i < wallets_length; i++) {
             const wallet = self.records[i]

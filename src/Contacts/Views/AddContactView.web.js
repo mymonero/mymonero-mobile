@@ -141,7 +141,7 @@ class AddContactView extends ContactFormView {
     //
     const canSkipEntireOAResolveAndDirectlyUseInputValues = self._overridable_defaultFalse_canSkipEntireOAResolveAndDirectlyUseInputValues()
     if (canSkipEntireOAResolveAndDirectlyUseInputValues === true) { // not the typical case
-      console.log('💬  Skipping OA resolve on AddContact.')
+      // console.log('💬  Skipping OA resolve on AddContact.')
       _proceedTo_addContact_paymentID(
         paymentID, // can apparently use the exact field value
         undefined // NOTE: This, cached_OAResolved_XMR_address, can be supplied by subclass._willSaveContactWithDescription

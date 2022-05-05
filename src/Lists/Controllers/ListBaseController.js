@@ -94,17 +94,17 @@ class ListBaseController extends EventEmitter {
           self._setup_didFailToBootWithError(err)
           return
         }
-        let migrationPossible; // This is for migration from the legacy iOS app
+        let migrationPossible // This is for migration from the legacy iOS app
         if (self.context.deviceInfo.platform === 'android') {
-          migrationPossible = false;
+          migrationPossible = false
         } else { // web (with slightly hacky polyfill) or ios
-          let hasMigratableFiles = await self.context.iosMigrationController.hasMigratableFiles
-          let hasPreviouslyMigrated = await self.context.iosMigrationController.hasPreviouslyMigrated
-          if (hasMigratableFiles && !hasPreviouslyMigrated) {
-            migrationPossible = true
-          } else {
-            migrationPossible = false
-          }
+          // let hasMigratableFiles = await self.context.iosMigrationController.hasMigratableFiles
+          // let hasPreviouslyMigrated = await self.context.iosMigrationController.hasPreviouslyMigrated
+          // if (hasMigratableFiles && !hasPreviouslyMigrated) {
+          //   migrationPossible = true
+          // } else {
+          //   migrationPossible = false
+          // }
         }
         // Workaround for checking if we need to migrate -- migrationData only set if migration necessary
         if (ids.length === 0 && migrationPossible !== true) { // do not cause the pw to be requested yet
@@ -131,9 +131,9 @@ class ListBaseController extends EventEmitter {
             self._setup_didFailToBootWithError(err)
             return
           }
-          let justMigratedSuccessfully = false;
-          if (self.context.deviceInfo.platform === "ios" || self.context.deviceInfo.platform === "web") {
-            let justMigratedSuccessfully = self.context.iosMigrationController.justMigratedSuccessfully
+          const justMigratedSuccessfully = false
+          if (self.context.deviceInfo.platform === 'ios') {
+            const justMigratedSuccessfully = self.context.iosMigrationController.justMigratedSuccessfully
           }
           if (ids.length === 0 && justMigratedSuccessfully !== true) { // do not cause the pw to be requested yet
             self._setup_didBoot()

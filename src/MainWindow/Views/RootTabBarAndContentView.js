@@ -116,15 +116,15 @@ class RootTabBarAndContentView extends TabBarAndContentView {
     { // drag and drop - stuff like tab auto-selection
       function _isAllowedToPerformDropOps () {
         if (self.context.passwordController.HasUserEnteredValidPasswordYet() === false) {
-          console.log("User hasn't entered valid pw yet")
+          // console.log("User hasn't entered valid pw yet")
           return false
         }
         if (self.context.passwordController.IsUserChangingPassword() === true) {
-          console.log('User is changing pw.')
+          // console.log('User is changing pw.')
           return false
         }
         if (!self.context.walletsListController.records || self.context.walletsListController.records.length == 0) {
-          console.log('No wallets.')
+          // console.log('No wallets.')
           return false
         }
         return true

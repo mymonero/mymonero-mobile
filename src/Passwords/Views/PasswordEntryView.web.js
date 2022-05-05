@@ -162,13 +162,23 @@ class PasswordEntryView extends StackAndModalNavigationView {
   ) {
     const self = this
     const shouldAnimateToNewState = isForChangePassword
+
     { // check legality
-      if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
-        self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
-        self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
+      if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None) {
+        if (self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType) {
           throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
         }
+      }
     }
+
+
+    // { // check legality
+    //   if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
+    //     self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
+    //     self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
+    //       throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
+    //     }
+    // }
     { // we need to hang onto the callback for when the form is submitted
       self.enterPasswordAndType_cb = enterPasswordAndType_cb
     }
@@ -398,7 +408,7 @@ class PasswordEntryView extends StackAndModalNavigationView {
     let passwordType = self.passwordTypeChosenWithPasswordIfNewPassword_orUndefined(password)
     
     // Code for iOS migration
-    if (self.context.deviceInfo.platform === 'ios' || self.context.deviceInfo.platform === 'web') {
+    if (self.context.deviceInfo.platform === 'ios') {
     // Ensuring that, if needed, we have a password type that corresponds to the migration process
       if (self.context.migrationFileData !== 'undefined' && self.context.iosMigrationController.migrationFilesExist) {
         // console.log("Override the password for the sake of this one-time migration");
