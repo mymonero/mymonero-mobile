@@ -660,11 +660,12 @@ class DocumentPersister extends DocumentPersister_Interface {
         if (newIndexArr.length == 0) {
           // No more of this collection left
           if (collectionName == 'Wallets') {
-            // Delete passwordmeta since we have no more wallets, and don't want to be made to use the old password when a new wallet is added
+            // Delete all files since we have no more wallets, and don't want to be made to use the old password when a new wallet is added
             // We delete everything here, since we won't be able to decrypt old data using a new PIN unless it is exactly the same as the old one
             this.__removeAllData() // Cleared everything due to no wallets being left
           } else {
             // Removed collection ${collectionName}
+            // console.log(`Removed collection ${collectionName}`);
             SecureStoragePlugin.remove({ key: collectionName }).then(() => {
               // finished removing collection
             })
@@ -792,24 +793,29 @@ class DocumentPersister extends DocumentPersister_Interface {
 		//// console.log("SecureStorage: invoked __removeAllData");
 		SecureStoragePlugin.keys().then((responseData) => {
       // console.log(responseData);
-      let arrayIndex = responseData.value.findIndex((value, index) => {
+      let arrayIndex = responseData.value.filter((value, index) => {
         if (value.includes("migratedOldIOSApp")) { // We use includes instead of equality to maintain web functionality
           return true
         }
-      })
+      })      
 
-      let deleteArray = responseData.value;
-      deleteArray.splice(arrayIndex, 1)
-      deleteArray.forEach(element => {
-        // for web purposes, replace cap_sec_ with ''
-        let collectionToRemove = element.replace('cap_sec_', '')
-        // console.log("Do remove: " + collectionToRemove);
-        SecureStoragePlugin.remove({ key: collectionToRemove })
-      });
-
-		}).catch(error => {
-			//// console.log("SecureStorage: Invoke removeAllData failed")
-			//// console.log(error);
+      if (arrayIndex.length > 0) {
+        // delete everything, then re-add migratedOldIOSApp
+        SecureStoragePlugin.clear().then(() => {
+          SecureStoragePlugin.set({ key: "migratedOldIOSApp", value: "migratedOldIOSApp" })
+          location.reload()
+        })
+      } else {
+        SecureStoragePlugin.clear().then(() => {
+          location.reload()
+        })
+      }
+      
+		}).then(() => {
+      
+    }).catch(error => {
+			// console.log("SecureStorage: Invoke removeAllData failed")
+			// console.log(error);
 			fn(error, null);
 		});
   }

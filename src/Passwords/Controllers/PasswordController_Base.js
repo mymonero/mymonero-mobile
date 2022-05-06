@@ -70,12 +70,11 @@ class PasswordController_Base extends EventEmitter {
             mocked_doc
           )
           return
-        }
-        if (contentStrings_length > 1) {
+        } else if (contentStrings_length > 1) {
           const errStr = 'Error while fetching existing ' + "PasswordMeta" + '... more than one PasswordModel found. Selecting first.'
           console.error(errStr)
           // this is indicative of a code fault
-        }
+        } 
         const contentString = contentStrings[0].value
         // this is old -- const plaintextDoc = JSON.parse(contentString) // whole doc is not encrypted - only challenge
         const plaintextDoc = JSON.parse(contentString) // whole doc is not encrypted - only challenge
