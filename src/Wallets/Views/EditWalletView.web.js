@@ -137,7 +137,6 @@ class EditWalletView extends View {
             throw err
           }
           self._thisRecordWasDeleted()
-          location.reload()
         }
       )
     }

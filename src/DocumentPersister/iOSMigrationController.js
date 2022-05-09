@@ -39,8 +39,8 @@ class iOSMigrationController {
         this.justMigratedSuccessfully = false;
         this.performMigration = this.performMigration
         this.touchFile = this.touchFile
-        this.hasPreviouslyMigrated = this.hasPreviouslyMigrated();
-        this.hasMigratableFiles = this.hasMigratableFiles();
+        this.hasPreviouslyMigrated = this.hasPreviouslyMigrated;
+        this.hasMigratableFiles = this.hasMigratableFiles;    
     }
 
     async setupFiles() {
@@ -331,15 +331,13 @@ class iOSMigrationController {
         return new Promise((resolve, reject) => {
             function migrationCheckCallback(err, result) {
             
-                // console.log(err);
-                // console.log(`err: ${err}`)
-                //// console.log(`result: ${result}`)
+                
                 if (result.length > 0) {
+                    self.didPreviouslyMigrate = true;
                     resolve(true);
                 }
+                self.didPreviouslyMigrate = false;
                 resolve(false);
-                self.didMigratePreviously = true;
-                return result;
             }
     
             let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
@@ -347,14 +345,16 @@ class iOSMigrationController {
     }
 
     async hasMigratableFiles() {
-        // const self = this
+         const self = this
         if (this.debug) {
             return true;
         }
         let hasMigratableFiles = await this.getMigrationFiles();
         if (hasMigratableFiles === false) {
+            self.doesHaveMigratableFiles = false;
             return false;
         }
+        self.doesHaveMigratableFiles = true;
         return true
     }
 

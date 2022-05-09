@@ -66,8 +66,10 @@ class SettingsController extends EventEmitter {
       iosMigrationController = new iOSMigrationController(self.context)
       //}
 
-      const hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated
-      self.context.shouldDisplayExistingPinScreenForMigration = !hasPreviouslyMigrated
+      const hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated()
+      const doesHaveMigratableFiles = await iosMigrationController.hasMigratableFiles()
+      
+      self.context.shouldDisplayExistingPinScreenForMigration = (!hasPreviouslyMigrated && doesHaveMigratableFiles)
       // iosMigrationController.touchFile(); // For debugging if you're not sure which folder your simulator is running in
       self.context.iosMigrationController = iosMigrationController
       const migrationFileData = await iosMigrationController.getMigrationFiles()
@@ -75,7 +77,7 @@ class SettingsController extends EventEmitter {
       const migrationPreviouslyPerformed = hasPreviouslyMigrated
 
       // console.log("migrated previously?");
-      if (!(hasPreviouslyMigrated === true)) {
+      if (!(hasPreviouslyMigrated === true) && (doesHaveMigratableFiles === true)) {
         // Check if previously migrated. If no, we may need to migrate from the old Swift proprietary file format to the new SecureStorage persistence
         const migrationFiles = await iosMigrationController.getMigrationFiles()
         // if (migrationFiles !== false) {

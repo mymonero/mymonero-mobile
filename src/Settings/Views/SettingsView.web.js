@@ -501,7 +501,6 @@ class SettingsView extends View {
             }
           }
         )
-        location.reload()
         return false
       }
     )
