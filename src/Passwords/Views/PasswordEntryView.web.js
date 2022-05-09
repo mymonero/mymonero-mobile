@@ -189,9 +189,17 @@ class PasswordEntryView extends StackAndModalNavigationView {
       } else {
         taskMode = passwordEntryTaskModes.ForFirstEntry_NewPasswordAndType
       }
-
+      console.log(`taskmode: ${taskMode}`)
+      // This series of if statements determines whether the user should be taken through the import process
       if (typeof(self.context.iosMigrationController) !== 'undefined') {
-        taskMode = passwordEntryTaskModes.ForMigratingFromOldIOSVersion
+        const didPreviouslyMigrate = self.context.iosMigrationController.didPreviouslyMigrate
+        
+        if (!didPreviouslyMigrate) {
+          const doesHaveMigratableFiles = self.context.iosMigrationController.doesHaveMigratableFiles;
+          if (doesHaveMigratableFiles) {
+            taskMode = passwordEntryTaskModes.ForMigratingFromOldIOSVersion
+          }
+        }
       }
 
       self.passwordEntryTaskMode = taskMode
