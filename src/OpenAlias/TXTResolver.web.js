@@ -8,10 +8,13 @@ class TXTResolver extends TXTResolver_Interface {
     name,
     fn // (err, records, dnssec_used, secured, dnssec_fail_reason) -> Void
   ) {
-    const completeURL = 'https://cloudflare-dns.com/dns-query?ct=application/dns-json&name=' + encodeURIComponent(name) + '&type=TXT'
-    const requestHandle = request(
-      completeURL,
-      function (err, response, body) {
+    const completeURL = 'https://cloudflare-dns.com/dns-query?name=' + encodeURIComponent(name) + '&type=TXT'
+    const requestHandle = request({
+      uri: completeURL,
+      headers: {
+        "accept": "application/dns-json"
+      }
+    }, function (err, response, body) {
         if (err) {
           fn(err)
           return
