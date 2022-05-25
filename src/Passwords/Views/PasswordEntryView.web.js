@@ -163,22 +163,20 @@ class PasswordEntryView extends StackAndModalNavigationView {
     const self = this
     const shouldAnimateToNewState = isForChangePassword
 
+    if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
+      self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
+      self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
+        throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
+      }
+
+
     { // check legality
-      if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None) {
-        if (self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType) {
+      if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
+        self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
+        self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
           throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
         }
-      }
     }
-
-
-    // { // check legality
-    //   if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
-    //     self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
-    //     self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
-    //       throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
-    //     }
-    // }
     { // we need to hang onto the callback for when the form is submitted
       self.enterPasswordAndType_cb = enterPasswordAndType_cb
     }
@@ -192,11 +190,10 @@ class PasswordEntryView extends StackAndModalNavigationView {
       console.log(`taskmode: ${taskMode}`)
       // This series of if statements determines whether the user should be taken through the import process
       if (typeof(self.context.iosMigrationController) !== 'undefined') {
-        const didPreviouslyMigrate = self.context.iosMigrationController.didPreviouslyMigrate
-        
-        if (!didPreviouslyMigrate) {
-          const doesHaveMigratableFiles = self.context.iosMigrationController.doesHaveMigratableFiles;
-          if (doesHaveMigratableFiles) {
+        const hasPreviouslyMigrated = self.context.iosMigrationController.hasPreviouslyMigrated;
+        if (!hasPreviouslyMigrated) {
+          const hasMigratableFiles = self.context.iosMigrationController.hasMigratableFiles;
+          if (hasMigratableFiles) {
             taskMode = passwordEntryTaskModes.ForMigratingFromOldIOSVersion
           }
         }

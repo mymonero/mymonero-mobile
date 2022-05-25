@@ -40,6 +40,7 @@ class iOSMigrationController {
         this.performMigration = this.performMigration
         this.touchFile = this.touchFile
         this.hasPreviouslyMigrated = this.hasPreviouslyMigrated;
+        this.didPreviouslyMigrate = ""
         this.hasMigratableFiles = this.hasMigratableFiles;    
     }
 

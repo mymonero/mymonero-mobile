@@ -2,7 +2,7 @@
 
 import EventEmitter from 'events'
 import async from 'async'
-
+import iOSMigrationController from '../../DocumentPersister/iOSMigrationController'
 class ListBaseController extends EventEmitter {
   constructor (options, context) {
     super() // must call super before we can access `this`
@@ -95,11 +95,15 @@ class ListBaseController extends EventEmitter {
           return
         }
         let migrationPossible // This is for migration from the legacy iOS app
+        
         if (self.context.deviceInfo.platform === 'android') {
           migrationPossible = false
         } else { // web (with slightly hacky polyfill) or ios
-          let hasMigratableFiles = await self.context.iosMigrationController.hasMigratableFiles
-          let hasPreviouslyMigrated = await self.context.iosMigrationController.hasPreviouslyMigrated
+          
+          let iosMigrationController = new iOSMigrationController(self.context)
+          let hasMigratableFiles = await iosMigrationController.hasMigratableFiles()
+          let hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated()
+
           if (hasMigratableFiles && !hasPreviouslyMigrated) {
             migrationPossible = true
           } else {
