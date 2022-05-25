@@ -98,13 +98,13 @@ class ListBaseController extends EventEmitter {
         if (self.context.deviceInfo.platform === 'android') {
           migrationPossible = false
         } else { // web (with slightly hacky polyfill) or ios
-          // let hasMigratableFiles = await self.context.iosMigrationController.hasMigratableFiles
-          // let hasPreviouslyMigrated = await self.context.iosMigrationController.hasPreviouslyMigrated
-          // if (hasMigratableFiles && !hasPreviouslyMigrated) {
-          //   migrationPossible = true
-          // } else {
-          //   migrationPossible = false
-          // }
+          let hasMigratableFiles = await self.context.iosMigrationController.hasMigratableFiles
+          let hasPreviouslyMigrated = await self.context.iosMigrationController.hasPreviouslyMigrated
+          if (hasMigratableFiles && !hasPreviouslyMigrated) {
+            migrationPossible = true
+          } else {
+            migrationPossible = false
+          }
         }
         // Workaround for checking if we need to migrate -- migrationData only set if migration necessary
         if (ids.length === 0 && migrationPossible !== true) { // do not cause the pw to be requested yet
