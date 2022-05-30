@@ -793,26 +793,23 @@ class DocumentPersister extends DocumentPersister_Interface {
 		//// console.log("SecureStorage: invoked __removeAllData");
 		SecureStoragePlugin.keys().then((responseData) => {
       // console.log(responseData);
-      let arrayIndex = responseData.value.filter((value, index) => {
+      let arrayIndex = responseData.value.findIndex((value, index) => {
         if (value.includes("migratedOldIOSApp")) { // We use includes instead of equality to maintain web functionality
           return true
         }
-      })      
+      })
 
-      if (arrayIndex.length > 0) {
-        // delete everything, then re-add migratedOldIOSApp
-        SecureStoragePlugin.clear().then(() => {
-          SecureStoragePlugin.set({ key: "migratedOldIOSApp", value: "migratedOldIOSApp" })
-          location.reload()
-        })
-      } else {
-        SecureStoragePlugin.clear().then(() => {
-          location.reload()
-        })
-      }
-      
+      let deleteArray = responseData.value;
+      deleteArray.splice(arrayIndex, 1)
+      deleteArray.forEach(element => {
+        // for web purposes, replace cap_sec_ with ''
+        let collectionToRemove = element.replace('cap_sec_', '')
+        console.log("Do remove: " + collectionToRemove);
+        SecureStoragePlugin.remove({ key: collectionToRemove })
+      });
+      setTimeout(2000);
 		}).then(() => {
-      
+      location.reload()
     }).catch(error => {
 			// console.log("SecureStorage: Invoke removeAllData failed")
 			// console.log(error);
