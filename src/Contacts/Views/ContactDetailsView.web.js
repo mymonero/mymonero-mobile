@@ -523,7 +523,7 @@ class ContactDetailsView extends View {
         }
         // console.log('Downloaded QR code')
         Toast.show({
-          text: 'QR code saved to Android\'s shared Documents folder successfully!',
+          text: 'QR code saved to device\'s shared Documents folder successfully!',
           duration: 'long'
         })
 

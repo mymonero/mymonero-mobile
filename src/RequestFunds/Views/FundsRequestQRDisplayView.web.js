@@ -152,7 +152,7 @@ class FundsRequestQRDisplayView extends View {
                 return
               }
               Toast.show({
-                text: 'QR code saved to Android\'s shared Documents folder successfully!',
+                text: 'QR code saved to device\'s shared Documents folder successfully!',
                 duration: 'long'
               })
               // console.log("Downloaded QR code")
