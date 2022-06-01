@@ -331,16 +331,15 @@ class iOSMigrationController {
         const self = this
         return new Promise((resolve, reject) => {
             function migrationCheckCallback(err, result) {
-            
-                
-                if (result.length > 0) {
+                if (result.length === 0) {
+                    self.didPreviouslyMigrate = false;
+                    resolve(false);
+                } else if (result.length === 1) {
                     self.didPreviouslyMigrate = true;
-                    resolve(true);
+                    resolve(false);
                 }
-                self.didPreviouslyMigrate = false;
-                resolve(false);
+                reject("Unexpected data");
             }
-    
             let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
         })
     }

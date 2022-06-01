@@ -5,6 +5,7 @@ import EnterExistingPasswordView from './EnterExistingPasswordView.web'
 import EnterNewPasswordView from './EnterNewPasswordView.web'
 import StackAndModalNavigationView from '../../StackNavigation/Views/StackAndModalNavigationView.web'
 import iOSMigrationController from '../../DocumentPersister/iOSMigrationController'
+import symmetric_string_cryptor from '../../symmetric_cryptor/symmetric_string_cryptor'
 
 const passwordEntryTaskModes =
 {
@@ -405,7 +406,7 @@ class PasswordEntryView extends StackAndModalNavigationView {
   //
   // Runtime - Imperatives - Internal - Form management
   //
-  submitForm (password) {
+  async submitForm (password) {
     const self = this
     {
       self._clearValidationMessage()
@@ -420,14 +421,44 @@ class PasswordEntryView extends StackAndModalNavigationView {
         passwordType = "FreeformStringPW"
       }
     }
-    // End of code for iOS migration
-    
-    // handles validation:
-    self._passwordController_callBack_trampoline(
-      false, // didCancel?
-      password,
-      passwordType
-    )
+
+    // if iOS
+    if (self.context.deviceInfo.platform === 'ios') {
+      if (self.context.iosMigrationController.didPreviouslyMigrate === false && self.context.iosMigrationController.doesHaveMigratableFiles === true) {
+
+        let keyForEncryptedString = Object.keys(self.context.iosMigrationController.migrationFileData)[0]
+        let encryptedStringToAttemptDecrypt = self.context.iosMigrationController.migrationFileData[keyForEncryptedString].data
+
+        symmetric_string_cryptor.New_DecryptedString__Async(encryptedStringToAttemptDecrypt, password, function(err, decryptedMessage) {
+          if (err) {
+            const errStr = self.context.passwordController._new_incorrectPasswordValidationErrorMessageString()
+            //const err = new Error(errStr)
+            self.context.passwordController.unguard_getNewOrExistingPassword()
+            self.context.passwordController.emit(self.context.passwordController.EventName_ErroredWhileGettingExistingPassword(), err)
+          } else {
+            // We decrypted the message, so it's safe to continue
+            self._passwordController_callBack_trampoline(
+              false, // didCancel?
+              password,
+              passwordType
+            )
+          }
+        });
+      } else {
+        // we don't need to check migration information since we already migrated in a previous migration process        
+        self._passwordController_callBack_trampoline(
+          false, // didCancel?
+          password,
+          passwordType
+        )
+      }// end if migrated in past
+    } else { // end if iOS
+      self._passwordController_callBack_trampoline(
+        false, // didCancel?
+        password,
+        passwordType
+      )  
+    }    
   }
 
   Cancel (optl_isAnimated) {
