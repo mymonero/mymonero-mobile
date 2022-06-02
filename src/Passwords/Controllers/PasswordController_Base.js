@@ -417,13 +417,16 @@ class PasswordController_Base extends EventEmitter {
                   let doMigration = await self.context.iosMigrationController.performMigration(existingPassword);
                   let walletRecords = await self.context.persister.AllDocuments("Wallets", (err, data) => {                   
                     self._didObtainPassword(existingPassword)
-                    self.unguard_getNewOrExistingPassword()
-                    self.emit(self.EventName_ObtainedCorrectExistingPassword())
-                    self.context.walletsListController.__listUpdated_records()
-                    setTimeout(() => {
-                      
-                    }, 300)
-                  })
+                    // self.unguard_getNewOrExistingPassword()
+                    // self.emit(self.EventName_ObtainedCorrectExistingPassword())
+                    // self.context.walletsListController.__listUpdated_records()
+
+                  }) // all wallets returned by this stage, so emit update events
+
+                  self.unguard_getNewOrExistingPassword()
+                  self.emit(self.EventName_ObtainedCorrectExistingPassword())
+                  self.context.walletsListController.__listUpdated_records()
+
                 } catch (error) {
                   throw error;
                 }

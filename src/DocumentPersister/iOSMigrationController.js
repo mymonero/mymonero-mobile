@@ -157,8 +157,9 @@ class iOSMigrationController {
                         let safeToMigrate = this.validateFileData(password).then(safeToMigrate => {
                             if (safeToMigrate === true) {
                                 try {
-                                    this.migrateAllData(password)
-                                    resolve(true);
+                                    this.migrateAllData(password).then(() => {
+                                        resolve(true);
+                                    })
                                 } catch (e) {
                                     reject(e);
                                 }
@@ -334,13 +335,19 @@ class iOSMigrationController {
                 if (result.length === 0) {
                     self.didPreviouslyMigrate = false;
                     resolve(false);
-                } else if (result.length === 1) {
+                } else if (result.length >= 1) {
                     self.didPreviouslyMigrate = true;
-                    resolve(false);
+                    resolve(true);
                 }
                 reject("Unexpected data");
             }
-            let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
+
+            try {
+                let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
+            } catch (error) {
+                console.log(error);
+                reject(error);
+            }
         })
     }
 
