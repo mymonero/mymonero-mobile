@@ -115,6 +115,7 @@ function HydrateInstance (
     self.account_scanned_tx_height = plaintextDocument.account_scanned_tx_height
     self.account_scanned_block_height = plaintextDocument.account_scanned_block_height
     self.account_scan_start_height = plaintextDocument.account_scan_start_height
+    self.dateWalletFirstSavedLocally = new Date()
     self.transaction_height = plaintextDocument.transaction_height
     self.blockchain_height = plaintextDocument.blockchain_height  
     self.total_received = new JSBigInt(plaintextDocument.total_received) // persisted as string
