@@ -15,7 +15,9 @@ function HydrateInstance (
   self.fullname = plaintextDocument.fullname
   self.address = plaintextDocument.address
   self.payment_id = plaintextDocument.payment_id
-  self.emoji = plaintextDocument.emoji
+  // Emojis are deprecated in favour of Yats
+  // self.emoji = plaintextDocument.emoji
+  self.isYat = plaintextDocument.isYat
   self.cached_OAResolved_XMR_address = plaintextDocument.cached_OAResolved_XMR_address
 }
 //
@@ -41,7 +43,8 @@ function SaveToDisk (
 	  fullname: self.fullname,
 	  address: self.address,
 	  payment_id: self.payment_id,
-	  emoji: self.emoji,
+    emoji: self.emoji,
+    isYat: self.isYat,
 	  cached_OAResolved_XMR_address: self.cached_OAResolved_XMR_address
 	}
   persistable_object_utils.write(
