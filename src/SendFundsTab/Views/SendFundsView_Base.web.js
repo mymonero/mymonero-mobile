@@ -38,6 +38,7 @@ class SendFundsView extends View {
   setup () {
     const self = this
     self.isSubmitButtonDisabled = false
+    self.isYat = false
     self.setup_views()
     self.startObserving()
     //
@@ -263,7 +264,9 @@ class SendFundsView extends View {
     div.style.paddingTop = '2px'
     const labelLayer = pkg.labelLayer
     labelLayer.style.marginTop = '0'
+    labelLayer.classList.add('isNumericInputElement')
     self.amountInputLayer = pkg.valueLayer
+    //self.amountInputlayer.classList.add('isNumericInputElement')
     self.amountInputLayer.addEventListener(
       'input', // to cover copy/paste ops, etc
       function (event) {
@@ -311,6 +314,7 @@ class SendFundsView extends View {
       layer.style.marginTop = '8px'
       layer.style.color = '#9E9C9E'
       layer.style.display = 'inline-block'
+      layer.classList.add('isNumericInputElement')
       self.networkFeeEstimateLayer = layer
       breakingDiv.appendChild(layer)
     }
@@ -1330,7 +1334,7 @@ class SendFundsView extends View {
   //
   // Runtime - Imperatives - Send-transaction generation
   //
-  _tryToGenerateSend () {
+  async _tryToGenerateSend () {
     const self = this
     if (self.isSubmitButtonDisabled) {
       console.warn('⚠️  Submit button currently disabled. Bailing.')
@@ -1434,13 +1438,46 @@ class SendFundsView extends View {
       final_XMR_amount_Number = submittableMoneroAmountDouble
     }
     //
-    const hasPickedAContact = !!(typeof self.pickedContact !== 'undefined' && self.pickedContact)
-    const enteredAddressValue = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value || ''
-    const enteredAddressValue_exists = enteredAddressValue !== ''
-    //
-    const resolvedAddress = self.resolvedAddress_valueLayer.innerHTML || ''
-    const resolvedAddress_exists = resolvedAddress !== '' // NOTE: it might be hidden, though!
-    const resolvedAddress_fieldIsVisible = self.resolvedAddress_containerLayer.style.display === 'block'
+    var enteredAddressValue, enteredAddressValue_exists, resolvedAddress, resolvedAddress_exists, resolvedAddress_fieldIsVisible;
+    if (hasPickedAContact && self.pickedContact.isYat === true) {
+      console.log("That's a yat");
+      enteredAddressValue = self.pickedContact.address
+      enteredAddressValue_exists = enteredAddressValue !== ''
+      //
+      resolvedAddress = self.resolvedAddress_valueLayer.innerHTML || ''
+      resolvedAddress_exists = resolvedAddress !== '' // NOTE: it might be hidden, though!
+      resolvedAddress_fieldIsVisible = self.resolvedAddress_containerLayer.style.display === 'block'
+      // console.log("Test for yat");
+      if (yatMoneroLookup.isValidYatHandle(enteredAddressValue)) {
+        // The user entered a valid Yat. We need to override the value of enteredAddressValue to the resolved address
+        let lookupResponse = await yatMoneroLookup.lookupMoneroAddresses(self.pickedContact.address)
+        // we get back a responsemap
+        if (lookupResponse.size == 0) {
+          // no monero address
+          const errorString = `There is no Monero address associated with "${enteredPossibleAddress}"`
+          self.validationMessageLayer.SetValidationError(errorString)
+        } else if (lookupResponse.size == 1) {
+          // Either a Monero address or a Monero subaddress was found.
+          const iterator = lookupResponse.values()
+          const record = iterator.next()
+          self._displayResolvedAddress(record.value)
+          self.pickedContact.resolvedAddress = record.value
+        } else if (lookupResponse.size == 2) {
+          const moneroAddress = lookupResponse.get('0x1001')
+          self._displayResolvedAddress(moneroAddress)
+          self.pickedContact.resolvedAddress = moneroAddress
+        } else {
+          throw new Error("An error occurred while trying to resolve your contact's Yat address")
+        }
+      }
+    } else {
+      let enteredAddressValue = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value || ''
+      const enteredAddressValue_exists = enteredAddressValue !== ''
+      //
+      const resolvedAddress = self.resolvedAddress_valueLayer.innerHTML || ''
+      const resolvedAddress_exists = resolvedAddress !== '' // NOTE: it might be hidden, though!
+      const resolvedAddress_fieldIsVisible = self.resolvedAddress_containerLayer.style.display === 'block'  
+    }
     //
     const manuallyEnteredPaymentID = self.manualPaymentIDInputLayer.value || ''
     const manuallyEnteredPaymentID_exists = manuallyEnteredPaymentID !== ''
@@ -1537,9 +1574,15 @@ class SendFundsView extends View {
     function __proceedTo_generateSendTransaction () {
       const contact_payment_id = hasPickedAContact ? self.pickedContact.payment_id : undefined
       const cached_OAResolved_address = hasPickedAContact ? self.pickedContact.cached_OAResolved_XMR_address : undefined
+
       const contact_hasOpenAliasAddress = hasPickedAContact ? self.pickedContact.HasOpenAliasAddress() : undefined
       const contact_address = hasPickedAContact ? self.pickedContact.address : undefined
 
+      // Check if Yat, if yes, use resolved address
+      if (self.pickedContact.isYat) {
+        enteredAddressValue = self.pickedContact.resolvedAddress
+        contact_address = self.pickedContact.resolvedAddress
+      }
       wallet.SendFunds(
         enteredAddressValue, // currency-ready wallet address, but not an OpenAlias address (resolve before calling)
         resolvedAddress,
@@ -1584,7 +1627,7 @@ class SendFundsView extends View {
         self.pushDetailsViewFor_transaction(wallet, stateCachedTransaction)
       }
       // TODO: Once we have properly developed Yat support for Contacts, remove this isYatHandle check to allow a user to save the Yat contact
-      if (self.isYatHandle == false) {
+      if (self.isYat == false) {
         {
           const this_pickedContact = hasPickedAContact == true ? self.pickedContact : null
           self.__didSendWithPickedContact(
@@ -1813,11 +1856,11 @@ class SendFundsView extends View {
       }
     }
 
-    // if enteredPossibleAddress length less than 7, check if it's a Yat
+    // checking for emojis for Yat address
     const hasEmojiCharacters = /\p{Extended_Pictographic}/u.test(enteredPossibleAddress)
     if (hasEmojiCharacters) {
       const isYat = yatMoneroLookup.isValidYatHandle(enteredPossibleAddress)
-      self.isYatHandle = isYat
+      self.isYat = isYat
       if (isYat) {
         const lookup = yatMoneroLookup.lookupMoneroAddresses(enteredPossibleAddress).then((responseMap) => {
           // Our library returns a map with between 0 and 2 keys
