@@ -816,5 +816,17 @@ class DocumentPersister extends DocumentPersister_Interface {
 			fn(error, null);
 		});
   }
+
+  RemoveImportFlag (fn) {
+		//// console.log("SecureStorage: invoked ");
+		SecureStoragePlugin.clear().then(() => {
+      setTimeout(5000);
+		}).then(() => {
+      location.reload()
+    }).catch(error => {
+			fn(error, null);
+		});
+  }
+
 }
 export default DocumentPersister
