@@ -520,7 +520,7 @@ class iOSMigrationController {
         try {
             for (let i = 0; i < fileList.files.length; i++) {
                 if (fileList.files[i].indexOf('mmdbdoc_v1') !== -1) {
-                    if (fileList.files[i].indexOf("PasswordMeta") == -1 && fileList.files[i].indexOf("Settings") == -1) {
+                    if (fileList.files[i].indexOf("Wallets") !== -1 || fileList.files[i].indexOf("Contacts") !== -1 || fileList.files[i].indexOf("FundsRequests" !== -1)) {
                         // console.log("Not password and not settings")
                         mmdbdocsPresent = true;
                         legacyFiles.push(fileList.files[i]);
