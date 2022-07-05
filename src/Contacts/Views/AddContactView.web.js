@@ -134,6 +134,7 @@ class AddContactView extends ContactFormView {
     const fullname = self.fullnameInputLayer.value
     //const emoji = self.emojiInputView.Value()
     const address = self.addressInputLayer.value
+    
     let paymentID = self.paymentIDInputLayer.value
     //
     if (typeof fullname === 'undefined' || !fullname) {
@@ -181,8 +182,8 @@ class AddContactView extends ContactFormView {
     const hasEmojiCharacters = /\p{Extended_Pictographic}/u.test(address)
     if (hasEmojiCharacters) {
       self.yat = address;
-      const lookup = yatMoneroLookup.lookupMoneroAddresses(address).then((responseMap) => {
-        self.isYat = true
+      self.isYat = true;
+      const lookup = yatMoneroLookup.lookupMoneroAddresses(address).then((responseMap) => {        
         // Our library returns a map with between 0 and 2 keys
         if (responseMap.size == 0) {
           // no monero address
@@ -346,11 +347,15 @@ class AddContactView extends ContactFormView {
         self.validationMessageLayer.SetValidationError('Please enter a valid payment ID.')
         return
       }
+      let isYat = false
+      if (/\p{Extended_Pictographic}/u.test(address)) {
+        isYat = true
+      }
       const contactDescription =
 			{
 			  fullname: fullname,
         //emoji: emoji,
-        isYat: self.isYat,
+        isYat: isYat,
 			  address: address,
 			  payment_id: paymentID__toSave,
 			  cached_OAResolved_XMR_address: cached_OAResolved_XMR_address__orUndefined

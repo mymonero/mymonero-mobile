@@ -222,7 +222,6 @@ class EditContactFromContactsTabView extends ContactFormView {
             }
           )
         }).catch((error) => {
-          console.log(error);
           __reEnableForm()
           // If the error status is defined, handle this error according to the HTTP error status code
           if (typeof (error.response) !== 'undefined' && typeof (error.response.status) !== 'undefined') {

@@ -491,6 +491,11 @@
   /* transition: background-color 0.05s ease-out, box-shadow 0.05s ease-out; */
 }
 
+div withNativeEmoji {
+  min-width: 100px;
+
+}
+
 .EmojiPickerPopoverContentView > .EmojiButtonView.withNonNativeEmoji {
 }
 
@@ -503,6 +508,11 @@
 
 .ContactsListCellView > div {
   margin-left: 0px; padding-left: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important
+}
+
+.ContactsListCellView div.withNativeEmoji {
+  min-width: calc(100% - 50px);
 }
 
 /* .EmojiPickerPopoverContentView > .EmojiButtonView .emojione {
@@ -511,6 +521,10 @@
   margin-top: 0px;
 } */
 
+.NavigationBarView .title-label .emojione {
+  
+}
+
 /** END FROM EmojiPickerPopoverContentView.web.js */
 
 /** FROM ContactsListCellView.web.js */
@@ -518,9 +532,9 @@
 }
 
 .ContactsListCellView .emoji-label .emojione {
-  transform: scale(.5);
+  /* transform: scale(.5);
   margin-left: -7px;
-  margin-top: -6px;
+  margin-top: -6px; */
 }
 
 /** END FROM ContactsListCellView.web.js */
@@ -2815,6 +2829,7 @@ input, textarea {
 .withNativeEmoji {
   margin-left: 0px;
   font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  text-align: left;
 }
 
 .emojiLetterSpacing {

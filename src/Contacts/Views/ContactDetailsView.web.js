@@ -62,6 +62,7 @@ class ContactDetailsView extends View {
       containerLayer.style.borderRadius = '5px'
       containerLayer.style.margin = '16px 0 0px 0'
       containerLayer.style.padding = '0 0 0 15px' // to get separator inset
+      containerLayer.classList.add('contactViewTitle')
       //
       self.tableSection_containerLayer = containerLayer
       {
@@ -105,6 +106,10 @@ class ContactDetailsView extends View {
     )
     div.style.paddingRight = '16px' // manually here cause we removed right padding on container to get separator flush with right side
     self.address__valueField_component = div
+    if (self.contact.yat !== undefined && self.contact.yat !== null) {
+      div.classList.add('withNativeEmoji')
+    }
+
     self.tableSection_containerLayer.appendChild(div)
   }
 
@@ -376,10 +381,10 @@ class ContactDetailsView extends View {
     const self = this
     let title = ''
     const emoji = self.contact.emoji
-    if (typeof emoji !== 'undefined' && emoji) {
-      const spacing = '&nbsp;&nbsp;&nbsp;&nbsp;'
-      title += emoji + spacing // extra spaces for emoji
-    }
+    // if (typeof emoji !== 'undefined' && emoji) {
+    //   const spacing = '&nbsp;&nbsp;&nbsp;&nbsp;'
+    //   title += emoji + spacing // extra spaces for emoji
+    // }
     title += self.contact.fullname
     //
     return title
@@ -434,6 +439,7 @@ class ContactDetailsView extends View {
     {
       const value = self.contact.address
       const layer = self.address__valueField_component
+      layer.classList.add('withNativeEmoji')
       layer.Component_SetValue(value)
     }
     {

@@ -28,7 +28,7 @@ class ContactsListCellView extends ListCellView {
     const self = this
     const layer = document.createElement('div')
     layer.style.position = 'relative'
-    layer.style.margin = '0 66px 4px 50px'
+    layer.style.margin = '0 66px 4px 8px'
     layer.style.height = 'auto'
     layer.style.fontSize = '13px'
     layer.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif'
@@ -52,7 +52,7 @@ class ContactsListCellView extends ListCellView {
     layer.style.fontSize = '13px'
     layer.style.fontFamily = 'Native-Light, input, menlo, monospace'
     layer.style.fontWeight = '100'
-    layer.style.height = '20px'
+    layer.style.height = '30px'
     layer.style.color = '#9e9c9e'
     layer.style.whiteSpace = 'nowrap'
     layer.style.overflow = 'hidden'
@@ -125,15 +125,12 @@ class ContactsListCellView extends ListCellView {
       return
     }
     if (self.record.didFailToInitialize_flag === true || self.record.didFailToBoot_flag === true) { // unlikely, but possible
-      self.emojiLayer.innerHTML = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-        self.context,
-        '❌'
-      )
+      self.emojiLayer.innerHTML = self.record.fullname
       self.nameLayer.innerHTML = 'Error: Please contact support.'
       self.addressLayer.innerHTML = self.record.didFailToBoot_errOrNil ? ' ' + self.record.didFailToBoot_errOrNil : ''
       return
     }
-
+    
     self.nameLayer.innerHTML = self.record.fullname
     self.addressLayer.innerHTML = self.record.address
     // self.DEBUG_BorderAllLayers()
