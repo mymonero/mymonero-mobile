@@ -11,37 +11,24 @@ class ContactsListCellView extends ListCellView {
     super.setup_views()
     self.layer.classList.add('ContactsListCellView')
     self.layer.style.position = 'relative'
-    self.layer.style.padding = '19px 0 7px 0'
+    self.layer.style.padding = '19px 0 15px 0'
     { // hover effects/classes
       self.layer.classList.add(commonComponents_hoverableCells.ClassFor_HoverableCell())
       self.layer.classList.add(commonComponents_hoverableCells.ClassFor_GreyCell())
     }
-    self.__setup_emojiLayer()
+    // the emoji layer is deprecated in favour of Yats
+    // self.__setup_emojiLayer()
     self.__setup_nameLayer()
     self.__setup_addressLayer()
     self.layer.appendChild(commonComponents_tables.New_tableCell_accessoryChevronLayer(self.context))
     self.__setup_cellSeparatorLayer()
   }
 
-  __setup_emojiLayer () {
-    const self = this
-    const layer = document.createElement('span')
-    layer.classList.add('emoji-label')
-    layer.style.position = 'absolute'
-    layer.style.left = '16px'
-    layer.style.top = '20px'
-    layer.style.fontSize = '13px'
-    layer.style.color = '#9e9c9e'
-    layer.style.cursor = 'default'
-    self.emojiLayer = layer
-    self.layer.appendChild(layer)
-  }
-
   __setup_nameLayer () {
     const self = this
     const layer = document.createElement('div')
     layer.style.position = 'relative'
-    layer.style.margin = '0 66px 4px 50px'
+    layer.style.margin = '0 66px 4px 8px'
     layer.style.height = 'auto'
     layer.style.fontSize = '13px'
     layer.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif'
@@ -59,12 +46,13 @@ class ContactsListCellView extends ListCellView {
   __setup_addressLayer () {
     const self = this
     const layer = document.createElement('div')
+    layer.classList.add('withNativeEmoji')
     layer.style.position = 'relative'
-    layer.style.margin = '0 66px 4px 50px'
+    layer.style.margin = '0 66px 4px 8px'
     layer.style.fontSize = '13px'
     layer.style.fontFamily = 'Native-Light, input, menlo, monospace'
     layer.style.fontWeight = '100'
-    layer.style.height = '20px'
+    layer.style.height = '30px'
     layer.style.color = '#9e9c9e'
     layer.style.whiteSpace = 'nowrap'
     layer.style.overflow = 'hidden'
@@ -132,24 +120,17 @@ class ContactsListCellView extends ListCellView {
       self.cellSeparatorLayer.style.visibility = 'visible'
     }
     if (typeof self.record === 'undefined' || !self.record) {
-      self.emojiLayer.innerHTML = ''
       self.nameLayer.innerHTML = ''
       self.addressLayer.innerHTML = ''
       return
     }
     if (self.record.didFailToInitialize_flag === true || self.record.didFailToBoot_flag === true) { // unlikely, but possible
-      self.emojiLayer.innerHTML = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-        self.context,
-        '❌'
-      )
+      self.emojiLayer.innerHTML = self.record.fullname
       self.nameLayer.innerHTML = 'Error: Please contact support.'
       self.addressLayer.innerHTML = self.record.didFailToBoot_errOrNil ? ' ' + self.record.didFailToBoot_errOrNil : ''
       return
     }
-    self.emojiLayer.innerHTML = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-      self.context,
-      self.record.emoji
-    )
+    
     self.nameLayer.innerHTML = self.record.fullname
     self.addressLayer.innerHTML = self.record.address
     // self.DEBUG_BorderAllLayers()

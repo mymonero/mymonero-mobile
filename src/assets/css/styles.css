@@ -477,7 +477,7 @@
   overflow-y: auto;
 }
 
-.EmojiPickerPopoverContentView > .EmojiButtonView {
+.withNativeEmoji {
   width: 42px;
   height: 40px;
   line-height: 40px;
@@ -491,6 +491,11 @@
   /* transition: background-color 0.05s ease-out, box-shadow 0.05s ease-out; */
 }
 
+div withNativeEmoji {
+  min-width: 100px;
+
+}
+
 .EmojiPickerPopoverContentView > .EmojiButtonView.withNonNativeEmoji {
 }
 
@@ -501,10 +506,23 @@
   border-radius: 3px;
 } */
 
-.EmojiPickerPopoverContentView > .EmojiButtonView .emojione {
+.ContactsListCellView > div {
+  margin-left: 0px; padding-left: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important
+}
+
+.ContactsListCellView div.withNativeEmoji {
+  min-width: calc(100% - 50px);
+}
+
+/* .EmojiPickerPopoverContentView > .EmojiButtonView .emojione {
   transform: scale(.75);
   margin-left: 3px;
   margin-top: 0px;
+} */
+
+.NavigationBarView .title-label .emojione {
+  
 }
 
 /** END FROM EmojiPickerPopoverContentView.web.js */
@@ -514,9 +532,9 @@
 }
 
 .ContactsListCellView .emoji-label .emojione {
-  transform: scale(.5);
+  /* transform: scale(.5);
   margin-left: -7px;
-  margin-top: -6px;
+  margin-top: -6px; */
 }
 
 /** END FROM ContactsListCellView.web.js */
@@ -657,11 +675,27 @@
   text-overflow: ellipsis;
 
   top: 0px;
-  left: 48px;
+  left: 6px;
   width: calc(100% - 48px - 12px)
 }
 
-.contactPicker .autocomplete-results .row .title.withNonNativeEmoji {
+.contactPicker .autocomplete-results .row {
+  position: relative;
+  left: 0px;
+  box-sizing: border-box;
+  padding: 0px 15px;
+  width: 100%;
+  height: 31px;
+  color: rgb(29, 27, 29);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  line-height: 31px;
+  user-select: none;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .contactPicker .picked-contact .emojione {
@@ -673,6 +707,10 @@
 
 .contactPicker .picked-contact .title {
   margin-left: 10px;
+}
+
+.picked-contact div {
+  height: 38px;
 }
 
 .contactPicker .picked-contact .title.withNonNativeEmoji {
@@ -2275,11 +2313,13 @@ div.customSelect {}
 .iconAndMessageLayer {
   padding: 7px 10px 7px 10px;
 }
+
 .iconAndMessageLayer > img {
   display: inline-block;
   position: relative;
   top: 1px;
 }
+
 .iconAndMessageLayer > span {
   display: inline-block;
 }
@@ -2290,7 +2330,8 @@ div.customSelect {}
   top: -1px;
   transform: scale(.5);
 }
-.contactPicker .autocomplete-results .row .title {
+
+/* .contactPicker .autocomplete-results .row .title {
   position: absolute;
   white-space: nowrap;
   overflow: hidden;
@@ -2299,9 +2340,8 @@ div.customSelect {}
   top: 0px;
   left: 48px;
   width: calc(100% - 48px - 12px)
-}
-.contactPicker .autocomplete-results .row .title.withNonNativeEmoji	 {
-}
+} */
+
 .contactPicker .picked-contact .emojione {
   position: absolute;
   left: 1px;
@@ -2768,4 +2808,30 @@ div.customSelect {}
     bottom: 15px !important;
     margin-top: 16px !important;
   }
+}
+div.yatField > div > span.field_value {
+  margin-top: -6px !important;
+  font-size: 18px !important;
+}
+
+input, textarea {
+  font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+}
+
+.isNumericInputElement + input, .isNumericInputElement + input::placeholder {
+  font-family: Native-Regular, input, menlo, monospace !important;
+}
+
+.isNumericInputElement + input {
+
+}
+
+.withNativeEmoji {
+  margin-left: 0px;
+  font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  text-align: left;
+}
+
+.emojiLetterSpacing {
+  letter-spacing: 1px;
 }

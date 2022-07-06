@@ -93,9 +93,6 @@ class Wallet extends EventEmitter {
       self.__setup_andAwaitBootAndLogInAndDocumentCreation(context)
     }
     context.wallets = []
-    context.wallets.forEach((element) => {
-      // console.log(element);
-    })
     context.wallets.push(self)
   }
 
