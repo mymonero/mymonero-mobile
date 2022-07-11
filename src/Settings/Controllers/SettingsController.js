@@ -9,7 +9,7 @@ const CollectionName = 'Settings'
 
 const k_defaults_record =
 {
-  specificAPIAddressURLAuthority: 'https://api.mymonero.com',
+  specificAPIAddressURLAuthority: '',
   appTimeoutAfterS: 6 * 60, // 6 mins
   invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount: false,
   displayCcySymbol: Currencies.ccySymbolsByCcy.XMR, // default
@@ -59,13 +59,14 @@ class SettingsController extends EventEmitter {
     // const deleteResponse = self.context.persister.RemoveAllData(callbackFn);
 
     // debug: for when you want to emulate iOS migration, add: || `self.context.deviceInfo.platform === 'web')`
-    if (self.context.deviceInfo.platform === 'ios') {
-      let iosMigrationController
+    if (self.context.deviceInfo.platform === 'ios' || self.context.deviceInfo.platform === 'web') {
+      //let iosMigrationController
       // debug: for when you want to emulate iOS migration, add: `iosMigrationController = new iOSMigrationController(self.context)`
       //if (self.context.deviceInfo.platform === 'ios') {
-      iosMigrationController = new iOSMigrationController(self.context)
+      //let iosMigrationController = self.context.iosMigrationController
       //}
-
+      let iosMigrationController = new iOSMigrationController(self.context)
+      //self.context.iosMigrationController = i
       const hasPreviouslyMigrated = await iosMigrationController.hasPreviouslyMigrated()
       const doesHaveMigratableFiles = await iosMigrationController.hasMigratableFiles()
       
@@ -162,7 +163,7 @@ class SettingsController extends EventEmitter {
     function _proceedTo_loadStateFromRecord (record_doc) {
       self._id = record_doc._id || undefined
       //
-      self.specificAPIAddressURLAuthority = record_doc.specificAPIAddressURLAuthority
+      self.specificAPIAddressURLAuthority = (record_doc.specificAPIAddressURLAuthority === '') ? 'https://api.mymonero.com' : record_doc.specificAPIAddressURLAuthority
       self.appTimeoutAfterS = record_doc.appTimeoutAfterS
       self.invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount = record_doc.invisible_hasAgreedToTermsOfCalculatedEffectiveMoneroAmount
       self.displayCcySymbol = record_doc.displayCcySymbol

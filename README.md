@@ -1,4 +1,4 @@
-# MyMonero for Mobile (iOS beta)
+# MyMonero for Mobile
 
 <p align="center">
   <img alt="MyMonero" src="https://user-images.githubusercontent.com/1645428/146000939-b06f8fd3-9ed2-4a5e-bdd6-3981281dde9c.png">
@@ -13,15 +13,8 @@
   <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg"></a>
 </p>
 
-Beta Testers Needed
+We've taken every precaution to make migration of data from the old iOS app as simple as possible. Nevertheless, we highly recommend ensuring that you back your mnemonic seed phrases up before installing the new iOS application.
 
-We're currently looking for tech-savvy MyMonero users willing to take part in our beta test.
-
-While we've taken every precaution to make migration of data from the old iOS app as simple as possible, please ensure you back your mnemonic seeds up before installing the beta version.
-
-Once you move across to the beta version of the iOS app, there is no way to return to the old version.
-
-To join the beta, DM @tekkzbadger on Reddit to be added.
 ## Summary
 
 
@@ -32,7 +25,7 @@ This repository contains the source code for the MyMonero mobile applications. T
 
 ## Downloads
 
-iOS download instructions to follow once beta is successfully finished.
+Download the latest iOS version from the Apple App Store or from the [Releases tab](https://github.com/mymonero/mymonero-mobile/releases/latest).
 
 Download the latest Android version from the [Play Store](https://play.google.com/store/apps/details?id=com.mymonero.official_android_application) or from the [Releases tab](https://github.com/mymonero/mymonero-mobile/releases/latest).
 

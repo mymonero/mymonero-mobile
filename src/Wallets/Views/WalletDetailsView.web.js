@@ -1136,7 +1136,7 @@ class WalletDetailsView extends View {
           return
         }
         Toast.show({
-          text: 'CSV saved to Android\'s shared Documents folder successfully!',
+          text: 'CSV saved to device successfully!',
           duration: 'long'
         })
       },

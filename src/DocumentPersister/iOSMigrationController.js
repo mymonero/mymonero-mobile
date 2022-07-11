@@ -40,6 +40,7 @@ class iOSMigrationController {
         this.performMigration = this.performMigration
         this.touchFile = this.touchFile
         this.hasPreviouslyMigrated = this.hasPreviouslyMigrated;
+        this.didPreviouslyMigrate = ""
         this.hasMigratableFiles = this.hasMigratableFiles;    
     }
 
@@ -156,8 +157,9 @@ class iOSMigrationController {
                         let safeToMigrate = this.validateFileData(password).then(safeToMigrate => {
                             if (safeToMigrate === true) {
                                 try {
-                                    this.migrateAllData(password)
-                                    resolve(true);
+                                    this.migrateAllData(password).then(() => {
+                                        resolve(true);
+                                    })
                                 } catch (e) {
                                     reject(e);
                                 }
@@ -330,17 +332,22 @@ class iOSMigrationController {
         const self = this
         return new Promise((resolve, reject) => {
             function migrationCheckCallback(err, result) {
-            
-                
-                if (result.length > 0) {
+                if (result.length === 0) {
+                    self.didPreviouslyMigrate = false;
+                    resolve(false);
+                } else if (result.length >= 1) {
                     self.didPreviouslyMigrate = true;
                     resolve(true);
                 }
-                self.didPreviouslyMigrate = false;
-                resolve(false);
+                reject("Unexpected data");
             }
-    
-            let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
+
+            try {
+                let migrationPreviouslyPerformed = this.context.persister.IdsOfAllDocuments("migratedOldIOSApp", migrationCheckCallback)
+            } catch (error) {
+                console.log(error);
+                reject(error);
+            }
         })
     }
 
@@ -513,7 +520,7 @@ class iOSMigrationController {
         try {
             for (let i = 0; i < fileList.files.length; i++) {
                 if (fileList.files[i].indexOf('mmdbdoc_v1') !== -1) {
-                    if (fileList.files[i].indexOf("PasswordMeta") == -1 && fileList.files[i].indexOf("Settings") == -1) {
+                    if (fileList.files[i].indexOf("Wallets") !== -1 || fileList.files[i].indexOf("Contacts") !== -1 || fileList.files[i].indexOf("FundsRequests" !== -1)) {
                         // console.log("Not password and not settings")
                         mmdbdocsPresent = true;
                         legacyFiles.push(fileList.files[i]);

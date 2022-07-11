@@ -66,7 +66,9 @@ class SettingsView extends View {
     self._setup_form_field_displayCcy()
     self._setup_form_field_serverURL()
     self._setup_deleteEverythingButton()
-
+    if (self.context.deviceInfo.platform === 'ios') {
+      self._setup_iosWalletImportTroubleshooting()
+    }
     containerLayer.style.paddingBottom = '64px'
     self.layer.appendChild(containerLayer)
   }
@@ -507,6 +509,44 @@ class SettingsView extends View {
     div.appendChild(layer)
     self.form_containerLayer.appendChild(div)
   }
+
+  _setup_iosWalletImportTroubleshooting () {
+    const self = this
+    const div = document.createElement('div')
+    div.style.paddingTop = '23px'
+    const titleText = 'TROUBLESHOOT WALLET IMPORTATION'
+    const view = commonComponents_tables.New_redTextButtonView(titleText, self.context)
+    self.iosImport_buttonView = view
+    const layer = view.layer
+    layer.addEventListener(
+      'click',
+      function (e) {
+        e.preventDefault()
+        let msg
+        msg = 'Only use this function if you are attempting to recover a wallet which did not import successfully. This will result in all data being cleared, including the check to ensure that a previous migration has not already been performed'
+        self.context.windowDialogs.PresentQuestionAlertDialogWith(
+          'Completely reset iOS importation process?',
+          msg,
+          'Reset everything',
+          'Cancel',
+          function (err, didChooseYes) {
+            if (err) {
+              throw err
+            }
+            if (didChooseYes) {
+              self.context.passwordController.InitiateImportReset(function (err) {
+                
+              })
+            }
+          }
+        )
+        return false
+      }
+    )
+    div.appendChild(layer)
+    self.form_containerLayer.appendChild(div)
+  }
+
 
   startObserving () {
     const self = this

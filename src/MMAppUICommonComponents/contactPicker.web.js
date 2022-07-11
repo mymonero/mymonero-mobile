@@ -285,28 +285,35 @@ function _new_autocompleteResultRowLayer (context, contact, isAtEnd, clicked_fn)
   const padding_h = 15
   const layer = document.createElement('div')
   layer.classList.add('row')
-  layer.style.position = 'relative'
-  layer.style.left = '0'
-  layer.style.boxSizing = 'border-box'
-  layer.style.padding = `0 ${padding_h}px`
-  layer.style.width = '100%'
-  layer.style.height = height + 'px'
-  layer.style.color = '#1D1B1D'
-  layer.style.fontSize = '13px'
-  layer.style.fontWeight = '500'
-  layer.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif'
-  layer.style.lineHeight = height + 'px' // this is commented because it's overridden in the CSS rules above
-  layer.style.webkitUserSelect = 'none' // redundant but for explicitness
-  layer.style.cursor = 'pointer'
-  layer.style.whiteSpace = 'nowrap'
-  layer.style.overflow = 'hidden'
-  layer.style.textOverflow = 'ellipsis'
-  const imageBackedEmojiHTMLString = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-    context,
-    contact.emoji
-  )
-  const titleClasses = 'title'
-  layer.innerHTML = `${imageBackedEmojiHTMLString}&nbsp;<span class="${titleClasses}">${contact.fullname}</span>`
+  // layer.style.position = 'relative'
+  // layer.style.left = '0'
+  // layer.style.boxSizing = 'border-box'
+  // layer.style.padding = `0 ${padding_h}px`
+  // layer.style.width = '100%'
+  // layer.style.height = height + 'px'
+  // layer.style.color = '#1D1B1D'
+  // layer.style.fontSize = '13px'
+  // layer.style.fontWeight = '500'
+  // layer.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif'
+  // layer.style.lineHeight = height + 'px' // this is commented because it's overridden in the CSS rules above
+  // layer.style.webkitUserSelect = 'none' // redundant but for explicitness
+  // layer.style.cursor = 'pointer'
+  // layer.style.whiteSpace = 'nowrap'
+  // layer.style.overflow = 'hidden'
+  // layer.style.textOverflow = 'ellipsis'
+  // const imageBackedEmojiHTMLString = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
+  //   context,
+  //   contact.emoji
+  // )
+  //const titleClasses = 'title'
+  //layer.innerHTML = `${imageBackedEmojiHTMLString}&nbsp;<span class="${titleClasses}">${contact.fullname}</span>`
+  let labelText
+  if (contact.isYat === true) {
+    labelText = contact.fullname + " <span class='emojiLetterSpacing'>(" + contact.address + "&nbsp;)</span>"
+  } else {
+    labelText = contact.fullname + " (" + contact.address.substring(0, 10) + "...)"
+  }
+  layer.innerHTML = `<span class="title">${labelText}</span>`
   {
     layer.addEventListener('mouseover', function () { this.highlight() })
     layer.addEventListener('mouseleave', function () { this.unhighlight() }) // will this be enough?
@@ -333,7 +340,7 @@ function _new_autocompleteResultRowLayer (context, contact, isAtEnd, clicked_fn)
   if (isAtEnd !== true) {
     const lineLayer = document.createElement('div')
     lineLayer.style.position = 'absolute'
-    lineLayer.style.left = '50px'
+    lineLayer.style.left = '0px'
     lineLayer.style.right = '0'
     const lineHeight = 1
     lineLayer.style.height = lineHeight + 'px'
@@ -351,12 +358,13 @@ function _new_pickedContactLayer (context, contact, didClickCloseBtn_fn) {
   layer.appendChild(contentLayer)
   { // ^-- using a content layer here so we can get width-of-content behavior with inline-block
     // while getting parent to give us display:block behavior
-    const imageBackedEmojiHTMLString = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-      context,
-      contact.emoji
-    )
+    
     const titleClasses = 'title'
-    contentLayer.innerHTML = `${imageBackedEmojiHTMLString}&nbsp;<span class="${titleClasses}">${contact.fullname}</span>`
+    if (typeof(contact.isYat) !== 'undefined' && contact.isYat === true) {
+      contentLayer.innerHTML = `<span class="title withNativeEmoji">${contact.fullname} (${contact.address})</span>`  
+    } else {
+      contentLayer.innerHTML = `<span class="title">${contact.fullname}</span>`
+    }
     contentLayer.style.boxSizing = 'border-box'
     contentLayer.style.position = 'relative'
     contentLayer.style.maxWidth = '274px'

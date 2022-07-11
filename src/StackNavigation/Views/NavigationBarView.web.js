@@ -224,10 +224,7 @@ class NavigationBarView extends View {
     }
     //
     self.titleLayer.style.color = titleTextColor
-    self.titleLayer.innerHTML = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-      self.context,
-      titleString
-    )
+    self.titleLayer.innerHTML = titleString
     self.titleLayer.style.width = self._new_titleLayer_styleWidth_withExtraPaddingLeft(extra_paddingLeft)
     self.titleLayer.style.paddingLeft = extra_paddingLeft + 'px'
   }
@@ -265,10 +262,7 @@ class NavigationBarView extends View {
     //
     if (isAnimated === false) {
       self.titleLayer.style.color = titleTextColor
-      self.titleLayer.innerHTML = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-        self.context,
-        titleString
-      )
+      self.titleLayer.innerHTML = titleString
       self.titleLayer.style.width = to_styleWidth
       self.titleLayer.style.paddingLeft = extra_paddingLeft + 'px'
       return
@@ -276,10 +270,7 @@ class NavigationBarView extends View {
     const old_titleLayer = self.titleLayer
     const successor_titleLayer = self.titleLayer.cloneNode()
     successor_titleLayer.style.color = titleTextColor
-    successor_titleLayer.innerHTML = emoji_web.NativeEmojiTextToImageBackedEmojiText_orUnlessDisabled_NativeEmojiText(
-      self.context,
-      titleString
-    ) // set up with new title
+    successor_titleLayer.innerHTML = titleString
     successor_titleLayer.style.width = to_styleWidth
     successor_titleLayer.style.paddingLeft = extra_paddingLeft + 'px'
     //

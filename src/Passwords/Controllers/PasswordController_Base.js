@@ -417,13 +417,16 @@ class PasswordController_Base extends EventEmitter {
                   let doMigration = await self.context.iosMigrationController.performMigration(existingPassword);
                   let walletRecords = await self.context.persister.AllDocuments("Wallets", (err, data) => {                   
                     self._didObtainPassword(existingPassword)
-                    self.unguard_getNewOrExistingPassword()
-                    self.emit(self.EventName_ObtainedCorrectExistingPassword())
-                    self.context.walletsListController.__listUpdated_records()
-                    setTimeout(() => {
-                      
-                    }, 300)
-                  })
+                    // self.unguard_getNewOrExistingPassword()
+                    // self.emit(self.EventName_ObtainedCorrectExistingPassword())
+                    // self.context.walletsListController.__listUpdated_records()
+
+                  }) // all wallets returned by this stage, so emit update events
+
+                  self.unguard_getNewOrExistingPassword()
+                  self.emit(self.EventName_ObtainedCorrectExistingPassword())
+                  self.context.walletsListController.__listUpdated_records()
+
                 } catch (error) {
                   throw error;
                 }
@@ -1036,6 +1039,41 @@ class PasswordController_Base extends EventEmitter {
         fn()
       }
     )
+  }
+
+  // Written for the < 0.1% of iOS users with wallet importation problems when migrating from old app to new
+  InitiateImportReset (fn) { 
+    // maybe it should be moved, maybe not.
+    // And note we're assuming here the PW has been entered already.
+    function callbackFn (err, success) {
+      if (err !== null) {
+        console.error('deleteEverything callbackFn failed')
+        throw 'PasswordController.InitiateDeleteEverything failed'
+      }
+    }
+    const self = this
+    self._deconstructBootedStateAndClearPassword(
+      true, // yes, is for a 'delete everything'
+      function (cb) {
+        // reset state cause we're going all the way back to pre-boot
+        self.hasBooted = false // require this pw controller to boot
+        self.password = undefined // this is redundant but is here for clarity
+        self.hasUserSavedAPassword = false
+        self._id = undefined
+        self.encryptedMessageForUnlockChallenge = undefined
+        self._initial_waitingForFirstPWEntryDecode_passwordModel_doc = undefined
+        const response = self.context.persister.RemoveImportFlag(callbackFn)
+      },
+      function (err) {
+        if (err) {
+          fn(err)
+          throw err // throwing because self's runtime is not in a good state given un-setting of instance props like .password
+        }
+        self.emit(self.EventName_havingDeletedEverything_didDeconstructBootedStateAndClearPassword())
+        fn()
+      }
+    )
+    console.log("We don't call this");
   }
 
   AddRegistrantForDeleteEverything (registrant) {

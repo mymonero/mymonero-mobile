@@ -19,6 +19,10 @@ class FilesytemUI extends FilesystemUI_Abstract {
           text: "MyMonero payment request",
           dialogTitle: "MyMonero payment request",
           url: finalPhotoUri.uri
+        }).catch(error => {
+          if (error.message !== "Share canceled") {
+            throw error
+          }
         })
       } else {
         const result2 = await Filesystem.writeFile({

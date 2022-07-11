@@ -5,6 +5,7 @@ import EnterExistingPasswordView from './EnterExistingPasswordView.web'
 import EnterNewPasswordView from './EnterNewPasswordView.web'
 import StackAndModalNavigationView from '../../StackNavigation/Views/StackAndModalNavigationView.web'
 import iOSMigrationController from '../../DocumentPersister/iOSMigrationController'
+import symmetric_string_cryptor from '../../symmetric_cryptor/symmetric_string_cryptor'
 
 const passwordEntryTaskModes =
 {
@@ -163,22 +164,20 @@ class PasswordEntryView extends StackAndModalNavigationView {
     const self = this
     const shouldAnimateToNewState = isForChangePassword
 
+    if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
+      self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
+      self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
+        throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
+      }
+
+
     { // check legality
-      if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None) {
-        if (self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType) {
+      if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
+        self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
+        self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
           throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
         }
-      }
     }
-
-
-    // { // check legality
-    //   if (self.passwordEntryTaskMode !== passwordEntryTaskModes.None && 
-    //     self.passwordEntryTaskMode !== passwordEntryTaskModes.ForChangingPassword_ExistingPasswordGivenType && 
-    //     self.passwordEntryTaskMode !== passwordEntryTaskModes.ForMigratingFromOldIOSVersion) {
-    //       throw 'GetUserToEnterNewPasswordAndTypeWithCB called but self.passwordEntryTaskMode not .None and not .ForChangingPassword_ExistingPasswordGivenType'
-    //     }
-    // }
     { // we need to hang onto the callback for when the form is submitted
       self.enterPasswordAndType_cb = enterPasswordAndType_cb
     }
@@ -192,11 +191,10 @@ class PasswordEntryView extends StackAndModalNavigationView {
       console.log(`taskmode: ${taskMode}`)
       // This series of if statements determines whether the user should be taken through the import process
       if (typeof(self.context.iosMigrationController) !== 'undefined') {
-        const didPreviouslyMigrate = self.context.iosMigrationController.didPreviouslyMigrate
-        
-        if (!didPreviouslyMigrate) {
-          const doesHaveMigratableFiles = self.context.iosMigrationController.doesHaveMigratableFiles;
-          if (doesHaveMigratableFiles) {
+        const hasPreviouslyMigrated = self.context.iosMigrationController.hasPreviouslyMigrated;
+        if (!hasPreviouslyMigrated) {
+          const hasMigratableFiles = self.context.iosMigrationController.hasMigratableFiles;
+          if (hasMigratableFiles) {
             taskMode = passwordEntryTaskModes.ForMigratingFromOldIOSVersion
           }
         }
@@ -408,7 +406,7 @@ class PasswordEntryView extends StackAndModalNavigationView {
   //
   // Runtime - Imperatives - Internal - Form management
   //
-  submitForm (password) {
+  async submitForm (password) {
     const self = this
     {
       self._clearValidationMessage()
@@ -423,14 +421,44 @@ class PasswordEntryView extends StackAndModalNavigationView {
         passwordType = "FreeformStringPW"
       }
     }
-    // End of code for iOS migration
-    
-    // handles validation:
-    self._passwordController_callBack_trampoline(
-      false, // didCancel?
-      password,
-      passwordType
-    )
+
+    // if iOS
+    if (self.context.deviceInfo.platform === 'ios') {
+      if (self.context.iosMigrationController.didPreviouslyMigrate === false && self.context.iosMigrationController.doesHaveMigratableFiles === true) {
+
+        let keyForEncryptedString = Object.keys(self.context.iosMigrationController.migrationFileData)[0]
+        let encryptedStringToAttemptDecrypt = self.context.iosMigrationController.migrationFileData[keyForEncryptedString].data
+
+        symmetric_string_cryptor.New_DecryptedString__Async(encryptedStringToAttemptDecrypt, password, function(err, decryptedMessage) {
+          if (err) {
+            const errStr = self.context.passwordController._new_incorrectPasswordValidationErrorMessageString()
+            //const err = new Error(errStr)
+            self.context.passwordController.unguard_getNewOrExistingPassword()
+            self.context.passwordController.emit(self.context.passwordController.EventName_ErroredWhileGettingExistingPassword(), err)
+          } else {
+            // We decrypted the message, so it's safe to continue
+            self._passwordController_callBack_trampoline(
+              false, // didCancel?
+              password,
+              passwordType
+            )
+          }
+        });
+      } else {
+        // we don't need to check migration information since we already migrated in a previous migration process        
+        self._passwordController_callBack_trampoline(
+          false, // didCancel?
+          password,
+          passwordType
+        )
+      }// end if migrated in past
+    } else { // end if iOS
+      self._passwordController_callBack_trampoline(
+        false, // didCancel?
+        password,
+        passwordType
+      )  
+    }    
   }
 
   Cancel (optl_isAnimated) {
