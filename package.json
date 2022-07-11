@@ -49,7 +49,7 @@
     "@mymonero/mymonero-monero-client": "^1.4.1",
     "@mymonero/mymonero-monero-config": "^1.4.2",
     "@mymonero/mymonero-money-format": "^1.4.2",
-    "@mymonero/mymonero-net-service-utils": "^2.0.2",
+    "@mymonero/mymonero-net-service-utils": "^2.1.10",
     "@mymonero/mymonero-nettype": "^1.1.15",
     "@mymonero/mymonero-page-templates": "^2.1.8",
     "@mymonero/mymonero-paymentid-utils": "^1.0.5",
