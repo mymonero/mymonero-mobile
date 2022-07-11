@@ -706,7 +706,7 @@ div withNativeEmoji {
 }
 
 .contactPicker .picked-contact .title {
-  margin-left: 10px;
+  margin: 6px 10px 6px 10px;
 }
 
 .picked-contact div {
