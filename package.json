@@ -24,7 +24,6 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@braintree/sanitize-url": "^6.0.0",
-    "@capacitor-community/http": "^1.4.1",
     "@capacitor/android": "^3.0.0",
     "@capacitor/app": "^1.1.0",
     "@capacitor/browser": "^1.0.7",
