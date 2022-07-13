@@ -2,7 +2,7 @@
   "name": "MyMonero",
   "author": "MyMonero",
   "description": "The simplest way to use Monero",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "license": "SEE LICENSE IN LICENSE.txt",
   "repository": "https://github.com/mymonero/mymonero-mobile",
   "scripts": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@braintree/sanitize-url": "^6.0.0",
+    "@capacitor-community/http": "^1.4.1",
     "@capacitor/android": "^3.0.0",
     "@capacitor/app": "^1.1.0",
     "@capacitor/browser": "^1.0.7",
