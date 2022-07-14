@@ -1638,18 +1638,7 @@ class SendFundsView extends View {
         const stateCachedTransaction = wallet.New_StateCachedTransaction(mockedTransaction) // for display
         self.pushDetailsViewFor_transaction(wallet, stateCachedTransaction)
       }
-      // TODO: Once we have properly developed Yat support for Contacts, remove this isYatHandle check to allow a user to save the Yat contact
-      if (self.isYat == false) {
-        {
-          const this_pickedContact = hasPickedAContact == true ? self.pickedContact : null
-          self.__didSendWithPickedContact(
-            this_pickedContact,
-            enteredAddressValue_exists ? enteredAddressValue : null,
-            resolvedAddress_exists ? resolvedAddress : null,
-            mockedTransaction
-          )
-        }
-      }
+
       { // finally, clean up form
         setTimeout(
           function () {
