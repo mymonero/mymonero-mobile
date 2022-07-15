@@ -8,6 +8,7 @@ const currency_openAliasPrefix = monero_config.openAliasPrefix
 function DoesStringContainPeriodChar_excludingAsXMRAddress_qualifyingAsPossibleOAAddress (address) {
   if (address)
   {
+    if (typeof(address) === 'string' && address.includes('.'))
     // assumed to be an OA address asXMR addresses do not have periods and OA addrs must
     return true
   }
