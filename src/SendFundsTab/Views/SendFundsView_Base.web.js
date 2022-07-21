@@ -1438,9 +1438,10 @@ class SendFundsView extends View {
       final_XMR_amount_Number = submittableMoneroAmountDouble
     }
     //
+    const hasPickedAContact = !!(typeof self.pickedContact !== 'undefined' && self.pickedContact)
     var enteredAddressValue, enteredAddressValue_exists, resolvedAddress, resolvedAddress_exists, resolvedAddress_fieldIsVisible;
     if (hasPickedAContact && self.pickedContact.isYat === true) {
-      console.log("That's a yat");
+
       enteredAddressValue = self.pickedContact.address
       enteredAddressValue_exists = enteredAddressValue !== ''
       //
@@ -1572,6 +1573,15 @@ class SendFundsView extends View {
     __proceedTo_generateSendTransaction()
     //
     function __proceedTo_generateSendTransaction () {
+      
+      const hasPickedAContact = !!(typeof self.pickedContact !== 'undefined' && self.pickedContact)
+      const enteredAddressValue = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value || ''
+      const enteredAddressValue_exists = enteredAddressValue !== ''
+      //
+      const resolvedAddress = self.resolvedAddress_valueLayer.innerHTML || ''
+      const resolvedAddress_exists = resolvedAddress !== '' // NOTE: it might be hidden, though!
+      const resolvedAddress_fieldIsVisible = self.resolvedAddress_containerLayer.style.display === 'block'
+
       const contact_payment_id = hasPickedAContact ? self.pickedContact.payment_id : undefined
       const cached_OAResolved_address = hasPickedAContact ? self.pickedContact.cached_OAResolved_XMR_address : undefined
 
@@ -1579,9 +1589,11 @@ class SendFundsView extends View {
       const contact_address = hasPickedAContact ? self.pickedContact.address : undefined
 
       // Check if Yat, if yes, use resolved address
-      if (self.pickedContact.isYat) {
-        enteredAddressValue = self.pickedContact.resolvedAddress
-        contact_address = self.pickedContact.resolvedAddress
+      if (typeof(hasPickedAContact) !== "undefined" && hasPickedAContact != false) {
+        if (self.pickedContact.isYat) {
+          enteredAddressValue = self.pickedContact.resolvedAddress
+          contact_address = self.pickedContact.resolvedAddress
+        }
       }
       wallet.SendFunds(
         enteredAddressValue, // currency-ready wallet address, but not an OpenAlias address (resolve before calling)
@@ -1626,18 +1638,7 @@ class SendFundsView extends View {
         const stateCachedTransaction = wallet.New_StateCachedTransaction(mockedTransaction) // for display
         self.pushDetailsViewFor_transaction(wallet, stateCachedTransaction)
       }
-      // TODO: Once we have properly developed Yat support for Contacts, remove this isYatHandle check to allow a user to save the Yat contact
-      if (self.isYat == false) {
-        {
-          const this_pickedContact = hasPickedAContact == true ? self.pickedContact : null
-          self.__didSendWithPickedContact(
-            this_pickedContact,
-            enteredAddressValue_exists ? enteredAddressValue : null,
-            resolvedAddress_exists ? resolvedAddress : null,
-            mockedTransaction
-          )
-        }
-      }
+
       { // finally, clean up form
         setTimeout(
           function () {

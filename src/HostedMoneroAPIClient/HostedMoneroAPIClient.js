@@ -35,6 +35,11 @@ class HostedMoneroAPIClient {
   }
 
   check (url, fn) {
+    // for some reason, url is passed as "about:blank" on iOS when check is invoked, causing the iOS app to terminate unexpectedly
+    if (url == 'about:blank') {
+      return
+    }    
+    
     const self = this
 
     const parameters = {

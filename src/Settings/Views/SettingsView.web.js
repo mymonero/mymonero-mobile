@@ -66,9 +66,11 @@ class SettingsView extends View {
     self._setup_form_field_displayCcy()
     self._setup_form_field_serverURL()
     self._setup_deleteEverythingButton()
+    self._setup_purgeLocalTransactions()
     if (self.context.deviceInfo.platform === 'ios') {
       self._setup_iosWalletImportTroubleshooting()
     }
+
     containerLayer.style.paddingBottom = '64px'
     self.layer.appendChild(containerLayer)
   }
@@ -547,6 +549,42 @@ class SettingsView extends View {
     self.form_containerLayer.appendChild(div)
   }
 
+  _setup_purgeLocalTransactions () {
+    const self = this
+    const div = document.createElement('div')
+    div.style.paddingTop = '23px'
+    const titleText = 'PURGE LOCAL TRANSACTIONS'
+    const view = commonComponents_tables.New_redTextButtonView(titleText, self.context)
+    self.iosImport_buttonView = view
+    const layer = view.layer
+    layer.addEventListener(
+      'click',
+      function (e) {
+        e.preventDefault()
+        let msg
+        msg = 'Use this function if you are having problems sending funds or when transactions are not showing up in your wallets\' transaction list'
+        self.context.windowDialogs.PresentQuestionAlertDialogWith(
+          'Purge locally stored transaction data?',
+          msg,
+          'Purge',
+          'Cancel',
+          function (err, didChooseYes) {
+            if (err) {
+              throw err
+            }
+            if (didChooseYes) {
+              self.context.walletsListController.records.forEach(wallet => {
+                wallet.transactions = [];
+              })
+            }
+          }
+        )
+        return false
+      }
+    )
+    div.appendChild(layer)
+    self.form_containerLayer.appendChild(div)
+  }
 
   startObserving () {
     const self = this
