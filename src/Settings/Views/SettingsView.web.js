@@ -863,18 +863,32 @@ class SettingsView extends View {
               self.serverURL_connecting_activityIndicatorLayer.style.display = 'none'
               return
             }
-            self.context.hostedMoneroAPIClient.check(savableValue,
-              function (login__err) {
-                if (login__err) {
-                  self.serverURL_clearValidationMessage()
-                  if (login__err.message === 'invalid address and/or view key' || login__err.message === 'account does not exist') {
-                    self.serverURL_setSuccessMessage('Server is a LWS Server')
-                  } else {
-                    self.serverURL_setValidationMessage(login__err.message)
+            
+            // before check, we'll use fetch to determine if the URL is retrievable before we call the hostedmoneroapiclient version
+            let fetchSuccess;
+            const testUrlIsValidUsingFetch = fetch(savableValue).then(() => {
+              fetchSuccess = true
+            }).catch(error => {
+              fetchSuccess = false
+            })
+
+            if (fetchSuccess === true) {
+              self.context.hostedMoneroAPIClient.check(savableValue,
+                function (login__err) {
+                  if (login__err) {
+                    self.serverURL_clearValidationMessage()
+                    if (login__err.message === 'invalid address and/or view key' || login__err.message === 'account does not exist') {
+                      self.serverURL_setSuccessMessage('Server is a LWS Server')
+                    } else {
+                      self.serverURL_setValidationMessage(login__err.message)
+                    }
                   }
-                }
-                self.serverURL_connecting_activityIndicatorLayer.style.display = 'none'
-              })
+                  self.serverURL_connecting_activityIndicatorLayer.style.display = 'none'
+                })
+            } else {
+              self.serverURL_setValidationMessage('MyMonero was not able to connect to the specified URL')
+            }
+              // end check
           }
         )
       },
