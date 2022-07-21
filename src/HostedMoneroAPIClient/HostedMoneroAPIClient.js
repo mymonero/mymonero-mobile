@@ -1,6 +1,5 @@
-'use strict'
-
 const JSBigInt = require('@mymonero/mymonero-bigint').BigInteger // important: grab defined export
+const capacitorHttp = require('@capacitor-community/http') // used to work around CORS for LWSß
 const net_service_utils = require('@mymonero/mymonero-net-service-utils')
 
 class HostedMoneroAPIClient {
@@ -9,11 +8,7 @@ class HostedMoneroAPIClient {
     self.options = options
     self.context = context
 
-    self.request = options.request_conformant_module
-    if (!self.request) {
-      throw Error(`${self.constructor.name} requires an options.request_conformant_module such as require('request' / 'xhr')`)
-    }
-
+    self.capacitorHttp = capacitorHttp
     self.setup()
   }
 
@@ -48,7 +43,7 @@ class HostedMoneroAPIClient {
       create_account: false,
       generated_locally: ''
     }
-
+    
     const requestHandle = net_service_utils.HTTPRequest(
       self.request,
       url,
@@ -62,6 +57,7 @@ class HostedMoneroAPIClient {
     )
 
     return requestHandle
+    
   }
 
   LogIn (address, privateViewKey, generatedLocally, fn) {
@@ -74,8 +70,8 @@ class HostedMoneroAPIClient {
       generated_locally: generatedLocally
     }
 
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/login',
       parameters,
@@ -102,8 +98,9 @@ class HostedMoneroAPIClient {
       address: address,
       view_key: privateViewKey
     }
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/get_address_info',
       parameters,
@@ -178,8 +175,8 @@ class HostedMoneroAPIClient {
       address: address,
       view_key: privateViewKey
     }
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/get_address_txs',
       parameters,
@@ -238,8 +235,8 @@ class HostedMoneroAPIClient {
       app_name: self.appUserAgent_product,
       app_version: self.appUserAgent_version
     }
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/import_wallet_request',
       parameters,
@@ -271,8 +268,8 @@ class HostedMoneroAPIClient {
     const self = this
     reqParams.app_name = self.appUserAgent_product
     reqParams.app_version = self.appUserAgent_version
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/get_unspent_outs',
       reqParams,
@@ -287,8 +284,8 @@ class HostedMoneroAPIClient {
     const self = this
     reqParams.app_name = self.appUserAgent_product
     reqParams.app_version = self.appUserAgent_version
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/get_random_outs',
       reqParams,
@@ -304,8 +301,8 @@ class HostedMoneroAPIClient {
     reqParams.app_name = self.appUserAgent_product
     reqParams.app_version = self.appUserAgent_version
 
-    const requestHandle = net_service_utils.HTTPRequest(
-      self.request,
+    const requestHandle = net_service_utils.HTTPRequestBypassCORS(
+      capacitorHttp,
       self._new_apiAddress_authority(),
       '/submit_raw_tx',
       reqParams,
