@@ -32,6 +32,7 @@ function read (
       }
     }
   )
+
   function __proceedTo_decryptEncryptedDocument (encryptedBase64String) {
     string_cryptor.New_DecryptedString__Async(
       encryptedBase64String,
@@ -43,15 +44,24 @@ function read (
           return
         }
         let plaintextDocument
-        try {
-          plaintextDocument = JSON.parse(plaintextString)
-        } catch (e) {
-          const errStr = 'Error while parsing JSON: ' + e
-          console.error('❌  ' + errStr)
-          fn(errStr)
-          return
+        if (typeof(plaintextString) === 'string') { // we're going to add an else case to try address a bug that cropped up in release 1.2.6
+          try {
+            plaintextDocument = JSON.parse(plaintextString)
+          } catch (e) {
+            const errStr = 'Error while parsing JSON: ' + e + " while parsing " + self.CollectionName + " - object type: " + typeof(plaintextString)
+            console.error('❌  ' + errStr)
+            fn(errStr)
+            return
+          }
+          fn(null, plaintextDocument)
+        } else { // this else is an attempt to address a bug that can't be replicated on our side
+          try {
+            plaintextDocument = plaintextString
+            fn(null, plaintextDocument)
+          } catch (e) {
+            console.error('❌  Error while decrypting - non-string passed to encryptedBase64String')
+          }
         }
-        fn(null, plaintextDocument)
       }
     )
   }
