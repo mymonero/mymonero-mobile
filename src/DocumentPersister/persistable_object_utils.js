@@ -49,7 +49,7 @@ function read (
             plaintextDocument = JSON.parse(plaintextString)
             fn(null, plaintextDocument)
           } catch (e) {
-            const errStr = 'Error while parsing JSON: ' + e + " while parsing " + self.CollectionName + " - object type: " + typeof(plaintextString)
+            const errStr = 'Error while parsing JSON: ' + e + " while parsing " + self.CollectionName
             console.error('❌  ' + errStr)
             fn(errStr)
             return
