@@ -54,7 +54,7 @@ function read (
             fn(errStr)
             return
           }
-        } else { // this else is an attempt to address a bug that can't be replicated on our side
+        } else { // this else is an attempt to address a JSON.parse bug that can't be replicated on our side
           try {
             plaintextDocument = plaintextString
             fn(null, plaintextDocument)
