@@ -47,13 +47,13 @@ function read (
         if (typeof(plaintextString) === 'string') { // we're going to add an else case to try address a bug that cropped up in release 1.2.6
           try {
             plaintextDocument = JSON.parse(plaintextString)
+            fn(null, plaintextDocument)
           } catch (e) {
             const errStr = 'Error while parsing JSON: ' + e + " while parsing " + self.CollectionName + " - object type: " + typeof(plaintextString)
             console.error('❌  ' + errStr)
             fn(errStr)
             return
           }
-          fn(null, plaintextDocument)
         } else { // this else is an attempt to address a bug that can't be replicated on our side
           try {
             plaintextDocument = plaintextString
