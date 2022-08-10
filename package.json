@@ -2,7 +2,7 @@
   "name": "MyMonero",
   "author": "MyMonero",
   "description": "The simplest way to use Monero",
-  "version": "1.2.10",
+  "version": "1.3.0",
   "license": "SEE LICENSE IN LICENSE.txt",
   "repository": "https://github.com/mymonero/mymonero-mobile",
   "scripts": {
@@ -39,7 +39,7 @@
     "@ionic/pwa-elements": "^3.0.2",
     "@johnbraum/capacitor-qrscanner": "^1.1.11",
     "@mymonero/capacitor-file-picker": "^2.1.5",
-    "@mymonero/mymonero-app-bridge": "^1.1.13",
+    "@mymonero/mymonero-app-bridge": "^2.1.14",
     "@mymonero/mymonero-bigint": "^1.1.15",
     "@mymonero/mymonero-bridge-utils": "^1.1.15",
     "@mymonero/mymonero-exchange": "^1.1.17",
