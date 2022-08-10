@@ -5,7 +5,7 @@ import android.os.Bundle;
 //import com.bkon.capacitor.fileselector.FileSelector;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
-import com.whitestein.securestorage.SecureStoragePlugin;
+//import com.whitestein.securestorage.SecureStoragePlugin;
 
 import java.util.ArrayList;
 
