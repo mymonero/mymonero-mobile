@@ -476,7 +476,7 @@ class SettingsView extends View {
     const self = this
     const div = document.createElement('div')
     div.style.paddingTop = '23px'
-    const titleText = 'DELETE EVERYTHING'
+    const titleText = 'DELETE ACCOUNT DATA'
     const view = commonComponents_tables.New_redTextButtonView(titleText, self.context)
     self.deleteEverything_buttonView = view
     const layer = view.layer
@@ -489,12 +489,12 @@ class SettingsView extends View {
         }
         let msg
 
-        msg = 'Are you sure you want to delete all of your local data?\n\nAny wallets will remain permanently on the Monero blockchain but local data such as contacts will not be recoverable.'
+        msg = 'Are you sure you want to delete your wallet data?\n\nNo account information that links you to your wallets is retained by MyMonero. Recovery will only be possible by using your mnemonic seed. MyMonero does not retain personally identifiable data, and our staff will never ask you to disclose your mnemonic seed.'
 
         self.context.windowDialogs.PresentQuestionAlertDialogWith(
-          'Delete everything?',
+          'Delete wallet and account data?',
           msg,
-          'Delete Everything',
+          'Delete Wallet and Account Data',
           'Cancel',
           function (err, didChooseYes) {
             if (err) {

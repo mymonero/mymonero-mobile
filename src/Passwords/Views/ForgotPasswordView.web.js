@@ -109,11 +109,11 @@ class ForgotPasswordView extends View {
       null, // no image
       true,
       function (layer, e) {
-        const msg = 'Are you sure you want to clear your locally stored data?\n\nAny wallets will remain permanently on the Monero blockchain. At present, local-only data like contacts would not be recoverable.'
+        const msg = 'Are you sure you want to delete your wallet data?\n\nNo account information that links you to your wallets is retained by MyMonero. Recovery will only be possible by using your mnemonic seed. MyMonero does not retain personally identifiable data.'
         self.context.windowDialogs.PresentQuestionAlertDialogWith(
-          'Delete everything?',
+          'Delete all wallet and account data?',
           msg,
-          'Delete Everything',
+          'Delete Wallet and Account Data',
           'Cancel',
           function (err, didChooseYes) {
             if (err) {
