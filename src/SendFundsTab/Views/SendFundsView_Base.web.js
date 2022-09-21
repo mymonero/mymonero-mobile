@@ -1587,6 +1587,7 @@ class SendFundsView extends View {
 
       const contact_hasOpenAliasAddress = hasPickedAContact ? self.pickedContact.HasOpenAliasAddress() : undefined
       const contact_address = hasPickedAContact ? self.pickedContact.address : undefined
+      
 
       // Check if Yat, if yes, use resolved address
       if (typeof(hasPickedAContact) !== "undefined" && hasPickedAContact != false) {
@@ -1595,8 +1596,13 @@ class SendFundsView extends View {
           contact_address = self.pickedContact.resolvedAddress
         }
       }
-      wallet.SendFunds(
-        enteredAddressValue, // currency-ready wallet address, but not an OpenAlias address (resolve before calling)
+      
+     const destinations = [
+        {to_address: enteredAddressValue,
+        send_amount: '' + final_XMR_amount_Number}
+     ]; 
+     wallet.SendFunds(
+	destinations,
         resolvedAddress,
         manuallyEnteredPaymentID,
         resolvedPaymentID,
@@ -1608,7 +1614,6 @@ class SendFundsView extends View {
         cached_OAResolved_address,
         contact_hasOpenAliasAddress,
         contact_address,
-        '' + final_XMR_amount_Number,
         sweeping, // when true, amount will be ignored
         self._selected_simplePriority(),
         preSuccess_nonTerminal_statusUpdate_fn,
