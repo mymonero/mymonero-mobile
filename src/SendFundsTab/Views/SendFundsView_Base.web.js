@@ -1575,7 +1575,8 @@ class SendFundsView extends View {
     function __proceedTo_generateSendTransaction () {
       
       const hasPickedAContact = !!(typeof self.pickedContact !== 'undefined' && self.pickedContact)
-      const enteredAddressValue = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value || ''
+      //const enteredAddressValue = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value || ''
+      let enteredAddressValue = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value || ''
       const enteredAddressValue_exists = enteredAddressValue !== ''
       //
       const resolvedAddress = self.resolvedAddress_valueLayer.innerHTML || ''
@@ -1589,7 +1590,7 @@ class SendFundsView extends View {
       const contact_address = hasPickedAContact ? self.pickedContact.address : undefined
       
 
-      // Check if Yat, if yes, use resolved address
+      // Check if picked contact is a Yat, if yes, use resolved address
       if (typeof(hasPickedAContact) !== "undefined" && hasPickedAContact != false) {
         if (self.pickedContact.isYat) {
           enteredAddressValue = self.pickedContact.resolvedAddress
@@ -1597,12 +1598,22 @@ class SendFundsView extends View {
         }
       }
       
-     const destinations = [
-        {to_address: enteredAddressValue,
-        send_amount: '' + final_XMR_amount_Number}
-     ]; 
+      if (self.isYat) {
+        enteredAddressValue = self.resolvedAddress;
+      }
+
+      const destinations = [
+        {
+          to_address: enteredAddressValue,
+          send_amount: '' + final_XMR_amount_Number
+        }
+      ];
+
+     //console.log("Beep boop");
+
+    // Before we invoke sendfunds, we need to already have resolved whether or not the user has a Yat
      wallet.SendFunds(
-	destinations,
+	      destinations,
         resolvedAddress,
         manuallyEnteredPaymentID,
         resolvedPaymentID,
@@ -1851,6 +1862,7 @@ class SendFundsView extends View {
     const self = this
     //
     const enteredPossibleAddress = self.contactOrAddressPickerLayer.ContactPicker_inputLayer.value
+    var isYat = false;
     const hasEnteredNoAddressContent = !enteredPossibleAddress || typeof enteredPossibleAddress === 'undefined'
     //
     const wasEnterKey = optl_event ? optl_event.keyCode == 13 : false/* 'input' event which lacks 'e' arg in cb seems not to be called on 'enter' key */
@@ -1865,11 +1877,14 @@ class SendFundsView extends View {
     // checking for emojis for Yat address
     const hasEmojiCharacters = /\p{Extended_Pictographic}/u.test(enteredPossibleAddress)
     if (hasEmojiCharacters) {
-      const isYat = yatMoneroLookup.isValidYatHandle(enteredPossibleAddress)
+      isYat = yatMoneroLookup.isValidYatHandle(enteredPossibleAddress)
       self.isYat = isYat
+      console.log(self)
+      console.log("Is yat" + isYat)
       if (isYat) {
         const lookup = yatMoneroLookup.lookupMoneroAddresses(enteredPossibleAddress).then((responseMap) => {
           // Our library returns a map with between 0 and 2 keys
+          console.log("RM" + responseMap)
           if (responseMap.size == 0) {
             // no monero address
             const errorString = `There is no Monero address associated with "${enteredPossibleAddress}"`
@@ -1884,6 +1899,8 @@ class SendFundsView extends View {
             self._displayResolvedAddress(moneroAddress)
           }
         }).catch((error) => {
+          console.log("Error in isYat")
+          isYat = false // we may have set this to true but encountered an error parsing the response map
           // If the error status is defined, handle this error according to the HTTP error status code
           if (typeof (error.response) !== 'undefined' && typeof (error.response.status) !== 'undefined') {
             if (error.response.status == 404) {
@@ -1908,6 +1925,7 @@ class SendFundsView extends View {
         })
       } else {
         // This conditional will run when a mixture of emoji and non-emoji characters are present in the address
+        isYat = false
         const errorString = `"${enteredPossibleAddress}" is not a valid Yat handle. You may have input an emoji that is not part of the Yat emoji set, or a non-emoji character.`
         self.validationMessageLayer.SetValidationError(errorString)
         return
