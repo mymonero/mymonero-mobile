@@ -1250,7 +1250,7 @@ class Wallet extends EventEmitter {
 		{
 		  fromWallet_didFailToInitialize: self.didFailToInitialize_flag == true,
 		  fromWallet_didFailToBoot: self.didFailToBoot_flag == true,
-		  fromWallet_needsImport: self.shouldDisplayImportAccountOption == true,
+		  fromWallet_needsImport: false,
 		  requireAuthentication: self.context.settingsController.authentication_requireWhenSending != false,
 		  //
 	          destinations: destinations, 
