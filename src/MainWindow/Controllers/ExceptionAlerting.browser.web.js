@@ -23,15 +23,47 @@ class ExceptionAlerting {
     const self = this
     window.onerror = function (message, file, line, col, error) {
       self.alertErrMsg(message, 1, error, file, line, col)
-      //return false
+      return false
     }
     window.addEventListener('error', function (e) { // the nice thing about these errors 
-      self.alertErrMsg(e.error.message, 2, e, e.filename, e.lineno, e.colno)
-      //return false
+      // Let's see if we can get the prototype of the error object
+      let errorMessage = '';
+      try {
+        errorMessage += 'Instance of ' + Object.getPrototypeOf(e) + ' error - ';
+      } catch (err) {
+        errorMessage += 'Unable to determine prototype of error - ';
+      }
+      if (typeof(e.error) !== 'undefined' && typeof(e.error.message) !== 'undefined') {
+        errorMessage += `Error type 2 w/ e.error.message: ${e.error.message}`
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else if (typeof(e.error) !== 'undefined'){
+        errorMessage += `Error type 2 w/ e.error: ${e.error}`,
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else {
+        errorMessage += `Error type 2 w/ e.error not defined: ${e}`
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      }
+      return false
     })
     window.addEventListener('unhandledrejection', function (e) {
-      self.alertErrMsg(e.error.message, 2, e, e.filename, e.lineno, e.colno)
-      //return false
+      let errorMessage = '';
+      try {
+        errorMessage += 'Instance of ' + Object.getPrototypeOf(e) + ' error - ';
+      } catch (err) {
+        errorMessage += 'Unable to determine prototype of error - ';
+      }
+      if (typeof(e.error) !== 'undefined' && typeof(e.error.message) !== 'undefined') {
+        errorMessage += `Error type 3 w/ e.error.message: ${e.error.message}`
+        self.alertErrMsg(errorMessage, 3, e, e.filename, e.lineno, e.colno)
+      } else if (typeof(e.error) !== 'undefined'){
+        errorMessage += `Error type 3 w/ e.error: ${e.error}`,
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else {
+        errorMessage += `Error type 3 w/ e.error not defined: ${e}`
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      }
+      //self.alertErrMsg(e.error.message, 2, e, e.filename, e.lineno, e.colno)
+      return false
     })
   }
 
