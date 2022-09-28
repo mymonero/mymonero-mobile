@@ -22,22 +22,54 @@ class ExceptionAlerting {
   _startObserving () {
     const self = this
     window.onerror = function (message, file, line, col, error) {
-      self.alertErrMsg(error.message, 1)
+      self.alertErrMsg(message, 1, error, file, line, col)
       return false
     }
-    window.addEventListener('error', function (e) {
-      self.alertErrMsg(e.error.message, 2)
+    window.addEventListener('error', function (e) { // the nice thing about these errors 
+      // Let's see if we can get the prototype of the error object
+      let errorMessage = '';
+      try {
+        errorMessage += 'Instance of ' + Object.getPrototypeOf(e) + ' error - ';
+      } catch (err) {
+        errorMessage += 'Unable to determine prototype of error - ';
+      }
+      if (typeof(e.error) !== 'undefined' && typeof(e.error.message) !== 'undefined') {
+        errorMessage += `Error type 2 w/ e.error.message: ${e.error.message}`
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else if (typeof(e.error) !== 'undefined'){
+        errorMessage += `Error type 2 w/ e.error: ${e.error}`,
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else {
+        errorMessage += `Error type 2 w/ e.error not defined: ${e}`
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      }
       return false
     })
     window.addEventListener('unhandledrejection', function (e) {
-      self.alertErrMsg(e.reason.message, 3)
+      let errorMessage = '';
+      try {
+        errorMessage += 'Instance of ' + Object.getPrototypeOf(e) + ' error - ';
+      } catch (err) {
+        errorMessage += 'Unable to determine prototype of error - ';
+      }
+      if (typeof(e.error) !== 'undefined' && typeof(e.error.message) !== 'undefined') {
+        errorMessage += `Error type 3 w/ e.error.message: ${e.error.message}`
+        self.alertErrMsg(errorMessage, 3, e, e.filename, e.lineno, e.colno)
+      } else if (typeof(e.error) !== 'undefined'){
+        errorMessage += `Error type 3 w/ e.error: ${e.error}`,
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else {
+        errorMessage += `Error type 3 w/ e.error not defined: ${e}`
+        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      }
+      //self.alertErrMsg(e.error.message, 2, e, e.filename, e.lineno, e.colno)
       return false
     })
   }
 
   //
   // Imperatives
-  alertErrMsg (message, handlerId) {
+  alertErrMsg (message, handlerId, errorObj, file = null, line = null, col = null) {
     // const self = this;
     // self.doToastMessage("Unhandled error. Please inform MyMonero Support of this message: " + message, message);
     // if (message.indexOf("undefined") !== -1 && message.indexOf("handler") !== -1) {
@@ -48,20 +80,26 @@ class ExceptionAlerting {
     // } else {
     // 	self.doToastMessage("Unrecognized error occured. Please contact Support with steps and browser informations.", undefined)
     // }
-    let errorHtml = 'An unexpected application error occurred.\n\nPlease let us know of '
-    errorHtml += `the following error message as it could be a bug:\n\n <p><span style='font-size: 11px;'>${message}`
+    let errorHtml = `An unexpected application error occurred.\n\nPlease let us know of the following error message as it could be a bug:\n\n <p><span style='font-size: 11px;'>`
+    errorHtml += `
+      <p>File: ${file} <br>Line: ${line} <br>Col: ${col} <br>Message:
+      <span style='font-size: 11px;'>${message}</span></p>
+    `;
     errorHtml += '</span></p>'
 
     let errStr = `An unexpected application error occurred. The following error message was encountered: \n\n ${message}`
+    errStr += `
+      <p>File: ${file} <br>Line: ${line} <br>Col: ${col} <br>Message:
+      <span style='font-size: 11px;'>${message}</span></p>
+    `;
     // append stack trace to error we copy to clipboard
 
-    errStr += navigator.userAgent
+    errStr += "Stack: " + errorObj.error.stack + " - " + navigator.userAgent
 
     Swal.fire({
       title: 'MyMonero has encountered an error',
       html: errorHtml,
       background: '#272527',
-      titleColor: '#FFFFFF',
       color: '#FFFFFF',
       text: 'Do you want to continue',
       confirmButtonColor: '#11bbec',

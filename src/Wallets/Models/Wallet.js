@@ -1141,7 +1141,7 @@ class Wallet extends EventEmitter {
   // Runtime - Imperatives - Public - Sending funds
 
   SendFunds (
-    enteredAddressValue, // currency-ready wallet address, but not an OpenAlias address (resolve before calling)
+    destinations, 
     resolvedAddress,
     manuallyEnteredPaymentID,
     resolvedPaymentID,
@@ -1155,7 +1155,6 @@ class Wallet extends EventEmitter {
     contact_hasOpenAliasAddress,
     contact_address,
     //
-    raw_amount_string,
     isSweepTx, // when true, amount will be ignored
     simple_priority,
     //
@@ -1184,6 +1183,7 @@ class Wallet extends EventEmitter {
       // critical to do on every exit from this method
       self.context.userIdleInWindowController.ReEnable_userIdle()
     }
+    const raw_amount_string = destinations[0].send_amount
     const statusUpdate_messageBase = isSweepTx ? 'Sending wallet balance…' : `Sending ${raw_amount_string} XMR…`
     const processStepMessageSuffix_byEnumVal =
 		{
@@ -1250,10 +1250,10 @@ class Wallet extends EventEmitter {
 		{
 		  fromWallet_didFailToInitialize: self.didFailToInitialize_flag == true,
 		  fromWallet_didFailToBoot: self.didFailToBoot_flag == true,
-		  fromWallet_needsImport: self.shouldDisplayImportAccountOption == true,
+		  fromWallet_needsImport: false,
 		  requireAuthentication: self.context.settingsController.authentication_requireWhenSending != false,
 		  //
-		  sending_amount_double_string: raw_amount_string,
+	          destinations: destinations, 
 		  hasPickedAContact: hasPickedAContact,
 		  resolvedAddress_fieldIsVisible: resolvedAddress_fieldIsVisible,
 		  manuallyEnteredPaymentID_fieldIsVisible: manuallyEnteredPaymentID_fieldIsVisible,
@@ -1267,7 +1267,6 @@ class Wallet extends EventEmitter {
 		  priority: simple_priority,
 		  nettype: self.context.nettype,
 		  //
-		  enteredAddressValue: enteredAddressValue, // may be ""
 		  resolvedAddress: resolvedAddress, // may be ""
 		  manuallyEnteredPaymentID: manuallyEnteredPaymentID, // may be ""
 		  resolvedPaymentID: resolvedPaymentID, // may be ""

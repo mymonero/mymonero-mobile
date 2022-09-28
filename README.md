@@ -81,6 +81,7 @@ iOS: To build the app, run the command below. XCode will be opened automatically
 ```bash
 npm run build-ios
 ```
+If using a Mac computer with Apple silicon and this step results in build errors,  may have to remove the created Pods folder and use the command ```bash  arch -x86_64 pod install``` instead of the default ```bash pod install```. 
 
 To run the app in a web browser, run the following
 ```bash
