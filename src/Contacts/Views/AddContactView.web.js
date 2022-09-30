@@ -134,17 +134,12 @@ class AddContactView extends ContactFormView {
     const fullname = self.fullnameInputLayer.value
     //const emoji = self.emojiInputView.Value()
     const address = self.addressInputLayer.value
-    
     let paymentID = self.paymentIDInputLayer.value
     //
     if (typeof fullname === 'undefined' || !fullname) {
       self.validationMessageLayer.SetValidationError('Please enter a name for this contact.')
       return
     }
-    // if (typeof emoji === 'undefined' || !emoji) {
-    //   self.validationMessageLayer.SetValidationError('Please select an emoji for this contact.')
-    //   return
-    // }
     if (typeof address === 'undefined' || !address) {
       self.validationMessageLayer.SetValidationError('Please enter an address for this contact.')
       return
@@ -181,79 +176,82 @@ class AddContactView extends ContactFormView {
     // checking for emojis for Yat addresses
     const hasEmojiCharacters = /\p{Extended_Pictographic}/u.test(address)
     if (hasEmojiCharacters) {
-      self.yat = address;
-      self.isYat = true;
-      const lookup = yatMoneroLookup.lookupMoneroAddresses(address).then((responseMap) => {        
-        // Our library returns a map with between 0 and 2 keys
-        if (responseMap.size == 0) {
-          // no monero address
-          // When zero keys, we're not going to let a user save a contact. There's the off chance they try to add an incorrect Yat
-          const errorString = `There is no Monero address associated with "${address}"`
-          self.validationMessageLayer.SetValidationError(errorString)
-          return
-        } else if (responseMap.size == 1) {
-          // Either a Monero address or a Monero subaddress was found.
-          const iterator = responseMap.values()
-          const record = iterator.next()
-          self._displayResolvedAddress(record.value)
-        } else if (responseMap.size == 2) {
-          const moneroAddress = responseMap.get('0x1001')
-          self._displayResolvedAddress(moneroAddress)
-        }
-        const contactDescription = {
-          fullname: fullname,           
-          isYat: true, 
-          address: address,
-          payment_id: null,
-          cached_OAResolved_XMR_address: null
-        }
-        self._willSaveContactWithDescription(contactDescription)
-        self.context.contactsListController.WhenBooted_AddContact(
-          contactDescription,
-          function (err, contact) {
-            if (err) {
-              __reEnableForm()
-              console.error('Error while creating contact', err)
-              self.validationMessageLayer.SetValidationError(err)
-              return
+      // const isYat = yatMoneroLookup.isValidYatHandle(address)
+      const isYat = true
+      if (isYat) {
+        self.yat = address;
+        const lookup = yatMoneroLookup.lookupMoneroAddresses(address).then((responseMap) => {
+          self.isYat = true
+          // Our library returns a map with between 0 and 2 keys
+          if (responseMap.size == 0) {
+            // no monero address
+            // When zero keys, we're not going to let a user save a contact. There's the off chance they try to add an incorrect Yat
+            const errorString = `There is no Monero address associated with "${address}"`
+            self.validationMessageLayer.SetValidationError(errorString)
+            return
+          } else if (responseMap.size == 1) {
+            // Either a Monero address or a Monero subaddress was found.
+            const iterator = responseMap.values()
+            const record = iterator.next()
+            self._displayResolvedAddress(record.value)
+          } else if (responseMap.size == 2) {
+            const moneroAddress = responseMap.get('0x1001')
+            self._displayResolvedAddress(moneroAddress)
+          }
+          const contactDescription = {
+            fullname: fullname,           
+            isYat: true, 
+            address: address,
+            payment_id: null,
+            cached_OAResolved_XMR_address: null
+          }
+          self._willSaveContactWithDescription(contactDescription)
+          self.context.contactsListController.WhenBooted_AddContact(
+            contactDescription,
+            function (err, contact) {
+              if (err) {
+                __reEnableForm()
+                console.error('Error while creating contact', err)
+                self.validationMessageLayer.SetValidationError(err)
+                return
+              }
+              // there's no need to re-enable the form because we're about to dismiss
+              self._didSaveNewContact(contact)
             }
-            // there's no need to re-enable the form because we're about to dismiss
-            self._didSaveNewContact(contact)
-          }
-        )
+          )
 
-      }).catch((error) => {
-        __reEnableForm()
-        // If the error status is defined, handle this error according to the HTTP error status code
-        if (typeof (error.response) !== 'undefined' && typeof (error.response.status) !== 'undefined') {
-          if (error.response.status == 404) {
-            // Yat not found
-            const errorString = `The Yat "${address}" does not exist`
-            self.validationMessageLayer.SetValidationError(errorString)
-          } else if (error.response.status >= 500) {
-            // Yat server / remote network device error encountered
-            const errorString = `The Yat server is responding with an error. Please try again later. Error: ${error.message}`
-            self.validationMessageLayer.SetValidationError(errorString)
+        }).catch((error) => {
+          __reEnableForm()
+          // If the error status is defined, handle this error according to the HTTP error status code
+          if (typeof (error.response) !== 'undefined' && typeof (error.response.status) !== 'undefined') {
+            if (error.response.status == 404) {
+              // Yat not found
+              const errorString = `The Yat "${address}" does not exist`
+              self.validationMessageLayer.SetValidationError(errorString)
+            } else if (error.response.status >= 500) {
+              // Yat server / remote network device error encountered
+              const errorString = `The Yat server is responding with an error. Please try again later. Error: ${error.message}`
+              self.validationMessageLayer.SetValidationError(errorString)
+            } else {
+              // Response code that isn't 404 or a server error (>= 500) on their side
+              const errorString = `An unexpected error occurred when looking up the Yat Handle: ${error.message}`
+              self.validationMessageLayer.SetValidationError(errorString)
+            }
           } else {
-            // Response code that isn't 404 or a server error (>= 500) on their side
-            const errorString = `An unexpected error occurred when looking up the Yat Handle: ${error.message}`
+            // Network connectivity issues -- could be offline / Yat server not responding
+            const errorString = `Unable to communicate with the Yat server. It may be down, or you may be experiencing internet connectivity issues. Error: ${error.message}`
             self.validationMessageLayer.SetValidationError(errorString)
+            // If we don't have an error.response, our request failed because of a network error
           }
-        } else {
-          // Network connectivity issues -- could be offline / Yat server not responding
-          const errorString = `Unable to communicate with the Yat server. It may be down, or you may be experiencing internet connectivity issues. Error: ${error.message}`
-          self.validationMessageLayer.SetValidationError(errorString)
-          // If we don't have an error.response, our request failed because of a network error
-        }
-      })
-    } else {
-      // This conditional will run when a mixture of emoji and non-emoji characters are present in the address
-      const errorString = `"${address}" is not a valid Yat handle. You may have input an emoji that is not part of the Yat emoji set, or a non-emoji character.`
-      self.validationMessageLayer.SetValidationError(errorString)
-      const hasEmojiCharacters = true;
-      return
+        })
+      } else {
+        // This conditional will run when a mixture of emoji and non-emoji characters are present in the address
+        const errorString = `"${address}" is not a valid Yat handle. You may have input an emoji that is not part of the Yat emoji set, or a non-emoji character.`
+        self.validationMessageLayer.SetValidationError(errorString)
+        const hasEmojiCharacters = true;
+        return
+      }
     }
-  
 
     if (hasEmojiCharacters == true) {
       return
@@ -338,7 +336,7 @@ class AddContactView extends ContactFormView {
         }
       )
     }
-    //
+    
     function _proceedTo_addContact_paymentID (paymentID__toSave, cached_OAResolved_XMR_address__orUndefined) {
       const paymentID_exists = paymentID__toSave && typeof paymentID__toSave !== 'undefined'
       const paymentID_existsAndIsNotValid = paymentID_exists && monero_paymentID_utils.IsValidPaymentIDOrNoPaymentID(paymentID__toSave) === false
@@ -347,20 +345,17 @@ class AddContactView extends ContactFormView {
         self.validationMessageLayer.SetValidationError('Please enter a valid payment ID.')
         return
       }
-      let isYat = false
-      if (/\p{Extended_Pictographic}/u.test(address)) {
-        isYat = true
-      }
       const contactDescription =
 			{
 			  fullname: fullname,
-        //emoji: emoji,
-        isYat: isYat,
+        // emoji: emoji,
+        isYat: self.isYat, 
 			  address: address,
 			  payment_id: paymentID__toSave,
 			  cached_OAResolved_XMR_address: cached_OAResolved_XMR_address__orUndefined
 			}
       self._willSaveContactWithDescription(contactDescription)
+      console.log(contactDescription);
       self.context.contactsListController.WhenBooted_AddContact(
         contactDescription,
         function (err, contact) {
