@@ -62,7 +62,7 @@ class ExceptionAlerting {
     `;
     // append stack trace to error we copy to clipboard
 
-    if (typeof(errorObj.error.stack !== 'undefined')) {
+    if (typeof(errorObj.error.stack) !== 'undefined') {
       errStr += "Stack: " + errorObj.error.stack
     }
     errStr + " - " + navigator.userAgent
