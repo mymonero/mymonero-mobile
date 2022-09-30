@@ -62,7 +62,10 @@ class ExceptionAlerting {
     `;
     // append stack trace to error we copy to clipboard
 
-    errStr += "Stack: " + errorObj.error.stack + " - " + navigator.userAgent
+    if (typeof(errorObj.error.stack !== 'undefined')) {
+      errStr += "Stack: " + errorObj.error.stack
+    }
+    errStr + " - " + navigator.userAgent
 
     Swal.fire({
       title: 'MyMonero has encountered an error',
