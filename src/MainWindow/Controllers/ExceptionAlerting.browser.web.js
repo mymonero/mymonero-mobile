@@ -96,8 +96,8 @@ class ExceptionAlerting {
 
     if (typeof(errorObj.error.stack !== 'undefined')) {
       errStr += "Stack: " + errorObj.error.stack
-     }
-     errStr + " - " + navigator.userAgent
+    }
+    errStr + " - " + navigator.userAgent
 
     Swal.fire({
       title: 'MyMonero has encountered an error',
