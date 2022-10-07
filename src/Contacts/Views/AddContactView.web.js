@@ -355,7 +355,6 @@ class AddContactView extends ContactFormView {
 			  cached_OAResolved_XMR_address: cached_OAResolved_XMR_address__orUndefined
 			}
       self._willSaveContactWithDescription(contactDescription)
-      console.log(contactDescription);
       self.context.contactsListController.WhenBooted_AddContact(
         contactDescription,
         function (err, contact) {
