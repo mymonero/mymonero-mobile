@@ -1597,10 +1597,22 @@ class SendFundsView extends View {
         }
       }
       
-     const destinations = [
-        {to_address: enteredAddressValue,
-        send_amount: '' + final_XMR_amount_Number}
-     ]; 
+      if (self.isYat) {
+        enteredAddressValue = self.resolvedAddress;
+      }
+
+      // Check if address is openalias address, if yes, use resolved address
+      if (enteredAddressValue.includes('.')) {
+        enteredAddressValue = resolvedAddress
+      }
+
+      const destinations = [
+        {
+          to_address: enteredAddressValue,
+          send_amount: '' + final_XMR_amount_Number
+        }
+      ];
+
      wallet.SendFunds(
 	destinations,
         resolvedAddress,
