@@ -1073,7 +1073,6 @@ class PasswordController_Base extends EventEmitter {
         fn()
       }
     )
-    console.log("We don't call this");
   }
 
   AddRegistrantForDeleteEverything (registrant) {
