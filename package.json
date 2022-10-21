@@ -60,7 +60,7 @@
     "@mymonero/mymonero-tx-parsing-utils": "^1.1.13",
     "@mymonero/mymonero-wallet-manager": "^1.4.1",
     "@mymonero/mymonero-web-components": "^2.1.8",
-    "@mymonero/mymonero-yat-lookup": "^2.1.9",
+    "@mymonero/mymonero-yat-lookup": "^2.1.26",
     "async": "^3.2.0",
     "bitcoin-address-validation": "^1.0.2",
     "buffer": "^6.0.3",
