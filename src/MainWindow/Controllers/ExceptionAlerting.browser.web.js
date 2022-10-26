@@ -52,17 +52,14 @@ class ExceptionAlerting {
       } catch (err) {
         errorMessage += 'Unable to determine prototype of error - ';
       }
-      if (typeof(e.error) !== 'undefined' && typeof(e.error.message) !== 'undefined') {
-        errorMessage += `Error type 3 w/ e.error.message: ${e.error.message}`
+      if (typeof(e) === 'PromiseRejectionEvent') {
+        // Per MDN, PromiseRejectionEvent will have a `reason` property that we'll use for our alert. Filename, lineno and colno will be null
+        errorMessage += `Errored promise: ${e.reason}`
         self.alertErrMsg(errorMessage, 3, e, e.filename, e.lineno, e.colno)
-      } else if (typeof(e.error) !== 'undefined'){
-        errorMessage += `Error type 3 w/ e.error: ${e.error}`,
-        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
-      } else {
-        errorMessage += `Error type 3 w/ e.error not defined: ${e}`
-        self.alertErrMsg(errorMessage, 2, e, e.filename, e.lineno, e.colno)
+      } else { // e.error.message is not defined
+        errorMessage += `Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
+        self.alertErrMsg(errorMessage, 3, e)
       }
-      //self.alertErrMsg(e.error.message, 2, e, e.filename, e.lineno, e.colno)
       return false
     })
   }
