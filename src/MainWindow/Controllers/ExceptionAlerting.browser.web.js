@@ -57,8 +57,20 @@ class ExceptionAlerting {
         errorMessage += `Errored promise: ${e.reason}`
         self.alertErrMsg(errorMessage, 3, e, e.filename, e.lineno, e.colno)
       } else { // e.error.message is not defined
-        errorMessage += `Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
-        self.alertErrMsg(errorMessage, 3, e)
+        // a select few users are having issues that result in this error block being executed
+        // we check to see if the user is logged in. If they aren't, we temporarily override the api authority URL in an attempt to fix the issue
+        // Error checking will behave as normal if the user is logged in
+        if (self.context.walletsListController.length > 0) { // don't change server url
+          errorMessage += `Unexpected error encountered -- Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
+          self.alertErrMsg(errorMessage, 3, e)
+        } else { // change server url
+          self.context.apiUrl = 'api.mymonero.com'
+          errorMessage += `Unexpected error encountered -- your API URL setting may be incorrect. MyMonero will now temporarily change your server URL to provide a workaround for this. Please attempt to log in again. Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
+          self.alertErrMsg(errorMessage, 3, e)  
+        }
+        // since these kinds of errors could be related to a network error, we'll attempt to continue execution
+        return true
+        // errors like this could be caused by a network error
       }
       return false
     })
