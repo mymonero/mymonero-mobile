@@ -28,6 +28,23 @@ class ExceptionAlerting {
     window.addEventListener('error', function (e) { // the nice thing about these errors 
       // Let's see if we can get the prototype of the error object
       let errorMessage = '';
+      if (self.context.walletsListController.length == 0 
+        && self.context.apiUrl.includes('mymonero.com') === FALSE) { 
+        // There are approximately 1 in ~5000 users who have experienced issues with the automated iOS data migration. 
+        // This is a workaround to attempt to allow those users to log in successfully
+        // We explicitly warn the user that their API URL setting may be incorrect. 
+        // We inform the user of what changing the URL for them implies for their view key privacy
+        // We then change it to api.mymonero.com
+        // The user's view-only key will be sent to mymonero.com. This would only be a privacy concern if they had previously used a custom URL in their settings
+        errorMessage += `It looks like the iOS migration failed for your device, and that your API URL setting may be incorrect. \r\n
+        MyMonero will try to recover from this behaviour by overriding your server URL to the mymonero server to attempt to work around the issue. 
+        For standard users, this will not affect your privacy. If you use a custom server, please be aware that further login attempts
+        will disclose your view-only keys to MyMonero. By default, this information would have already been supplied to MyMonero. 
+        Please attempt to log in to restore your wallets, unless you only want to use a custom server.\r\n
+        If you continue to experience issues, please contact MyMonero Support.`
+          self.context.apiUrl = 'https://api.mymonero.com'
+          self.alertErrMsg(errorMessage, 3, e)  
+      }
       try {
         errorMessage += 'Instance of ' + Object.getPrototypeOf(e) + ' error - ';
       } catch (err) {
@@ -63,11 +80,27 @@ class ExceptionAlerting {
         if (self.context.walletsListController.length > 0) { // don't change server url
           errorMessage += `Unexpected error encountered -- Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
           self.alertErrMsg(errorMessage, 3, e)
-        } else { // change server url
-          self.context.apiUrl = 'api.mymonero.com'
-          errorMessage += `Unexpected error encountered -- your API URL setting may be incorrect. MyMonero will now temporarily change your server URL to provide a workaround for this. Please attempt to log in again. Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
-          self.alertErrMsg(errorMessage, 3, e)  
-        }
+        } else if (self.context.walletsListController.length == 0 
+          && self.context.apiUrl.includes('mymonero.com') == FALSE) { 
+          // There are approximately 1 in ~5000 users who have experienced issues with the automated iOS data migration. 
+          // This is a workaround to attempt to allow those users to log in successfully
+          // We explicitly warn the user that their API URL setting may be incorrect. 
+          // We inform the user of what changing the URL for them implies for their view key privacy
+          // We then change it to api.mymonero.com
+          // The user's view-only key will be sent to mymonero.com. This would only be a privacy concern if they had previously used a custom URL in their settings
+            errorMessage += `It looks like the iOS migration failed for your device, and that your API URL setting may be incorrect. \r\n
+              MyMonero will try to recover from this behaviour by overriding your server URL to the mymonero server to attempt to work around the issue. 
+              For standard users, this will not affect your privacy. If you use a custom server, please be aware that further login attempts
+              will disclose your view-only keys to MyMonero. By default, this information would have already been supplied to MyMonero. 
+              Please attempt to log in to restore your wallets, unless you only want to use a custom server.\r\n
+              If you continue to experience issues, please contact MyMonero Support.`
+            self.context.apiUrl = 'https://api.mymonero.com'
+            self.alertErrMsg(errorMessage, 3, e)  
+            
+          } else {
+            errorMessage += `Unexpected error encountered -- Non-browser-compliance error - we received an object other than a PromiseRejectionEvent: ${e}`
+            self.alertErrMsg(errorMessage, 3, e)
+          }
         // since these kinds of errors could be related to a network error, we'll attempt to continue execution
         return true
         // errors like this could be caused by a network error
