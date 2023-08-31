@@ -5,9 +5,9 @@ android {
     defaultConfig {
         applicationId "com.mymonero.official_android_application"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 32
-        versionName "1.3.9"
+        targetSdk 31
+        versionCode 33
+        versionName "1.3.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
