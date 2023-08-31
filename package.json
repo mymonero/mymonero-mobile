@@ -15,7 +15,7 @@
     "build-ios": "npm run build; npm run update-ios",
     "dev-ios": "(webpack --mode=development); npm run update-ios",
     "dev-android": "(webpack --mode=development); npm run update-android",
-    "watch2": "(webpack --config webpack.config.js --watch) & (cd dist; python2 -m SimpleHTTPServer 9110)",
+    "watch-legacy": "(webpack --config webpack.config.js --watch) & (cd dist; python2 -m SimpleHTTPServer 9110)",
     "watch": "(webpack --mode=development --config webpack.config.js --watch) & (node server.js)"
   },
   "engines": {
