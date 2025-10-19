@@ -81,9 +81,7 @@ window.BootApp = async function () { // encased in a function to prevent scope b
     didOpen: function () {
       Swal.getConfirmButton().blur()
     }
-  }).then(async (result) => {
-    console.log("Swal closed: ", result);
-    
+  }).then(async (result) => {  
     if (result.isConfirmed) {
       // User clicked "Download Cake Wallet"
       const deviceInfo = await Device.getInfo()
@@ -96,7 +94,7 @@ window.BootApp = async function () { // encased in a function to prevent scope b
         storeUrl = "https://play.google.com/store/apps/details?id=com.cakewallet.cake_wallet"
         window.location.href = storeUrl
       } else {
-        // Web fallback
+        // Web fallback (for testing in browser)
         storeUrl = "https://cakewallet.com"
       }
       
@@ -113,19 +111,29 @@ window.BootApp = async function () { // encased in a function to prevent scope b
         // Fallback approaches
         try {
           if (deviceInfo.platform === 'ios') {
+            // Try browser.open for ios
             await Browser.open({ url: storeUrl })
           } else {
+            // try fallback for Android since Browser.open failed
             window.open(storeUrl, '_blank')
           }
         } catch (fallbackError) {
           console.error('Fallback also failed:', fallbackError)
-          window.open(storeUrl, '_blank')
         }
       }
+      // SweetAlert's buttons are "confirm" and "deny"
     } else if (result.isDenied) {
       // User clicked "Migration Guide"
+      const migrationUrl = "https://docs.cakewallet.com/tutorials/mymonero/"
       try {
-        await Browser.open({ url: "https://docs.cakewallet.com/tutorials/mymonero/" })
+        if (deviceInfo.platform === 'ios') {
+          // Try fallback methods for both ios and Android
+          await Browser.open({ url: migrationUrl })
+        } else if (deviceInfo.platform === 'android') {
+          await Browser.open({ url: migrationUrl })
+        } else {
+          window.open(migrationUrl, '_blank')
+        }
       } catch (error) {
         console.error('Failed to open browser:', error)
         // Fallback to window.open for web
@@ -211,9 +219,6 @@ window.BootApp = async function () { // encased in a function to prevent scope b
             context.wallets[walletIndex].eid = eid;
             context.passwordController.yatRefreshToken = refresh_token;
 
-            let closeHandler = function(closeResponse) {
-              console.log("Close response: ", closeResponse);
-            }
             // The eid is received via URL. Swal sanitizes it
             let messageText = 'You have successfully linked `' + eid + '` to wallet ' + context.wallets[walletIndex].walletLabel;
             Swal.fire({
