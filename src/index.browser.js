@@ -9,6 +9,7 @@ import MyMoneroLibAppBridge from '@mymonero/mymonero-app-bridge'
 import indexContextBrowser from './MainWindow/Models/index_context.browser'
 import { App, URLOpenListenerEvent } from '@capacitor/app'
 import { Device } from '@capacitor/device'
+import { Browser } from '@capacitor/browser'
 import Swal from 'sweetalert2'
 
 window.BootApp = async function () { // encased in a function to prevent scope being lost/freed on mobile
@@ -19,6 +20,127 @@ window.BootApp = async function () { // encased in a function to prevent scope b
     reporting_processName: 'BrowserWindow'
   })
 
+  Swal.fire({
+    // title: "MyMonero will be sunsetting its services in January 2026",
+    //icon: "info",
+    icon: undefined,
+    inputAutoFocus: false,
+    html: `
+      <img src="/assets/img/MM-to-Cake.jpg" style="width: auto; max-width: 100%;">
+      <div style="font-weight:bold; margin-bottom: 1.25em; font-size: 1.25em; margin-top: 0.5em;">MyMonero will be sunsetting its services in January 2026</div>
+      <div style="text-align:left; margin-bottom: 1em;">
+      Dear Monero Community,
+      </div>
+      <div style="text-align: justify; margin-bottom: 1em;">After over a decade of serving the Monero ecosystem, MyMonero has decided to sunset its wallet service on Tuesday, January 06, 2026. We've worked closely with the Cake Wallet team to help provide continuity for our users, given their strong track record in the Monero community. We understand the trust you've placed in us since 2014, and we're committed to ensuring a smooth, secure, and privacy-preserving transition for all users.</div>
+      
+      <div style="text-align:left; margin-bottom: 1em;">Please migrate your Monero to <a href="https://docs.cakewallet.com/tutorials/mymonero/" target="_blank" class="no-decoration">Cake Wallet</a> prior to January, 2026 to ensure uninterrupted access to your funds.</div>
+
+      <div style="text-align:left; margin-bottom: 1em;"><a href="https://mymonero.com/?announcement=1" class="no-decoration">Read more about this change here.</a></div>
+      <div style="text-align:left; margin-bottom: 1em;">Thank you for being part of this journey with us.</div>
+      <style>
+      --swal2-action-button-focus-box-shadow, --swal2-action-button-focus-box-shadow {
+        background: none !important;
+      }
+      .swal2-confirm, .swal2-confirm:hover {
+        background-color: rgb(17, 187, 236) !important;
+        padding: 8px 16px !important;
+        min-width: 140px !important;
+        height: auto !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        border: none !important;
+        border-radius: 6px !important;
+      }
+
+      .swal2-deny, .swal2-deny:hover {
+        background-color: rgb(17, 187, 236) !important;
+        padding: 8px 16px !important;
+        min-width: 140px !important;
+        height: auto !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        border: none !important;
+        border-radius: 6px !important;
+      }
+
+      .no-decoration {
+        text-decoration: none !important;
+        color: rgb(17, 187, 236) !important;
+      }
+      </style>
+    `,
+    showCloseButton: true,
+    focusConfirm: false,  
+    showDenyButton: true,
+    showCancelButton: false,
+    confirmButtonColor: "rgb(17, 187, 236)",
+    denyButtonColor: "rgb(17, 187, 236)",
+    cancelButtonColor: "rgb(17, 187, 236)",
+    confirmButtonText: `Download Cake Wallet`,
+    denyButtonText: `Migration Guide`,
+    didOpen: function () {
+      Swal.getConfirmButton().blur()
+    }
+  }).then(async (result) => {  
+    if (result.isConfirmed) {
+      // User clicked "Download Cake Wallet"
+      const deviceInfo = await Device.getInfo()
+      let storeUrl;
+      
+      if (deviceInfo.platform === 'ios') {
+        storeUrl = "https://apps.apple.com/app/id1334702542"
+        window.location.href = storeUrl
+      } else if (deviceInfo.platform === 'android') {
+        storeUrl = "https://play.google.com/store/apps/details?id=com.cakewallet.cake_wallet"
+        window.location.href = storeUrl
+      } else {
+        // Web fallback (for testing in browser)
+        storeUrl = "https://cakewallet.com"
+      }
+      
+      // Use different approaches based on platform
+      try {
+        if (deviceInfo.platform === 'ios') {
+          // For iOS, try window.location.href first as it often works better in Capacitor
+          window.location.href = storeUrl
+        } else {
+          await Browser.open({ url: storeUrl })
+        }
+      } catch (error) {
+        console.error('Failed to open store:', error)
+        // Fallback approaches
+        try {
+          if (deviceInfo.platform === 'ios') {
+            // Try browser.open for ios
+            await Browser.open({ url: storeUrl })
+          } else {
+            // try fallback for Android since Browser.open failed
+            window.open(storeUrl, '_blank')
+          }
+        } catch (fallbackError) {
+          console.error('Fallback also failed:', fallbackError)
+        }
+      }
+      // SweetAlert's buttons are "confirm" and "deny"
+    } else if (result.isDenied) {
+      // User clicked "Migration Guide"
+      const migrationUrl = "https://docs.cakewallet.com/tutorials/mymonero/"
+      try {
+        if (deviceInfo.platform === 'ios') {
+          // Try fallback methods for both ios and Android
+          await Browser.open({ url: migrationUrl })
+        } else if (deviceInfo.platform === 'android') {
+          await Browser.open({ url: migrationUrl })
+        } else {
+          window.open(migrationUrl, '_blank')
+        }
+      } catch (error) {
+        console.error('Failed to open browser:', error)
+        // Fallback to window.open for web
+        window.open("https://docs.cakewallet.com/tutorials/mymonero/", '_blank')
+      }
+    }
+  })
   const deviceInfo = await Device.getInfo()
   //
   // context
@@ -109,7 +231,7 @@ window.BootApp = async function () { // encased in a function to prevent scope b
               color: '#FFFFFF',
               showConfirmButton: false,
               timer: 4500
-            })
+            }, closeHandler(closeResponse))
           }
         }
       }
