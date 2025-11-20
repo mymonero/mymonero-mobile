@@ -69,7 +69,7 @@ class ExceptionAlerting {
       } catch (err) {
         errorMessage += 'Unable to determine prototype of error - ';
       }
-      if (typeof(e) === 'PromiseRejectionEvent') {
+      if (e instanceof PromiseRejectionEvent) {
         // Per MDN, PromiseRejectionEvent will have a `reason` property that we'll use for our alert. Filename, lineno and colno will be null
         errorMessage += `Errored promise: ${e.reason}`
         self.alertErrMsg(errorMessage, 3, e, e.filename, e.lineno, e.colno)
